@@ -1,11 +1,20 @@
-import { TextInput, View } from "react-native";
+import { Pressable, TextInput, View } from "react-native";
 
 import { styled } from "styled-components/native";
 
-import { zinc200, rounded2xl, zinc600 } from "@/constants/theme";
+import {
+  zinc200,
+  rounded2xl,
+  zinc600,
+  roundedLg,
+  textSm,
+  roundedFull,
+  sky800,
+} from "@/constants/theme";
 
 import { ViewActionsFeature } from "./view-actions";
 import {
+  ArrowUp,
   GithubLogo,
   GlobeSimple,
   LinkedinLogo,
@@ -13,6 +22,7 @@ import {
   XLogo,
 } from "phosphor-react-native";
 import { ColorPickerFeature } from "./color-picker";
+import { Text } from "@/components/text";
 
 const InputBox = styled.View`
   background-color: #fff;
@@ -61,6 +71,40 @@ export const InputBoxFeature = () => {
             numberOfLines={6}
             placeholder="Type something..."
           />
+
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <View>
+              <Text
+                style={{
+                  borderColor: zinc200,
+                  borderWidth: 2,
+                  borderRadius: roundedLg,
+                  paddingVertical: 2,
+                  paddingHorizontal: 8,
+                  fontSize: textSm,
+                }}
+              >
+                GPT‑4.1
+              </Text>
+            </View>
+
+            <Pressable
+              style={{
+                padding: 6,
+                backgroundColor: sky800,
+                borderRadius: roundedFull,
+              }}
+            >
+              <ArrowUp size={14} color="#fff" />
+            </Pressable>
+          </View>
         </InputBox>
       </View>
     </InputContainer>

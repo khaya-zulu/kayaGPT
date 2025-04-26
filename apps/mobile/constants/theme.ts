@@ -10,5 +10,8 @@ export const violet200 = "#ddd6fe";
 export const green200 = "#bbf7d0";
 export const amber200 = "#fde68a";
 
-export const rounded2xl = "1rem";
+export const rounded2xl = "16px";
+export const roundedLg = "8px";
 export const roundedFull = "9999px";
+
+export const textSm = 14;
