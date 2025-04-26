@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { Text } from "@/components/text";
 import { zinc600, zinc100, roundedFull } from "@/constants/theme";
 
-import { Plus } from "phosphor-react-native";
+import { CaretLeft, Minus, Plus } from "phosphor-react-native";
 import styled from "styled-components/native";
 
 const IconBox = styled.View`
@@ -21,9 +21,9 @@ export const ViewActionsFeature = () => {
   return (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
       <IconBox>
-        <Plus size={12} color={zinc600} weight="bold" />
+        <CaretLeft size={12} color={zinc600} weight="bold" />
       </IconBox>
-      <Text>view options</Text>
+      <Text>hide options</Text>
     </View>
   );
 };

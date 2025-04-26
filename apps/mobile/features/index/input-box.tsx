@@ -10,25 +10,30 @@ import {
   textSm,
   roundedFull,
   sky800,
+  sky500,
+  sky200,
 } from "@/constants/theme";
 
 import { ViewActionsFeature } from "./view-actions";
 import {
   ArrowUp,
+  ClockCounterClockwise,
   GithubLogo,
   GlobeSimple,
   LinkedinLogo,
+  LinkSimple,
   Microphone,
   XLogo,
 } from "phosphor-react-native";
 import { ColorPickerFeature } from "./color-picker";
 import { Text } from "@/components/text";
+import { LinearGradient } from "expo-linear-gradient";
 
 const InputBox = styled.View`
   background-color: #fff;
   border-radius: ${rounded2xl};
   padding: 1.5rem;
-  border: 2px solid ${zinc200};
+  /* border: 2px solid ${zinc200}; */
 `;
 
 const InputContainer = styled.View`
@@ -58,54 +63,63 @@ export const InputBoxFeature = () => {
           <ViewActionsFeature />
 
           <View style={{ flexDirection: "row", gap: 15 }}>
-            <GlobeSimple size={17} weight="bold" color={zinc600} />
-            <GithubLogo size={17} weight="bold" color={zinc600} />
-            <LinkedinLogo size={17} weight="bold" color={zinc600} />
-            <XLogo size={17} weight="bold" color={zinc600} />
+            <LinkSimple size={17} weight="bold" color={zinc600} />
+            <ClockCounterClockwise size={17} weight="bold" color={zinc600} />
             <Microphone size={19} weight="fill" />
           </View>
         </View>
-        <InputBox>
-          <TextInput
-            multiline
-            numberOfLines={6}
-            placeholder="Type something..."
-          />
+        <LinearGradient
+          colors={["#ffffff" + "00", sky200]}
+          style={{ borderRadius: rounded2xl, padding: 1 }}
+        >
+          <InputBox>
+            <TextInput
+              multiline
+              numberOfLines={6}
+              placeholder="Type something..."
+            />
 
-          <View
-            style={{
-              flexDirection: "row",
-              gap: 10,
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            <View>
-              <Text
-                style={{
-                  borderColor: zinc200,
-                  borderWidth: 2,
-                  borderRadius: roundedLg,
-                  paddingVertical: 2,
-                  paddingHorizontal: 8,
-                  fontSize: textSm,
-                }}
-              >
-                GPT‑4.1
-              </Text>
-            </View>
-
-            <Pressable
+            <View
               style={{
-                padding: 6,
-                backgroundColor: sky800,
-                borderRadius: roundedFull,
+                flexDirection: "row",
+                gap: 10,
+                justifyContent: "flex-end",
+                alignItems: "center",
               }}
             >
-              <ArrowUp size={14} color="#fff" />
-            </Pressable>
-          </View>
-        </InputBox>
+              <View style={{ flexDirection: "row", gap: 15 }}>
+                <GlobeSimple size={17} weight="bold" color={zinc600} />
+                <GithubLogo size={17} weight="bold" color={zinc600} />
+                <LinkedinLogo size={17} weight="bold" color={zinc600} />
+                <XLogo size={17} weight="bold" color={zinc600} />
+              </View>
+              <View>
+                <Text
+                  style={{
+                    borderColor: zinc200,
+                    borderWidth: 2,
+                    borderRadius: roundedLg,
+                    paddingVertical: 2,
+                    paddingHorizontal: 8,
+                    fontSize: textSm,
+                  }}
+                >
+                  GPT‑4.1
+                </Text>
+              </View>
+
+              <Pressable
+                style={{
+                  padding: 6,
+                  backgroundColor: sky800,
+                  borderRadius: roundedFull,
+                }}
+              >
+                <ArrowUp size={14} color="#fff" />
+              </Pressable>
+            </View>
+          </InputBox>
+        </LinearGradient>
       </View>
     </InputContainer>
   );

@@ -1,5 +1,6 @@
 export const sky800 = "#075985";
 export const sky500 = "#0ea5e9";
+export const sky200 = "#bae6fd";
 
 export const zinc200 = "#e4e4e7";
 export const zinc100 = "#f4f4f5";
