@@ -1,4 +1,4 @@
-import { Text as RNText, TextProps } from "react-native";
+import { Text as RNText } from "react-native";
 import styled from "styled-components/native";
 
 export const Text = styled(RNText)`

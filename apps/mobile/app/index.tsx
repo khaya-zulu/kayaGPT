@@ -1,7 +1,11 @@
 import { styled } from "styled-components/native";
 
-import { View } from "react-native";
+import { ImageBackground, View } from "react-native";
+import { BlurView } from "expo-blur";
+
 import { Text } from "@/components/text";
+
+import { InputBoxFeature } from "@/features/index";
 
 import { sky800, zinc200, rounded2xl } from "@/constants/theme";
 
@@ -14,38 +18,73 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const Input = styled.View`
-  background-color: #fff;
-  border-radius: ${rounded2xl};
-  padding: 1rem;
-  border: 2px solid ${zinc200};
-  height: 10rem;
-`;
+// background-color: #25008a;
+// background-image: url("https://www.transparenttextures.com/patterns/worn-dots.png");
 
-const InputBox = styled.View`
-  background-color: #fff;
-  max-width: 56rem;
-  margin: 0 auto;
-  width: 100%;
-`;
+const BackgroundImage = () => {
+  return (
+    <>
+      <BlurView
+        style={{
+          height: "100%",
+          width: "100%",
+          position: "absolute",
+          left: 0,
+        }}
+        intensity={20}
+      />
+      <ImageBackground
+        style={{
+          backgroundColor: "#ffffff" + "d9",
+          height: "100%",
+          width: "100%",
+          position: "absolute",
+          left: 0,
+        }}
+        source={{
+          uri: "https://www.transparenttextures.com/patterns/worn-dots.png",
+        }}
+        resizeMode="repeat"
+      />
+    </>
+  );
+};
 
 export default function IndexPage() {
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff", padding: "2.5rem" }}>
-      <Container>
-        <Text>
-          Hi My name is Khaya, Design/Product Engineer and, my strengths are in
-          frontend development. However I am a huge fan of design and I am pr
-        </Text>
-        <Text style={{ color: sky800 }}>
-          Hi My name is Khaya, Design/Product Engineer and, my strengths are in
-          frontend development. However I am a huge fan of design and I am pr
-        </Text>
-      </Container>
+    <ImageBackground
+      style={{
+        flex: 1,
+        backgroundColor: "#fff",
+        width: "100%",
+      }}
+      source={require("../assets/images/workspace.png")}
+      resizeMode="cover"
+    >
+      <BackgroundImage />
+      <View
+        style={{
+          flex: 1,
+          padding: 40,
+          flexDirection: "column",
+          position: "relative",
+        }}
+      >
+        <Container>
+          <Text>
+            Hi My name is Khaya, Design/Product Engineer and, my strengths are
+            in frontend development. However I am a huge fan of design and I am
+            pr
+          </Text>
+          <Text style={{ color: sky800 }}>
+            Hi My name is Khaya, Design/Product Engineer and, my strengths are
+            in frontend development. However I am a huge fan of design and I am
+            pr
+          </Text>
+        </Container>
 
-      <InputBox>
-        <Input />
-      </InputBox>
-    </View>
+        <InputBoxFeature />
+      </View>
+    </ImageBackground>
   );
 }
