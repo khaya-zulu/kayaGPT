@@ -3,12 +3,18 @@ import styled from "styled-components/native";
 
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
+import { textSm, fontSpaceGrotesk } from "@/constants/theme";
 
-export const Text = styled.Text`
-  font-family: SpaceGrotesk-Medium;
-  font-size: 1.5rem;
-  line-height: 1.5rem;
-  font-size: 16px;
+const FONT_SIZE = {
+  sm: textSm,
+  base: 16,
+} as const;
+
+export const Text = styled.Text<{ fontSize?: keyof typeof FONT_SIZE }>`
+  font-family: ${fontSpaceGrotesk};
+  font-size: 24px;
+  line-height: 24px;
+  font-size: ${(props) => FONT_SIZE[props.fontSize ?? "base"]};
 `;
 
 type GradientTextProps = TextProps & {

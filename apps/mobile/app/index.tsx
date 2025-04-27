@@ -1,19 +1,19 @@
 import { styled } from "styled-components/native";
 
-import { Image, ImageBackground, View } from "react-native";
-import { BlurView } from "expo-blur";
-import { LinearGradient } from "expo-linear-gradient";
+import { Keyboard, View } from "react-native";
 
 import { Text } from "@/components/text";
 
 import { InputBoxFeature } from "@/features/index";
 
-import { sky800, roundedLg, rounded2xl } from "@/constants/theme";
+import { sky800, rounded2xl } from "@/constants/theme";
 import { Cube } from "phosphor-react-native";
-import { transform } from "@babel/core";
+import { AppContainerFeature } from "@/features/app-container";
+import { isWeb } from "@/constants/platform";
 
-const Container = styled.View`
-  max-width: 32rem;
+// todo: this should only be a button on mobile
+const Container = styled.Pressable`
+  max-width: 512;
   margin: 0 auto;
   width: 100%;
   flex-direction: column;
@@ -21,104 +21,56 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const BackgroundImage = () => {
-  return (
-    <>
-      <BlurView
-        style={{
-          height: "100%",
-          width: "100%",
-          position: "absolute",
-          left: 0,
-        }}
-        intensity={20}
-      />
-      <ImageBackground
-        style={{
-          backgroundColor: "#ffffff" + "d9",
-          height: "100%",
-          width: "100%",
-          position: "absolute",
-          left: 0,
-        }}
-        source={{
-          uri: "https://www.transparenttextures.com/patterns/worn-dots.png",
-        }}
-        resizeMode="repeat"
-      />
-      <LinearGradient
-        colors={["#e0f2fe" + "80", "#ffffff" + "00"]}
-        style={{
-          height: "100%",
-          width: "100%",
-          position: "absolute",
-          left: 0,
-        }}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-      />
-    </>
-  );
-};
+const WorkspaceImage = styled.Image`
+  width: 60px;
+  height: 60px;
+  border-radius: ${rounded2xl};
+  margin-left: 20px;
+  transform: rotate(-8deg) translateY(-10px);
+  z-index: 20;
+  /* todo: make this transparent with some kind of mask */
+  border-color: #fff;
+  border-width: 4px;
+`;
+
+const AvatarImage = styled.Image`
+  width: 75px;
+  height: 75px;
+  border-radius: ${rounded2xl};
+  margin-left: 20px;
+  transform: translateX(-50px) translateY(10px) rotate(4deg);
+`;
 
 export default function IndexPage() {
   return (
-    <ImageBackground
-      style={{
-        flex: 1,
-        backgroundColor: "#fff",
-        width: "100%",
-      }}
-      source={require("../assets/images/workspace.png")}
-      resizeMode="cover"
-    >
-      <BackgroundImage />
+    <AppContainerFeature>
       <View
         style={{
           flex: 1,
-          padding: 40,
+          padding: isWeb ? 40 : 0,
           flexDirection: "column",
           position: "relative",
         }}
       >
-        <Container>
-          <View style={{ flexDirection: "row" }}>
-            <Image
-              style={{
-                width: 60,
-                height: 60,
-                borderRadius: rounded2xl,
-                marginLeft: 20,
-                transform: [{ rotate: "-5deg" }, { translateY: -10 }],
-                zIndex: 20,
-                // todo: make this transparent with some kind of mask
-                borderColor: "#fff",
-                borderWidth: 4,
-              }}
+        <Container
+          style={{ padding: isWeb ? 0 : 20 }}
+          onPress={() => Keyboard.dismiss()}
+        >
+          <View style={{ flexDirection: "row", marginBottom: 20 }}>
+            <WorkspaceImage
               source={require("../assets/images/workspace.png")}
             />
-            <Image
-              style={{
-                width: 80,
-                height: 80,
-                borderRadius: rounded2xl,
-                marginLeft: 20,
-                transform: [
-                  { translateX: -50 },
-                  { translateY: 10 },
-                  { rotate: "2deg" },
-                ],
-              }}
+            <AvatarImage
               source={{
                 uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
               }}
             />
           </View>
-          <View style={{ flexDirection: "row", gap: 20, marginTop: 20 }}>
+          <View style={{ flexDirection: "row", gap: 20 }}>
             <View style={{ opacity: 0 }}>
               <Cube color={sky800} weight="duotone" size={20} />
             </View>
-            <Text>
+            <Text style={{ flex: 1 }}>
               Hi my name is Khaya, Design/Product Engineer and, my strengths are
               in frontend development. However I am a huge fan of design and I
               am pr
@@ -137,12 +89,14 @@ export default function IndexPage() {
                 // }}
               />
             </View>
-            <Text style={{ color: sky800 }}>How can I help you today?</Text>
+            <Text style={{ color: sky800, flex: 1 }}>
+              How can I help you today?
+            </Text>
           </View>
         </Container>
 
         <InputBoxFeature />
       </View>
-    </ImageBackground>
+    </AppContainerFeature>
   );
 }

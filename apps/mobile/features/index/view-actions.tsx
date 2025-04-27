@@ -23,7 +23,7 @@ export const ViewActionsFeature = () => {
       <IconBox>
         <CaretLeft size={12} color={zinc600} weight="bold" />
       </IconBox>
-      <Text>hide options</Text>
+      <Text fontSize="sm">hide options</Text>
     </View>
   );
 };

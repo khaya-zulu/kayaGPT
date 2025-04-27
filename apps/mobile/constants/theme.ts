@@ -1,3 +1,4 @@
+// colors
 export const sky800 = "#075985";
 export const sky500 = "#0ea5e9";
 export const sky200 = "#bae6fd";
@@ -15,4 +16,8 @@ export const rounded2xl = "16px";
 export const roundedLg = "8px";
 export const roundedFull = "9999px";
 
+// font sizes
 export const textSm = 14;
+
+// font family
+export const fontSpaceGrotesk = "SpaceGrotesk-Medium";
