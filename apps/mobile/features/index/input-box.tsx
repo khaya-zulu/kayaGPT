@@ -1,4 +1,4 @@
-import { Pressable, TextInput, View } from "react-native";
+import { Pressable, SafeAreaView, TextInput, View } from "react-native";
 
 import { styled } from "styled-components/native";
 
@@ -33,7 +33,8 @@ import { ReactNode } from "react";
 const InputBox = styled.View`
   background-color: #fff;
   border-radius: ${rounded2xl};
-  padding: 24px;
+  border-bottom-right-radius: ${isWeb ? rounded2xl : 0};
+  border-bottom-left-radius: ${isWeb ? rounded2xl : 0};
 `;
 
 const InputContainer = styled.View`
@@ -44,18 +45,23 @@ const InputContainer = styled.View`
   align-items: end;
   gap: 15px;
   padding: ${isWeb ? 0 : 2}px;
+  padding-bottom: 0;
 `;
 
 const RoundedBox = styled.View`
   border-radius: ${rounded2xl};
   overflow: hidden;
+  border-bottom-right-radius: ${isWeb ? rounded2xl : 0};
+  border-bottom-left-radius: ${isWeb ? rounded2xl : 0};
 `;
 
 const InputLinearBox = ({ children }: { children: ReactNode }) => {
+  const colors: any = ["#ffffff" + "00", sky200];
+
   return (
-    <RoundedBox>
+    <RoundedBox style={{ overflow: "hidden" }}>
       <LinearGradient
-        colors={["#ffffff" + "00", sky200]}
+        colors={isWeb ? colors : colors.reverse()}
         style={{ borderRadius: rounded2xl, padding: isWeb ? 1 : 2 }}
       >
         {children}
@@ -117,49 +123,53 @@ export const InputBoxFeature = () => {
 
         <InputLinearBox>
           <InputBox>
-            <TextInput
-              multiline
-              numberOfLines={6}
-              placeholder="Type something..."
-              placeholderTextColor={zinc600}
-              style={{
-                fontFamily: fontSpaceGrotesk,
-                outline: "none",
-                marginBottom: 20,
-              }}
-            />
+            <SafeAreaView>
+              <View style={{ padding: 24 }}>
+                <TextInput
+                  multiline
+                  numberOfLines={3}
+                  placeholder="Type something..."
+                  placeholderTextColor={zinc600}
+                  style={{
+                    fontFamily: fontSpaceGrotesk,
+                    outline: "none",
+                    marginBottom: 20,
+                  }}
+                />
 
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 10,
-                justifyContent: "flex-end",
-                alignItems: "center",
-              }}
-            >
-              {isWeb ? (
-                <View style={{ flexDirection: "row", gap: 15 }}>
-                  <GlobeSimple size={17} weight="bold" color={zinc600} />
-                  <GithubLogo size={17} weight="bold" color={zinc600} />
-                  <LinkedinLogo size={17} weight="bold" color={zinc600} />
-                  <XLogo size={17} weight="bold" color={zinc600} />
+                <View
+                  style={{
+                    flexDirection: "row",
+                    gap: 10,
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                  }}
+                >
+                  {isWeb ? (
+                    <View style={{ flexDirection: "row", gap: 15 }}>
+                      <GlobeSimple size={17} weight="bold" color={zinc600} />
+                      <GithubLogo size={17} weight="bold" color={zinc600} />
+                      <LinkedinLogo size={17} weight="bold" color={zinc600} />
+                      <XLogo size={17} weight="bold" color={zinc600} />
+                    </View>
+                  ) : null}
+                  {!isWeb ? <Options /> : null}
+                  <View>
+                    <RoundedText fontSize="sm">GPT‑4.1</RoundedText>
+                  </View>
+
+                  <ArrowUpButton
+                    style={{
+                      padding: 6,
+                      backgroundColor: sky800,
+                      borderRadius: roundedFull,
+                    }}
+                  >
+                    <ArrowUp size={14} color="#fff" />
+                  </ArrowUpButton>
                 </View>
-              ) : null}
-              {!isWeb ? <Options /> : null}
-              <View>
-                <RoundedText fontSize="sm">GPT‑4.1</RoundedText>
               </View>
-
-              <ArrowUpButton
-                style={{
-                  padding: 6,
-                  backgroundColor: sky800,
-                  borderRadius: roundedFull,
-                }}
-              >
-                <ArrowUp size={14} color="#fff" />
-              </ArrowUpButton>
-            </View>
+            </SafeAreaView>
           </InputBox>
         </InputLinearBox>
       </View>

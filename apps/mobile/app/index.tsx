@@ -1,6 +1,6 @@
 import { styled } from "styled-components/native";
 
-import { Keyboard, View } from "react-native";
+import { Keyboard, SafeAreaView, View } from "react-native";
 
 import { Text } from "@/components/text";
 
@@ -52,48 +52,50 @@ export default function IndexPage() {
           position: "relative",
         }}
       >
-        <Container
-          style={{ padding: isWeb ? 0 : 20 }}
-          onPress={() => Keyboard.dismiss()}
-        >
-          <View style={{ flexDirection: "row", marginBottom: 20 }}>
-            <WorkspaceImage
-              source={require("../assets/images/workspace.png")}
-            />
-            <AvatarImage
-              source={{
-                uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
-              }}
-            />
-          </View>
-          <View style={{ flexDirection: "row", gap: 20 }}>
-            <View style={{ opacity: 0 }}>
-              <Cube color={sky800} weight="duotone" size={20} />
-            </View>
-            <Text style={{ flex: 1 }}>
-              Hi my name is Khaya, Design/Product Engineer and, my strengths are
-              in frontend development. However I am a huge fan of design and I
-              am pr
-            </Text>
-          </View>
-
-          <View style={{ flexDirection: "row", gap: 20 }}>
-            <View>
-              <Cube
-                color={sky800}
-                weight="duotone"
-                size={20}
-                // flip x, todo: use for loading
-                // style={{
-                //   transform: [{ rotateY: "180deg" }],
-                // }}
+        <SafeAreaView style={{ flex: 1 }}>
+          <Container
+            style={{ padding: isWeb ? 0 : 20 }}
+            onPress={() => Keyboard.dismiss()}
+          >
+            <View style={{ flexDirection: "row", marginBottom: 20 }}>
+              <WorkspaceImage
+                source={require("../assets/images/workspace.png")}
+              />
+              <AvatarImage
+                source={{
+                  uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
+                }}
               />
             </View>
-            <Text style={{ color: sky800, flex: 1 }}>
-              How can I help you today?
-            </Text>
-          </View>
-        </Container>
+            <View style={{ flexDirection: "row", gap: 20 }}>
+              <View style={{ opacity: 0 }}>
+                <Cube color={sky800} weight="duotone" size={20} />
+              </View>
+              <Text style={{ flex: 1 }}>
+                Hi my name is Khaya, Design/Product Engineer and, my strengths
+                are in frontend development. However I am a huge fan of design
+                and I am pr
+              </Text>
+            </View>
+
+            <View style={{ flexDirection: "row", gap: 20 }}>
+              <View>
+                <Cube
+                  color={sky800}
+                  weight="duotone"
+                  size={20}
+                  // flip x, todo: use for loading
+                  // style={{
+                  //   transform: [{ rotateY: "180deg" }],
+                  // }}
+                />
+              </View>
+              <Text style={{ color: sky800, flex: 1 }}>
+                How can I help you today?
+              </Text>
+            </View>
+          </Container>
+        </SafeAreaView>
 
         <InputBoxFeature />
       </View>
