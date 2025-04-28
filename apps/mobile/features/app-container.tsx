@@ -1,11 +1,17 @@
 import "react-native-reanimated";
 import { ReactNode } from "react";
-import { ImageBackground, KeyboardAvoidingView } from "react-native";
+import {
+  ImageBackground,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  View,
+} from "react-native";
 import { BackgroundImageFeature } from "@/features/background-image";
 
-import { isIOS } from "@/constants/platform";
+import { isIOS, isWeb } from "@/constants/platform";
+import { InputBoxFeature } from "./index";
 
-export const AppContainerFeature = ({ children }: { children: ReactNode }) => {
+export const MainContainerFeature = ({ children }: { children: ReactNode }) => {
   return (
     <ImageBackground
       style={{
@@ -24,5 +30,28 @@ export const AppContainerFeature = ({ children }: { children: ReactNode }) => {
         {children}
       </KeyboardAvoidingView>
     </ImageBackground>
+  );
+};
+
+export const ContainerWithChatFeature = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
+  return (
+    <MainContainerFeature>
+      <View
+        style={{
+          flex: 1,
+          padding: isWeb ? 40 : 0,
+          flexDirection: "column",
+          position: "relative",
+        }}
+      >
+        <SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>
+
+        <InputBoxFeature />
+      </View>
+    </MainContainerFeature>
   );
 };

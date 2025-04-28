@@ -6,10 +6,14 @@ import { Text } from "@/components/text";
 
 import { InputBoxFeature } from "@/features/index";
 
-import { sky800, rounded2xl } from "@/constants/theme";
+import { sky800, rounded2xl, sky200, zinc100 } from "@/constants/theme";
 import { Cube } from "phosphor-react-native";
-import { AppContainerFeature } from "@/features/app-container";
+import {
+  ContainerWithChatFeature,
+  MainContainerFeature,
+} from "@/features/app-container";
 import { isWeb } from "@/constants/platform";
+import { Rounded } from "@/components/rounded";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -43,62 +47,34 @@ const AvatarImage = styled.Image`
 
 export default function IndexPage() {
   return (
-    <AppContainerFeature>
-      <View
-        style={{
-          flex: 1,
-          padding: isWeb ? 40 : 0,
-          flexDirection: "column",
-          position: "relative",
-        }}
+    <ContainerWithChatFeature>
+      <Container
+        style={{ padding: isWeb ? 0 : 20 }}
+        onPress={() => Keyboard.dismiss()}
       >
-        <SafeAreaView style={{ flex: 1 }}>
-          <Container
-            style={{ padding: isWeb ? 0 : 20 }}
-            onPress={() => Keyboard.dismiss()}
+        <View style={{ flexDirection: "row", marginBottom: 20 }}>
+          <WorkspaceImage source={require("../assets/images/workspace.png")} />
+          <AvatarImage
+            source={{
+              uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
+            }}
+          />
+        </View>
+        <View style={{ flexDirection: "column", gap: 20 }}>
+          <Text style={{ flex: 1 }}>Hi my name is Khaya 👋</Text>
+
+          <Rounded
+            style={{
+              backgroundColor: zinc100 + "80",
+              padding: 2,
+            }}
           >
-            <View style={{ flexDirection: "row", marginBottom: 20 }}>
-              <WorkspaceImage
-                source={require("../assets/images/workspace.png")}
-              />
-              <AvatarImage
-                source={{
-                  uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
-                }}
-              />
-            </View>
-            <View style={{ flexDirection: "row", gap: 20 }}>
-              <View style={{ opacity: 0 }}>
-                <Cube color={sky800} weight="duotone" size={20} />
-              </View>
-              <Text style={{ flex: 1 }}>
-                Hi my name is Khaya, Design/Product Engineer and, my strengths
-                are in frontend development. However I am a huge fan of design
-                and I am pr
-              </Text>
-            </View>
-
-            <View style={{ flexDirection: "row", gap: 20 }}>
-              <View>
-                <Cube
-                  color={sky800}
-                  weight="duotone"
-                  size={20}
-                  // flip x, todo: use for loading
-                  // style={{
-                  //   transform: [{ rotateY: "180deg" }],
-                  // }}
-                />
-              </View>
-              <Text style={{ color: sky800, flex: 1 }}>
-                How can I help you today?
-              </Text>
-            </View>
-          </Container>
-        </SafeAreaView>
-
-        <InputBoxFeature />
-      </View>
-    </AppContainerFeature>
+            <Rounded style={{ backgroundColor: "#fff", padding: 20 }}>
+              <Text>Hello world</Text>
+            </Rounded>
+          </Rounded>
+        </View>
+      </Container>
+    </ContainerWithChatFeature>
   );
 }

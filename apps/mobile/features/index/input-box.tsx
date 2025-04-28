@@ -19,9 +19,11 @@ import {
   ClockCounterClockwise,
   GithubLogo,
   GlobeSimple,
+  ImagesSquare,
   LinkedinLogo,
   LinkSimple,
   Microphone,
+  PlusCircle,
   XLogo,
 } from "phosphor-react-native";
 import { ColorPickerFeature } from "./color-picker";
@@ -86,10 +88,15 @@ const RoundedText = styled(Text)`
 const Options = () => {
   return (
     <View
-      style={{ flexDirection: "row", gap: 15, marginRight: isWeb ? 0 : "auto" }}
+      style={{
+        flexDirection: isWeb ? "row" : "row-reverse",
+        gap: 15,
+        marginRight: isWeb ? 0 : "auto",
+      }}
     >
       <LinkSimple size={17} weight="bold" color={zinc600} />
       <ClockCounterClockwise size={17} weight="bold" color={zinc600} />
+      <PlusCircle size={17} weight="bold" color={zinc600} />
       <Microphone size={19} weight="fill" />
     </View>
   );
@@ -165,7 +172,7 @@ export const InputBoxFeature = () => {
                       borderRadius: roundedFull,
                     }}
                   >
-                    <ArrowUp size={14} color="#fff" />
+                    <ArrowUp size={14} color="#fff" weight="bold" />
                   </ArrowUpButton>
                 </View>
               </View>
