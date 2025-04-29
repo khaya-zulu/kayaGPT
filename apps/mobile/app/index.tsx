@@ -1,19 +1,21 @@
 import { styled } from "styled-components/native";
 
-import { Keyboard, SafeAreaView, View } from "react-native";
+import { Keyboard, View } from "react-native";
 
 import { Text } from "@/components/text";
 
-import { InputBoxFeature } from "@/features/index";
-
-import { sky800, rounded2xl, sky200, zinc100 } from "@/constants/theme";
-import { Cube } from "phosphor-react-native";
 import {
-  ContainerWithChatFeature,
-  MainContainerFeature,
-} from "@/features/app-container";
+  sky800,
+  rounded2xl,
+  zinc100,
+  zinc600,
+  zinc400,
+} from "@/constants/theme";
+import { ChatCircleDots } from "phosphor-react-native";
+import { ContainerWithChatFeature } from "@/features/app-container";
 import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
+import { MessageTags } from "@/features/message-tags";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -45,35 +47,116 @@ const AvatarImage = styled.Image`
   transform: translateX(-50px) translateY(10px) rotate(4deg);
 `;
 
+const padding = isWeb ? 0 : 20;
+
+const ChatHistoryBox = styled(Rounded)`
+  flex-direction: column;
+  gap: 8;
+  padding: ${isWeb ? 0 : padding}px ${isWeb ? 0 : 20}px 0px;
+  flex: 1;
+  border: ${!isWeb ? "1px" : "0px"} solid ${zinc400 + "80"};
+  border-bottom-color: transparent;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+`;
+
+const Message = () => {
+  return (
+    <Rounded
+      style={{
+        backgroundColor: zinc100 + "80",
+        padding: isWeb ? 4 : 0,
+      }}
+    >
+      <Rounded
+        style={{
+          backgroundColor: "#fff",
+          padding: 20,
+        }}
+        size={11}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            marginBottom: 10,
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              alignItems: "center",
+            }}
+          >
+            <ChatCircleDots size={18} weight="bold" />
+            <Text fontSize="sm">Hello world</Text>
+          </View>
+
+          <Text fontSize="sm" style={{ color: sky800 }}>
+            12:00 PM
+          </Text>
+        </View>
+        <Text fontSize="sm" numberOfLines={2}>
+          AI:{" "}
+          <Text style={{ color: zinc600 }}>
+            Why is the world flat? and do I need to worry about it? I am not
+            sure if I should be worried about it or not. I am not sure
+          </Text>
+        </Text>
+      </Rounded>
+    </Rounded>
+  );
+};
+
 export default function IndexPage() {
   return (
     <ContainerWithChatFeature>
-      <Container
-        style={{ padding: isWeb ? 0 : 20 }}
-        onPress={() => Keyboard.dismiss()}
-      >
-        <View style={{ flexDirection: "row", marginBottom: 20 }}>
-          <WorkspaceImage source={require("../assets/images/workspace.png")} />
-          <AvatarImage
-            source={{
-              uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
-            }}
-          />
-        </View>
-        <View style={{ flexDirection: "column", gap: 20 }}>
-          <Text style={{ flex: 1 }}>Hi my name is Khaya 👋</Text>
-
-          <Rounded
+      <Container onPress={() => Keyboard.dismiss()}>
+        <View
+          style={{
+            position: "relative",
+            paddingTop: padding,
+            paddingHorizontal: padding,
+            marginBottom: isWeb ? 10 : 5,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+          }}
+        >
+          <View
             style={{
-              backgroundColor: zinc100 + "80",
-              padding: 2,
+              flexDirection: "row",
             }}
           >
-            <Rounded style={{ backgroundColor: "#fff", padding: 20 }}>
-              <Text>Hello world</Text>
-            </Rounded>
-          </Rounded>
+            <WorkspaceImage
+              source={require("../assets/images/workspace.png")}
+            />
+            <AvatarImage
+              source={{
+                uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
+              }}
+            />
+          </View>
+          <View>
+            <Text style={{ marginLeft: "auto" }}>Hi Khaya 👋</Text>
+            <Text>18:58 PM, 22°C</Text>
+          </View>
         </View>
+        <ChatHistoryBox>
+          {!isWeb ? (
+            <>
+              <MessageTags />
+              <View style={{ height: 4 }} />
+            </>
+          ) : null}
+
+          <Message />
+          <Message />
+          <Message />
+        </ChatHistoryBox>
       </Container>
     </ContainerWithChatFeature>
   );

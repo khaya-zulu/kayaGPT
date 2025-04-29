@@ -31,6 +31,7 @@ import { Text } from "@/components/text";
 import { LinearGradient } from "expo-linear-gradient";
 import { isWeb } from "@/constants/platform";
 import { ReactNode } from "react";
+import { MessageTags } from "../message-tags";
 
 const InputBox = styled.View`
   background-color: #fff;
@@ -118,9 +119,12 @@ export const InputBoxFeature = () => {
               alignItems: "center",
             }}
           >
-            <ViewActionsFeature />
+            <MessageTags />
 
-            <View style={{ flexDirection: "row", gap: 15 }}>
+            <View
+              style={{ flexDirection: "row", gap: 15, alignItems: "center" }}
+            >
+              <ViewActionsFeature />
               <LinkSimple size={17} weight="bold" color={zinc600} />
               <ClockCounterClockwise size={17} weight="bold" color={zinc600} />
               <Microphone size={19} weight="fill" />

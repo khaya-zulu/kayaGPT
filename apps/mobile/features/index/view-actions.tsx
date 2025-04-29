@@ -19,11 +19,8 @@ const IconBox = styled.View`
 
 export const ViewActionsFeature = () => {
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-      <IconBox>
-        <CaretLeft size={12} color={zinc600} weight="bold" />
-      </IconBox>
-      <Text fontSize="sm">hide options</Text>
-    </View>
+    <IconBox>
+      <CaretLeft size={12} color={zinc600} weight="bold" />
+    </IconBox>
   );
 };
