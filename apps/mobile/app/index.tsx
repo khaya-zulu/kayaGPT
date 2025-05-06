@@ -1,6 +1,6 @@
 import { styled } from "styled-components/native";
 
-import { Keyboard, View } from "react-native";
+import { Keyboard, Pressable, View } from "react-native";
 
 import { Text } from "@/components/text";
 
@@ -16,6 +16,8 @@ import { ContainerWithChatFeature } from "@/features/app-container";
 import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
 import { MessageTags } from "@/features/message-tags";
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -60,54 +62,62 @@ const ChatHistoryBox = styled(Rounded)`
   border-bottom-right-radius: 0;
 `;
 
-const Message = () => {
+const MessageHistory = ({ idx }: { idx: number }) => {
+  const router = useRouter();
+
   return (
-    <Rounded
-      style={{
-        backgroundColor: zinc100 + "80",
-        padding: isWeb ? 4 : 0,
+    <Pressable
+      onPress={() => {
+        router.push("/chat/12");
       }}
     >
       <Rounded
         style={{
-          backgroundColor: "#fff",
-          padding: 20,
+          backgroundColor: zinc100 + "80",
+          padding: isWeb ? 4 : 0,
         }}
-        size={11}
       >
-        <View
+        <Rounded
           style={{
-            flexDirection: "row",
-            gap: 10,
-            marginBottom: 10,
-            alignItems: "center",
-            justifyContent: "space-between",
+            backgroundColor: "#fff",
+            padding: 20,
           }}
+          size={11}
         >
           <View
             style={{
               flexDirection: "row",
               gap: 10,
+              marginBottom: 10,
               alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            <ChatCircleDots size={18} weight="bold" />
-            <Text fontSize="sm">Hello world</Text>
-          </View>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 10,
+                alignItems: "center",
+              }}
+            >
+              <ChatCircleDots size={18} weight="bold" />
+              <Text fontSize="sm">Hello world</Text>
+            </View>
 
-          <Text fontSize="sm" style={{ color: sky800 }}>
-            12:00 PM
+            <Text fontSize="sm" style={{ color: sky800 }}>
+              12:00 PM
+            </Text>
+          </View>
+          <Text fontSize="sm" numberOfLines={2}>
+            AI:{" "}
+            <Text style={{ color: zinc600 }}>
+              Why is the world flat? and do I need to worry about it? I am not
+              sure if I should be worried about it or not. I am not sure
+            </Text>
           </Text>
-        </View>
-        <Text fontSize="sm" numberOfLines={2}>
-          AI:{" "}
-          <Text style={{ color: zinc600 }}>
-            Why is the world flat? and do I need to worry about it? I am not
-            sure if I should be worried about it or not. I am not sure
-          </Text>
-        </Text>
+        </Rounded>
       </Rounded>
-    </Rounded>
+    </Pressable>
   );
 };
 
@@ -153,9 +163,9 @@ export default function IndexPage() {
             </>
           ) : null}
 
-          <Message />
-          <Message />
-          <Message />
+          <MessageHistory />
+          <MessageHistory />
+          <MessageHistory />
         </ChatHistoryBox>
       </Container>
     </ContainerWithChatFeature>

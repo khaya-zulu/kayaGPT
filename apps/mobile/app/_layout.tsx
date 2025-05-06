@@ -21,13 +21,5 @@ export default function RootLayout() {
     return <Text>Loading...</Text>;
   }
 
-  return (
-    <>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </>
-  );
+  return <Stack screenOptions={{ headerShown: false }} />;
 }

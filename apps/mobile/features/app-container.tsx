@@ -1,5 +1,5 @@
 import "react-native-reanimated";
-import { ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 import {
   ImageBackground,
   KeyboardAvoidingView,
@@ -35,9 +35,15 @@ export const MainContainerFeature = ({ children }: { children: ReactNode }) => {
 
 export const ContainerWithChatFeature = ({
   children,
+  isSafeAreaDisabled,
 }: {
   children: ReactNode;
+  isSafeAreaDisabled?: boolean;
 }) => {
+  const Component = isSafeAreaDisabled ? Fragment : SafeAreaView;
+
+  const props = isSafeAreaDisabled ? {} : { style: { flex: 1 } };
+
   return (
     <MainContainerFeature>
       <View
@@ -48,8 +54,7 @@ export const ContainerWithChatFeature = ({
           position: "relative",
         }}
       >
-        <SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>
-
+        <Component {...props}>{children}</Component>
         <InputBoxFeature />
       </View>
     </MainContainerFeature>

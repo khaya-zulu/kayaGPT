@@ -15,6 +15,7 @@ import {
 
 import { ViewActionsFeature } from "./view-actions";
 import {
+  ArrowLeft,
   ArrowUp,
   ClockCounterClockwise,
   GithubLogo,
@@ -32,6 +33,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { isWeb } from "@/constants/platform";
 import { ReactNode } from "react";
 import { MessageTags } from "../message-tags";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 const InputBox = styled.View`
   background-color: #fff;
@@ -103,7 +105,25 @@ const Options = () => {
   );
 };
 
+const BackToolbar = () => {
+  const router = useRouter();
+
+  return (
+    <Pressable
+      onPress={() => {
+        router.navigate("/");
+      }}
+      style={{ flexDirection: "row", gap: 15, alignItems: "center" }}
+    >
+      <ArrowLeft weight="bold" size={14} />
+      <Text>Hello world</Text>
+    </Pressable>
+  );
+};
+
 export const InputBoxFeature = () => {
+  const { id } = useLocalSearchParams();
+
   return (
     <InputContainer>
       {isWeb ? <ColorPickerFeature /> : null}
@@ -119,7 +139,8 @@ export const InputBoxFeature = () => {
               alignItems: "center",
             }}
           >
-            <MessageTags />
+            {id ? <BackToolbar /> : null}
+            {!id ? <MessageTags /> : null}
 
             <View
               style={{ flexDirection: "row", gap: 15, alignItems: "center" }}
