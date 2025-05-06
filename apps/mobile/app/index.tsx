@@ -1,6 +1,12 @@
 import { styled } from "styled-components/native";
 
-import { Keyboard, Pressable, View } from "react-native";
+import {
+  Keyboard,
+  Pressable,
+  PressableProps,
+  StyleProp,
+  View,
+} from "react-native";
 
 import { Text } from "@/components/text";
 
@@ -17,7 +23,6 @@ import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
 import { MessageTags } from "@/features/message-tags";
 import { useRouter } from "expo-router";
-import { useEffect } from "react";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -62,7 +67,7 @@ const ChatHistoryBox = styled(Rounded)`
   border-bottom-right-radius: 0;
 `;
 
-const MessageHistory = ({ idx }: { idx: number }) => {
+const MessageHistory = ({ style }: { style: PressableProps["style"] }) => {
   const router = useRouter();
 
   return (
@@ -70,6 +75,7 @@ const MessageHistory = ({ idx }: { idx: number }) => {
       onPress={() => {
         router.push("/chat/12");
       }}
+      style={style}
     >
       <Rounded
         style={{
