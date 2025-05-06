@@ -67,7 +67,7 @@ const ChatHistoryBox = styled(Rounded)`
   border-bottom-right-radius: 0;
 `;
 
-const MessageHistory = ({ style }: { style: PressableProps["style"] }) => {
+const MessageHistory = ({ style }: { style?: PressableProps["style"] }) => {
   const router = useRouter();
 
   return (
@@ -169,9 +169,9 @@ export default function IndexPage() {
             </>
           ) : null}
 
+          <MessageHistory style={{ transform: [{ translateY: 30 }] }} />
           <MessageHistory />
-          <MessageHistory />
-          <MessageHistory />
+          <MessageHistory style={{ transform: [{ translateY: -30 }] }} />
         </ChatHistoryBox>
       </Container>
     </ContainerWithChatFeature>
