@@ -1,25 +1,15 @@
+import { Keyboard, View } from "react-native";
 import { styled } from "styled-components/native";
-
-import { Keyboard, Pressable, PressableProps, View } from "react-native";
 
 import { Text } from "@/components/text";
 
-import {
-  sky800,
-  rounded2xl,
-  zinc100,
-  zinc600,
-  zinc400,
-  zinc300,
-} from "@/constants/theme";
-import { ChatCircleDots } from "phosphor-react-native";
+import { rounded2xl, zinc400 } from "@/constants/theme";
 import { ContainerWithChatFeature } from "@/features/app-container";
 import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
 import { MessageTags } from "@/features/message-tags";
-import { useRouter } from "expo-router";
-import { BlurView } from "expo-blur";
-import { LinearGradient } from "expo-linear-gradient";
+
+import { MessageOverview } from "@/features/message-overview";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -53,7 +43,7 @@ const AvatarImage = styled.Image`
 
 const padding = isWeb ? 0 : 20;
 
-const ChatHistoryBox = styled(Rounded)`
+const MessageOverviewBox = styled(Rounded)`
   flex-direction: column;
   gap: 8;
   padding: ${isWeb ? 0 : padding}px ${isWeb ? 0 : 10}px 0px;
@@ -63,78 +53,6 @@ const ChatHistoryBox = styled(Rounded)`
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 `;
-
-const MessageHistoryRounded = styled(Rounded)`
-  border: 1px solid ${zinc100};
-  overflow: hidden;
-`;
-
-const MessageHistory = ({ style }: { style?: PressableProps["style"] }) => {
-  const router = useRouter();
-
-  return (
-    <Pressable
-      onPress={() => {
-        router.push("/chat/12");
-      }}
-      style={style}
-    >
-      <MessageHistoryRounded>
-        <View
-          style={{
-            height: "100%",
-            width: "100%",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            backgroundColor: "#fff",
-            opacity: isWeb ? 0.5 : 0.2,
-          }}
-        />
-
-        <BlurView
-          intensity={20}
-          style={{
-            backgroundColor: "#ffffff" + "80",
-            padding: 20,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              gap: 10,
-              marginBottom: 10,
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 10,
-                alignItems: "center",
-              }}
-            >
-              <ChatCircleDots size={18} weight="bold" />
-              <Text fontSize="sm">Hello world</Text>
-            </View>
-
-            <Text fontSize="sm" style={{ color: sky800 }}>
-              12:00 PM
-            </Text>
-          </View>
-          <Text fontSize="sm" numberOfLines={2}>
-            AI:{" "}
-            <Text style={{ color: zinc600 }}>
-              Why is the world flat? and do I need to worry about it? I am not
-              sure if I should be worried about it or not. I am not sure
-            </Text>
-          </Text>
-        </BlurView>
-      </MessageHistoryRounded>
-    </Pressable>
-  );
-};
 
 export default function IndexPage() {
   return (
@@ -170,7 +88,7 @@ export default function IndexPage() {
             <Text>18:58 PM, 22°C</Text>
           </View>
         </View>
-        <ChatHistoryBox>
+        <MessageOverviewBox>
           {!isWeb ? (
             <>
               <MessageTags />
@@ -178,10 +96,10 @@ export default function IndexPage() {
             </>
           ) : null}
 
-          <MessageHistory style={{ transform: [{ translateY: 5 }] }} />
-          <MessageHistory style={{ transform: [{ translateY: -15 }] }} />
-          <MessageHistory style={{ transform: [{ translateY: -30 }] }} />
-        </ChatHistoryBox>
+          <MessageOverview style={{ transform: [{ translateY: 5 }] }} />
+          <MessageOverview style={{ transform: [{ translateY: -15 }] }} />
+          <MessageOverview style={{ transform: [{ translateY: -30 }] }} />
+        </MessageOverviewBox>
       </Container>
     </ContainerWithChatFeature>
   );

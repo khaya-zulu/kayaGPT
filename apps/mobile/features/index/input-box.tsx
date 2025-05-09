@@ -1,4 +1,11 @@
-import { Pressable, SafeAreaView, TextInput, View } from "react-native";
+import {
+  Pressable,
+  PressableProps,
+  SafeAreaView,
+  TextInput,
+  TextInputProps,
+  View,
+} from "react-native";
 
 import { styled } from "styled-components/native";
 
@@ -20,7 +27,6 @@ import {
   ClockCounterClockwise,
   GithubLogo,
   GlobeSimple,
-  ImagesSquare,
   LinkedinLogo,
   LinkSimple,
   Microphone,
@@ -121,7 +127,15 @@ const BackToolbar = () => {
   );
 };
 
-export const InputBoxFeature = () => {
+export const InputBoxFeature = ({
+  value,
+  onChange,
+  onSubmit,
+}: {
+  value: string;
+  onChange: TextInputProps["onChange"];
+  onSubmit: PressableProps["onPress"];
+}) => {
   const { id } = useLocalSearchParams();
 
   return (
@@ -167,6 +181,9 @@ export const InputBoxFeature = () => {
                     outline: "none",
                     marginBottom: 20,
                   }}
+                  onChange={onChange}
+                  value={value}
+                  autoFocus
                 />
 
                 <View
@@ -196,6 +213,7 @@ export const InputBoxFeature = () => {
                       backgroundColor: sky800,
                       borderRadius: roundedFull,
                     }}
+                    onPress={onSubmit}
                   >
                     <ArrowUp size={14} color="#fff" weight="bold" />
                   </ArrowUpButton>

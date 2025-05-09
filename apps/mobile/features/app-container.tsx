@@ -11,6 +11,9 @@ import { BackgroundImageFeature } from "@/features/background-image";
 import { isIOS, isWeb } from "@/constants/platform";
 import { InputBoxFeature } from "./index";
 
+import { useChat } from "@ai-sdk/react";
+import { fetch as expoFetch } from "expo/fetch";
+
 export const MainContainerFeature = ({ children }: { children: ReactNode }) => {
   return (
     <ImageBackground
@@ -40,8 +43,15 @@ export const ContainerWithChatFeature = ({
   children: ReactNode;
   isSafeAreaDisabled?: boolean;
 }) => {
-  const Component = isSafeAreaDisabled ? Fragment : SafeAreaView;
+  const { handleSubmit, handleInputChange, input } = useChat({
+    api: "http://localhost:8787/api/chat",
+    fetch: expoFetch as unknown as typeof fetch,
+    onError: (error) => {
+      console.error("Error:", error);
+    },
+  });
 
+  const Component = isSafeAreaDisabled ? Fragment : SafeAreaView;
   const props = isSafeAreaDisabled ? {} : { style: { flex: 1 } };
 
   return (
@@ -55,7 +65,22 @@ export const ContainerWithChatFeature = ({
         }}
       >
         <Component {...props}>{children}</Component>
-        <InputBoxFeature />
+        <InputBoxFeature
+          value={input}
+          onChange={(ev) => {
+            handleInputChange({
+              ...ev,
+              target: {
+                ...ev.target,
+                value: ev.nativeEvent.text,
+              },
+            } as unknown as React.ChangeEvent<HTMLInputElement>);
+          }}
+          onSubmit={(e) => {
+            handleSubmit(e);
+            e.preventDefault();
+          }}
+        />
       </View>
     </MainContainerFeature>
   );

@@ -1,9 +1,28 @@
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-const app = new Hono()
+import { cors } from "hono/cors";
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+import { Message, streamText } from "ai";
+import { Env } from "../types/env";
+import { createOpenAIModel } from "../utils/models";
 
-export default app
+const app = new Hono<{ Bindings: Env }>();
+
+app.use("/api/*", cors());
+
+app.post("/api/chat/:id", async (c) => {
+  const body = await c.req.json<{ messages: Message[] }>();
+
+  const openai = await createOpenAIModel(c.env);
+
+  const result = streamText({
+    model: openai("gpt-4o-mini"),
+    prompt: "What is the capital of France?",
+    messages: body.messages,
+    onError: console.error,
+  });
+
+  return result.toDataStreamResponse();
+});
+
+export default app;
