@@ -156,7 +156,7 @@ export const InputBoxFeature = () => {
         <InputLinearBox>
           <InputBox>
             <SafeAreaView>
-              <View style={{ padding: 24 }}>
+              <View style={{ padding: 20 }}>
                 <TextInput
                   multiline
                   numberOfLines={3}
