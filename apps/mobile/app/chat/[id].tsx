@@ -10,6 +10,7 @@ import { ContainerWithChatFeature } from "@/features/app-container";
 import { ReactNode } from "react";
 import { useRouter } from "expo-router";
 import { isWeb } from "@/constants/platform";
+import { BlurView } from "expo-blur";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -17,7 +18,7 @@ const Container = styled.Pressable`
   margin: 0 auto;
   width: 100%;
   flex-direction: column;
-  gap: 20;
+  gap: 20px;
   flex: 1;
 `;
 
@@ -51,13 +52,9 @@ const Message = ({
 };
 
 const ToolbarBox = styled.View`
-  border-radius: ${roundedLg};
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
   flex-direction: row;
   border: 1px solid ${zinc200 + "80"};
   border-top-color: transparent;
-  background-color: #ffffffc6;
 `;
 
 export default function ChatIdPage() {
@@ -67,28 +64,45 @@ export default function ChatIdPage() {
     <ContainerWithChatFeature isSafeAreaDisabled>
       {!isWeb ? (
         <ToolbarBox>
+          <View
+            style={{
+              height: "100%",
+              width: "100%",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              backgroundColor: "#fff",
+              opacity: 0.2,
+            }}
+          />
           <SafeAreaView>
-            <Pressable
-              onPress={() => router.back()}
-              style={{
-                paddingHorizontal: 30,
-                paddingBottom: 20,
-                paddingTop: 10,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
-            >
-              <View
-                style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
+            <BlurView intensity={20}>
+              <Pressable
+                onPress={() => router.back()}
+                style={{
+                  paddingHorizontal: 20,
+                  paddingBottom: 20,
+                  paddingTop: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
               >
-                <ArrowLeft size={18} weight="bold" />
-                <Text>Hello world</Text>
-              </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    gap: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <ArrowLeft size={18} weight="bold" />
+                  <Text>Hello world</Text>
+                </View>
 
-              <ChatCircleDots size={18} weight="bold" />
-            </Pressable>
+                <ChatCircleDots size={20} weight="bold" />
+              </Pressable>
+            </BlurView>
           </SafeAreaView>
         </ToolbarBox>
       ) : null}
@@ -96,8 +110,8 @@ export default function ChatIdPage() {
         <Container onPress={() => Keyboard.dismiss()}>
           <View
             style={{
-              paddingHorizontal: 30,
-              paddingTop: 30,
+              paddingHorizontal: 20,
+              paddingTop: 20,
               flexDirection: "column",
               gap: 15,
             }}

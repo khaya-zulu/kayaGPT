@@ -11,7 +11,7 @@ export const MessageTags = () => {
       style={{
         flexDirection: "row",
         gap: 4,
-        paddingHorizontal: 1,
+        paddingHorizontal: 15,
         alignItems: "center",
       }}
     >

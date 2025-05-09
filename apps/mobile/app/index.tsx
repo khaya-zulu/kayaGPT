@@ -56,7 +56,7 @@ const padding = isWeb ? 0 : 20;
 const ChatHistoryBox = styled(Rounded)`
   flex-direction: column;
   gap: 8;
-  padding: ${isWeb ? 0 : padding}px ${isWeb ? 0 : 20}px 0px;
+  padding: ${isWeb ? 0 : padding}px ${isWeb ? 0 : 10}px 0px;
   flex: 1;
   border: ${!isWeb ? "1px" : "0px"} solid ${zinc400 + "80"};
   border-bottom-color: transparent;
