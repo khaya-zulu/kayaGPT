@@ -74,7 +74,7 @@ const MessageHistory = ({ style }: { style?: PressableProps["style"] }) => {
       <Rounded
         style={{
           backgroundColor: zinc100 + "80",
-          padding: isWeb ? 4 : 0,
+          padding: isWeb ? 3 : 0,
         }}
       >
         <Rounded
