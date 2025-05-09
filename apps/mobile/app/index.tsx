@@ -1,12 +1,6 @@
 import { styled } from "styled-components/native";
 
-import {
-  Keyboard,
-  Pressable,
-  PressableProps,
-  StyleProp,
-  View,
-} from "react-native";
+import { Keyboard, Pressable, PressableProps, View } from "react-native";
 
 import { Text } from "@/components/text";
 
@@ -169,9 +163,9 @@ export default function IndexPage() {
             </>
           ) : null}
 
-          <MessageHistory style={{ transform: [{ translateY: 30 }] }} />
-          <MessageHistory />
-          <MessageHistory style={{ transform: [{ translateY: -30 }] }} />
+          <MessageHistory style={{ transform: [{ translateY: 10 }] }} />
+          <MessageHistory style={{ transform: [{ translateY: -20 }] }} />
+          <MessageHistory style={{ transform: [{ translateY: -50 }] }} />
         </ChatHistoryBox>
       </Container>
     </ContainerWithChatFeature>
