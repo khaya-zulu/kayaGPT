@@ -10,6 +10,7 @@ import {
   zinc100,
   zinc600,
   zinc400,
+  zinc300,
 } from "@/constants/theme";
 import { ChatCircleDots } from "phosphor-react-native";
 import { ContainerWithChatFeature } from "@/features/app-container";
@@ -17,6 +18,8 @@ import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
 import { MessageTags } from "@/features/message-tags";
 import { useRouter } from "expo-router";
+import { BlurView } from "expo-blur";
+import { LinearGradient } from "expo-linear-gradient";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -61,6 +64,11 @@ const ChatHistoryBox = styled(Rounded)`
   border-bottom-right-radius: 0;
 `;
 
+const MessageHistoryRounded = styled(Rounded)`
+  border: 1px solid ${zinc100};
+  overflow: hidden;
+`;
+
 const MessageHistory = ({ style }: { style?: PressableProps["style"] }) => {
   const router = useRouter();
 
@@ -71,18 +79,25 @@ const MessageHistory = ({ style }: { style?: PressableProps["style"] }) => {
       }}
       style={style}
     >
-      <Rounded
-        style={{
-          backgroundColor: zinc100 + "80",
-          padding: isWeb ? 3 : 0,
-        }}
-      >
-        <Rounded
+      <MessageHistoryRounded>
+        <View
           style={{
+            height: "100%",
+            width: "100%",
+            position: "absolute",
+            top: 0,
+            left: 0,
             backgroundColor: "#fff",
+            opacity: isWeb ? 0.5 : 0.2,
+          }}
+        />
+
+        <BlurView
+          intensity={20}
+          style={{
+            backgroundColor: "#ffffff" + "80",
             padding: 20,
           }}
-          size={11}
         >
           <View
             style={{
@@ -115,8 +130,8 @@ const MessageHistory = ({ style }: { style?: PressableProps["style"] }) => {
               sure if I should be worried about it or not. I am not sure
             </Text>
           </Text>
-        </Rounded>
-      </Rounded>
+        </BlurView>
+      </MessageHistoryRounded>
     </Pressable>
   );
 };
@@ -163,9 +178,9 @@ export default function IndexPage() {
             </>
           ) : null}
 
-          <MessageHistory style={{ transform: [{ translateY: 10 }] }} />
-          <MessageHistory style={{ transform: [{ translateY: -20 }] }} />
-          <MessageHistory style={{ transform: [{ translateY: -50 }] }} />
+          <MessageHistory style={{ transform: [{ translateY: 5 }] }} />
+          <MessageHistory style={{ transform: [{ translateY: -15 }] }} />
+          <MessageHistory style={{ transform: [{ translateY: -30 }] }} />
         </ChatHistoryBox>
       </Container>
     </ContainerWithChatFeature>
