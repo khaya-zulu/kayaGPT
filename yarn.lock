@@ -3325,6 +3325,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/luxon@npm:^3.6.2":
+  version: 3.6.2
+  resolution: "@types/luxon@npm:3.6.2"
+  checksum: fa7bf7d74544c77c2010739337d359c5d6f9b0424de0e0eb273f7bae203996168cc33c2ad6f3b35771eac8fea8b7e5bcce72b91d129924d0f84b91dc216de42e
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 22.15.2
   resolution: "@types/node@npm:22.15.2"
@@ -7551,6 +7558,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"luxon@npm:^3.6.1":
+  version: 3.6.1
+  resolution: "luxon@npm:3.6.1"
+  checksum: bc6c24dde90f4263f548cc5a4ea3328e9c9511bee0b2255bd319639712862f1eb14a39c1b2dcbff8a8bf6686996d28f45b8fc902994a72dd05a29cef1269a6a4
+  languageName: node
+  linkType: hard
+
 "make-dir@npm:^4.0.0":
   version: 4.0.0
   resolution: "make-dir@npm:4.0.0"
@@ -8073,6 +8087,7 @@ __metadata:
     "@react-navigation/native": ^7.0.14
     "@tanstack/react-query": ^5.75.7
     "@types/jest": ^29.5.12
+    "@types/luxon": ^3.6.2
     "@types/react": ~19.0.10
     "@types/react-test-renderer": ^18.3.0
     expo: 53.0.9
@@ -8092,6 +8107,7 @@ __metadata:
     hono: ^4.7.8
     jest: ^29.2.1
     jest-expo: ~53.0.5
+    luxon: ^3.6.1
     phosphor-react-native: ^2.3.1
     react: 19.0.0
     react-dom: 19.0.0

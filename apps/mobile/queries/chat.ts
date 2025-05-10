@@ -1,9 +1,13 @@
-import { client } from "@/utils/client";
+import { client, InferResponseType } from "@/utils/client";
 import { useQuery } from "@tanstack/react-query";
 
-export const useChatHistory = async () => {
+export type ChatHistoryQueryOutput = InferResponseType<
+  typeof client.api.chat.$get
+>;
+
+export const useChatHistoryQuery = () => {
   return useQuery({
-    queryKey: ["chatHistory"],
+    queryKey: ["/chat"],
     queryFn: async () => {
       const response = await client.api.chat.$get();
       return response.json();

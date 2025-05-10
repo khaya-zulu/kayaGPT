@@ -14,6 +14,7 @@ import { MessageTags } from "@/features/message-tags";
 
 import { MessageOverview } from "@/features/message-overview";
 import { useChat } from "@/hooks/use-chat";
+import { useChatHistoryQuery } from "@/queries/chat";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -61,7 +62,9 @@ const MessageOverviewBox = styled(Rounded)`
 export default function IndexPage() {
   const router = useRouter();
 
-  const { handleInputChange, input } = useChat({});
+  const { handleInputChange, input, setInput } = useChat({});
+
+  const chatHistoryQuery = useChatHistoryQuery();
 
   return (
     <BoxWithChat
@@ -77,6 +80,7 @@ export default function IndexPage() {
       value={input}
       onSubmit={() => {
         router.push(`/chat/${Crypto.randomUUID()}?message=${input}`);
+        setInput("");
       }}
     >
       <Container onPress={() => Keyboard.dismiss()}>
@@ -118,9 +122,16 @@ export default function IndexPage() {
             </>
           ) : null}
 
-          <MessageOverview style={{ transform: [{ translateY: 5 }] }} />
-          <MessageOverview style={{ transform: [{ translateY: -15 }] }} />
-          <MessageOverview style={{ transform: [{ translateY: -30 }] }} />
+          {chatHistoryQuery.data?.chats.map((c, idx) => {
+            return (
+              <MessageOverview
+                key={c.id}
+                style={{ transform: [{ translateY: -idx * 20 }] }}
+                title={c.title}
+                message={c.lastMessage}
+              />
+            );
+          })}
         </MessageOverviewBox>
       </Container>
     </BoxWithChat>

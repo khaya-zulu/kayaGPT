@@ -10,6 +10,8 @@ import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
 import { useRouter } from "expo-router";
 import { BlurView } from "expo-blur";
+import { ChatHistoryQueryOutput } from "@/queries/chat";
+import { formatRelative } from "@/utils/date";
 
 const MessageOverviewBox = styled(Rounded)`
   border: 1px solid ${zinc100};
@@ -18,8 +20,12 @@ const MessageOverviewBox = styled(Rounded)`
 
 export const MessageOverview = ({
   style,
+  title,
+  message,
 }: {
   style?: PressableProps["style"];
+  title?: string;
+  message: ChatHistoryQueryOutput["chats"][number]["lastMessage"];
 }) => {
   const router = useRouter();
 
@@ -67,19 +73,18 @@ export const MessageOverview = ({
               }}
             >
               <ChatCircleDots size={18} weight="bold" />
-              <Text fontSize="sm">Hello world</Text>
+              <Text fontSize="sm">{title}</Text>
             </View>
 
             <Text fontSize="sm" style={{ color: sky800 }}>
-              12:00 PM
+              {message?.createdAt
+                ? formatRelative(new Date(message?.createdAt))
+                : "-"}
             </Text>
           </View>
           <Text fontSize="sm" numberOfLines={2}>
             AI:{" "}
-            <Text style={{ color: zinc600 }}>
-              Why is the world flat? and do I need to worry about it? I am not
-              sure if I should be worried about it or not. I am not sure
-            </Text>
+            <Text style={{ color: zinc600 }}>{message?.content ?? "-"}</Text>
           </Text>
         </BlurView>
       </MessageOverviewBox>

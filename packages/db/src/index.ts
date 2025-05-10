@@ -1,4 +1,5 @@
 import { AnyD1Database, drizzle } from "drizzle-orm/d1";
+export * from "drizzle-orm";
 
 export * from "./schema";
 
