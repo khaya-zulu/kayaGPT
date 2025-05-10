@@ -2704,7 +2704,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kgpt/db@workspace:packages/db":
+"@kgpt/db@*, @kgpt/db@workspace:packages/db":
   version: 0.0.0-use.local
   resolution: "@kgpt/db@workspace:packages/db"
   dependencies:
@@ -3887,6 +3887,7 @@ __metadata:
   resolution: "backend@workspace:apps/backend"
   dependencies:
     "@ai-sdk/openai": ^1.3.22
+    "@kgpt/db": "*"
     ai: ^4.3.15
     dotenv: ^16.5.0
     hono: ^4.7.8
