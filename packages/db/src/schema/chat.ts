@@ -1,9 +1,9 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-import { dateNow, id } from ".";
+import { dateNow, id } from "./utils";
 
 export const chat = sqliteTable("chat", {
-  id,
+  id: text("id").primaryKey(),
   name: int("name").notNull(),
   updatedAt: dateNow("updated_at").notNull(),
   createdAt: dateNow("created_at").notNull(),

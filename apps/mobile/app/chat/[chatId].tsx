@@ -4,13 +4,14 @@ import { Keyboard, Pressable, View, SafeAreaView } from "react-native";
 
 import { Text } from "@/components/text";
 
-import { sky800, roundedLg, zinc200 } from "@/constants/theme";
+import { sky800, zinc200 } from "@/constants/theme";
 import { ArrowLeft, ChatCircleDots, Cube } from "phosphor-react-native";
-import { ContainerWithChatFeature } from "@/features/app-container";
-import { ReactNode } from "react";
-import { useRouter } from "expo-router";
+import { BoxWithChat } from "@/features/main-app-box";
+import { ReactNode, useEffect } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { isWeb } from "@/constants/platform";
 import { BlurView } from "expo-blur";
+import { useChat } from "@/hooks/use-chat";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -59,9 +60,38 @@ const ToolbarBox = styled.View`
 
 export default function ChatIdPage() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ message?: string; chatId: string }>();
+
+  const { handleInputChange, input, handleSubmit, append, messages } = useChat({
+    chatId: params.chatId,
+  });
+
+  useEffect(() => {
+    if (!!params.message && params.message !== "undefined") {
+      append({
+        role: "user",
+        content: params.message,
+      });
+    }
+
+    router.setParams({ message: undefined });
+  }, [params.message]);
 
   return (
-    <ContainerWithChatFeature isSafeAreaDisabled>
+    <BoxWithChat
+      isSafeAreaDisabled
+      value={input}
+      onChange={(ev) => {
+        handleInputChange({
+          ...ev,
+          target: {
+            ...ev.target,
+            value: ev.nativeEvent.text,
+          },
+        } as unknown as React.ChangeEvent<HTMLInputElement>);
+      }}
+      onSubmit={handleSubmit}
+    >
       {!isWeb ? (
         <ToolbarBox>
           <View
@@ -113,14 +143,26 @@ export default function ChatIdPage() {
               paddingHorizontal: 20,
               paddingTop: 20,
               flexDirection: "column",
-              gap: 15,
+              gap: 18,
             }}
           >
-            <Message role="Assistant">How can I help you today?</Message>
-            <Message role="User">Whats the weather in South Africa</Message>
+            {messages.map((m) => (
+              <Message
+                key={m.id}
+                role={m.role === "assistant" ? "Assistant" : "User"}
+              >
+                {m.parts.map((p) => {
+                  if (p.type === "text") {
+                    return <Text key={m.id + p.text}>{p.text}</Text>;
+                  }
+
+                  return null;
+                })}
+              </Message>
+            ))}
           </View>
         </Container>
       </SafeAreaView>
-    </ContainerWithChatFeature>
+    </BoxWithChat>
   );
 }

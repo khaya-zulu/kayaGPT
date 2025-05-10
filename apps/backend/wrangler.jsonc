@@ -25,7 +25,8 @@
     {
       "binding": "DB",
       "database_name": "kgpt-database",
-      "database_id": "",
+      "database_id": "YOUR-DB-ID-HERE",
+      "migrations_dir": "../../packages/db/drizzle",
     },
   ],
   // "ai": {

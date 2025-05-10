@@ -1,15 +1,19 @@
 import { Keyboard, View } from "react-native";
+import { useRouter } from "expo-router";
 import { styled } from "styled-components/native";
+
+import * as Crypto from "expo-crypto";
 
 import { Text } from "@/components/text";
 
 import { rounded2xl, zinc400 } from "@/constants/theme";
-import { ContainerWithChatFeature } from "@/features/app-container";
+import { BoxWithChat } from "@/features/main-app-box";
 import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
 import { MessageTags } from "@/features/message-tags";
 
 import { MessageOverview } from "@/features/message-overview";
+import { useChat } from "@/hooks/use-chat";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -55,8 +59,26 @@ const MessageOverviewBox = styled(Rounded)`
 `;
 
 export default function IndexPage() {
+  const router = useRouter();
+
+  const { handleInputChange, input } = useChat({});
+
   return (
-    <ContainerWithChatFeature>
+    <BoxWithChat
+      onChange={(ev) => {
+        handleInputChange({
+          ...ev,
+          target: {
+            ...ev.target,
+            value: ev.nativeEvent.text,
+          },
+        } as unknown as React.ChangeEvent<HTMLInputElement>);
+      }}
+      value={input}
+      onSubmit={() => {
+        router.push(`/chat/${Crypto.randomUUID()}?message=${input}`);
+      }}
+    >
       <Container onPress={() => Keyboard.dismiss()}>
         <View
           style={{
@@ -101,6 +123,6 @@ export default function IndexPage() {
           <MessageOverview style={{ transform: [{ translateY: -30 }] }} />
         </MessageOverviewBox>
       </Container>
-    </ContainerWithChatFeature>
+    </BoxWithChat>
   );
 }

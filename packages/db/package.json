@@ -2,13 +2,13 @@
   "name": "@kgpt/db",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
+  "scripts": {
+    "generate": "drizzle-kit generate"
+  },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.8",
     "drizzle-kit": "^0.31.1",

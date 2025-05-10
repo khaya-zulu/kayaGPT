@@ -3,18 +3,20 @@ import { Fragment, ReactNode } from "react";
 import {
   ImageBackground,
   KeyboardAvoidingView,
+  PressableProps,
   SafeAreaView,
+  TextInputProps,
   View,
 } from "react-native";
 import { BackgroundImageFeature } from "@/features/background-image";
 
 import { isIOS, isWeb } from "@/constants/platform";
-import { InputBoxFeature } from "./index";
+import { InputBoxFeature } from "./index/index";
 
 import { useChat } from "@ai-sdk/react";
 import { fetch as expoFetch } from "expo/fetch";
 
-export const MainContainerFeature = ({ children }: { children: ReactNode }) => {
+export const MainAppBox = ({ children }: { children: ReactNode }) => {
   return (
     <ImageBackground
       style={{
@@ -36,26 +38,24 @@ export const MainContainerFeature = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const ContainerWithChatFeature = ({
+export const BoxWithChat = ({
   children,
   isSafeAreaDisabled,
+  value,
+  onChange,
+  onSubmit,
 }: {
   children: ReactNode;
   isSafeAreaDisabled?: boolean;
+  value: string;
+  onChange: TextInputProps["onChange"];
+  onSubmit: PressableProps["onPress"];
 }) => {
-  const { handleSubmit, handleInputChange, input } = useChat({
-    api: "http://localhost:8787/api/chat",
-    fetch: expoFetch as unknown as typeof fetch,
-    onError: (error) => {
-      console.error("Error:", error);
-    },
-  });
-
   const Component = isSafeAreaDisabled ? Fragment : SafeAreaView;
   const props = isSafeAreaDisabled ? {} : { style: { flex: 1 } };
 
   return (
-    <MainContainerFeature>
+    <MainAppBox>
       <View
         style={{
           flex: 1,
@@ -66,22 +66,11 @@ export const ContainerWithChatFeature = ({
       >
         <Component {...props}>{children}</Component>
         <InputBoxFeature
-          value={input}
-          onChange={(ev) => {
-            handleInputChange({
-              ...ev,
-              target: {
-                ...ev.target,
-                value: ev.nativeEvent.text,
-              },
-            } as unknown as React.ChangeEvent<HTMLInputElement>);
-          }}
-          onSubmit={(e) => {
-            handleSubmit(e);
-            e.preventDefault();
-          }}
+          value={value}
+          onChange={onChange}
+          onSubmit={onSubmit}
         />
       </View>
-    </MainContainerFeature>
+    </MainAppBox>
   );
 };

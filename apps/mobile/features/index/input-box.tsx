@@ -37,7 +37,7 @@ import { ColorPickerFeature } from "./color-picker";
 import { Text } from "@/components/text";
 import { LinearGradient } from "expo-linear-gradient";
 import { isWeb } from "@/constants/platform";
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 import { MessageTags } from "../message-tags";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
@@ -136,7 +136,9 @@ export const InputBoxFeature = ({
   onChange: TextInputProps["onChange"];
   onSubmit: PressableProps["onPress"];
 }) => {
-  const { id } = useLocalSearchParams();
+  const { chatId } = useLocalSearchParams();
+
+  const arrowUpButtonRef = useRef<View>(null);
 
   return (
     <InputContainer>
@@ -153,8 +155,8 @@ export const InputBoxFeature = ({
               alignItems: "center",
             }}
           >
-            {id ? <BackToolbar /> : null}
-            {!id ? <MessageTags /> : null}
+            {chatId ? <BackToolbar /> : null}
+            {!chatId ? <MessageTags /> : null}
 
             <View
               style={{ flexDirection: "row", gap: 15, alignItems: "center" }}
@@ -182,8 +184,14 @@ export const InputBoxFeature = ({
                     marginBottom: 20,
                   }}
                   onChange={onChange}
+                  onKeyPress={(ev) => {
+                    if (isWeb && ev.nativeEvent.key === "Enter") {
+                      arrowUpButtonRef.current?.focus();
+
+                      onSubmit?.(undefined as any);
+                    }
+                  }}
                   value={value}
-                  autoFocus
                 />
 
                 <View
@@ -208,6 +216,7 @@ export const InputBoxFeature = ({
                   </View>
 
                   <ArrowUpButton
+                    ref={arrowUpButtonRef}
                     style={{
                       padding: 6,
                       backgroundColor: sky800,
