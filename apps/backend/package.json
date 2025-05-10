@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "@kgpt/backend",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
@@ -17,5 +17,8 @@
   },
   "devDependencies": {
     "wrangler": "^4.4.0"
+  },
+  "exports": {
+    ".": "./src/index.ts"
   }
 }

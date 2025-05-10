@@ -1,10 +1,13 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { Text } from "react-native";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const [isFontLoaded, error] = useFonts({
@@ -21,5 +24,9 @@ export default function RootLayout() {
     return <Text>Loading...</Text>;
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Stack screenOptions={{ headerShown: false }} />
+    </QueryClientProvider>
+  );
 }

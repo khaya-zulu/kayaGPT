@@ -4,7 +4,7 @@ import { z } from "zod";
 import { chat, db } from "@kgpt/db";
 
 import { createOpenAIModel } from "@/utils/models";
-import { Env } from "@/types/env";
+import { Env } from "@/utils/env";
 
 export const createChat = async ({
   prompt,
@@ -28,4 +28,9 @@ export const createChat = async ({
     id,
     title: object.title,
   });
+};
+
+export const getChatHistory = async ({ env }: { env: Env }) => {
+  const chats = await db(env.DB).select().from(chat);
+  return chats;
 };

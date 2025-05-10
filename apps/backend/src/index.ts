@@ -1,36 +1,14 @@
 import { Hono } from "hono";
-
 import { cors } from "hono/cors";
 
-import { Message, streamText } from "ai";
-import { Env } from "@/types/env";
-import { createOpenAIModel } from "@/utils/models";
-import { createChat } from "@/queries/chat";
+import { chatRoute } from "./routes/chat";
 
-const app = new Hono<{ Bindings: Env }>();
+import { app as appServer } from "@/utils/server";
 
-app.use("/api/*", cors());
+appServer.use("/api/*", cors());
 
-app.post("/api/chat/:id", async (c) => {
-  const body = await c.req.json<{ messages: Message[] }>();
+const routes = appServer.route("/api/chat", chatRoute);
 
-  const openai = await createOpenAIModel(c.env, ["gpt-4o-mini"]);
+export default appServer;
 
-  if (body.messages.length === 1) {
-    await createChat({
-      prompt: body.messages[0].content,
-      id: c.req.param("id"),
-      env: c.env,
-    });
-  }
-
-  const result = streamText({
-    model: openai,
-    messages: body.messages,
-    onError: console.error,
-  });
-
-  return result.toDataStreamResponse();
-});
-
-export default app;
+export type AppType = typeof routes;

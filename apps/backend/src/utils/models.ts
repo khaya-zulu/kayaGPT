@@ -1,10 +1,6 @@
-import {
-  createOpenAI,
-  OpenAIProvider,
-  OpenAIProviderSettings,
-} from "@ai-sdk/openai";
+import { createOpenAI, OpenAIProvider } from "@ai-sdk/openai";
 
-import { Env } from "@/types/env";
+import { Env } from "@/utils/env";
 
 export const createOpenAIModel = async (
   env: Env,
