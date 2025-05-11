@@ -20,7 +20,7 @@ export const Pill = ({
   const colors = {
     filled: ["#222222", "#222222"],
     outline: [zinc200, zinc200],
-    white: ["#ffffff" + "80", "#ffffff"],
+    white: [zinc200 + "CC", zinc100],
   };
 
   const borderColor = {
@@ -59,14 +59,18 @@ export const Pill = ({
           position: "relative",
         }}
       >
-        <BlurView style={{ paddingHorizontal: 10 }} intensity={50}>
+        <BlurView intensity={50}>
           {noText ? (
             children
           ) : (
             <Text
               style={[
                 style,
-                { color: variant === "filled" ? "#fff" : undefined },
+                {
+                  color: variant === "filled" ? "#fff" : undefined,
+                  paddingHorizontal: 10,
+                  backgroundColor: "#fff",
+                },
               ]}
             >
               {children}

@@ -23,6 +23,7 @@ export default function WorkspacePage() {
                   alignItems: "center",
                   gap: 10,
                   paddingVertical: 2.5,
+                  paddingHorizontal: 10,
                 }}
               >
                 <ImageSquare size={20} />

@@ -23,6 +23,7 @@ export default function ProfilePage() {
                   alignItems: "center",
                   gap: 10,
                   paddingVertical: 2.5,
+                  paddingHorizontal: 10,
                 }}
               >
                 <ImageSquare size={18} color="#fff" />
