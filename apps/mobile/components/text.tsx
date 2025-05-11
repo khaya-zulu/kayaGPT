@@ -14,7 +14,7 @@ export const Text = styled.Text<{ fontSize?: keyof typeof FONT_SIZE }>`
   font-family: ${fontSpaceGrotesk};
   font-size: 24px;
   line-height: 24px;
-  font-size: ${(props) => FONT_SIZE[props.fontSize ?? "base"]};
+  font-size: ${(props) => FONT_SIZE[props.fontSize ?? "base"]}px;
 `;
 
 type GradientTextProps = TextProps & {

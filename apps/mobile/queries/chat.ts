@@ -31,7 +31,10 @@ export const useChatMessagesQuery = (props: {
   });
 };
 
-export const useChatTitleQuery = (chatId: string) => {
+export const useChatTitleQuery = (
+  chatId: string,
+  props?: { isEnabled?: boolean }
+) => {
   return useQuery({
     queryKey: [`/chat/${chatId}/title`],
     queryFn: async () => {
@@ -40,5 +43,6 @@ export const useChatTitleQuery = (chatId: string) => {
       });
       return response.json();
     },
+    enabled: props?.isEnabled,
   });
 };

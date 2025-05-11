@@ -123,7 +123,7 @@ export const ChatBox = ({
     <InputContainer>
       {isWeb ? <ColorPicker /> : null}
       <View style={{ flex: 1, position: "relative" }}>
-        {isWeb ? (toolbar ?? <ChatBoxToolbar />) : null}
+        {isWeb ? toolbar : null}
 
         <InputLinearBox>
           <InputBox>

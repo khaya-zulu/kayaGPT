@@ -16,7 +16,7 @@ export default function ProfilePage() {
         role="Assistant"
         actions={
           <View style={{ flexDirection: "row", gap: 10 }}>
-            <Pill noText>
+            <Pill variant="filled" noText>
               <View
                 style={{
                   flexDirection: "row",
@@ -25,8 +25,10 @@ export default function ProfilePage() {
                   paddingVertical: 2.5,
                 }}
               >
-                <ImageSquare size={20} />
-                <Text>Upload</Text>
+                <ImageSquare size={18} color="#fff" />
+                <Text fontSize="sm" style={{ color: "#fff" }}>
+                  Upload
+                </Text>
               </View>
             </Pill>
           </View>

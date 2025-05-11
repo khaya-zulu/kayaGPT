@@ -24,6 +24,7 @@ import { Rounded } from "@/components/rounded";
 
 import { BoxWithChat } from "@/features/main-app-box";
 import { ChatMessage } from "@/features/chat-message";
+import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -64,11 +65,13 @@ export default function ChatIdPage() {
     chatId: params.chatId,
   });
 
+  const isMessageQueryEnabled = !isNewMessage && !params.message;
+
   const messagesQuery = useChatMessagesQuery({
     chatId: params.chatId,
     // only fetch if the page navigation is not
     // the result of a new message
-    isEnabled: !isNewMessage && !params.message,
+    isEnabled: isMessageQueryEnabled,
   });
 
   useWatch(messagesQuery.isSuccess, (prev, curr) => {
@@ -131,6 +134,7 @@ export default function ChatIdPage() {
         });
         handleSubmit();
       }}
+      toolbar={<ChatBoxToolbar isTitleEnabled={isMessageQueryEnabled} />}
     >
       {!isWeb ? (
         <ToolbarBox>

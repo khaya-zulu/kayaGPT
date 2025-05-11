@@ -15,14 +15,15 @@ import { MessageTags } from "@/features/message-tags";
 import { MessageOverview } from "@/features/message-overview";
 import { useChat } from "@/hooks/use-chat";
 import { useChatHistoryQuery } from "@/queries/chat";
+import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
-  max-width: 512;
+  max-width: 512px;
   margin: 0 auto;
   width: 100%;
   flex-direction: column;
-  gap: 20;
+  gap: 20px;
   flex: 1;
 `;
 
@@ -82,6 +83,7 @@ export default function IndexPage() {
         router.push(`/chat/${Crypto.randomUUID()}?message=${input}`);
         setInput("");
       }}
+      toolbar={<ChatBoxToolbar />}
     >
       <Container onPress={() => Keyboard.dismiss()}>
         <View

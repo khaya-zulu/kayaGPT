@@ -13,10 +13,14 @@ import { MessageTags } from "../message-tags";
 import { useChatTitleQuery } from "@/queries/chat";
 import { Text } from "@/components/text";
 
-export const BackToolbar = () => {
+export const BackToolbar = ({
+  isTitleEnabled,
+}: {
+  isTitleEnabled?: boolean;
+}) => {
   const { chatId } = useLocalSearchParams<{ chatId: string }>();
 
-  const titleQuery = useChatTitleQuery(chatId);
+  const titleQuery = useChatTitleQuery(chatId, { isEnabled: isTitleEnabled });
 
   return (
     <Link href="/">
@@ -28,7 +32,11 @@ export const BackToolbar = () => {
   );
 };
 
-export const ChatBoxToolbar = () => {
+export const ChatBoxToolbar = ({
+  isTitleEnabled,
+}: {
+  isTitleEnabled?: boolean;
+}) => {
   const { chatId } = useLocalSearchParams();
 
   return (
@@ -41,7 +49,7 @@ export const ChatBoxToolbar = () => {
           alignItems: "center",
         }}
       >
-        {chatId ? <BackToolbar /> : null}
+        {chatId ? <BackToolbar isTitleEnabled={isTitleEnabled} /> : null}
         {!chatId ? <MessageTags /> : null}
 
         <View style={{ flexDirection: "row", gap: 15, alignItems: "center" }}>

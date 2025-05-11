@@ -21,13 +21,13 @@ export default function ProfileLayout() {
       toolbar={
         <View style={{ flexDirection: "row", gap: 10, padding: 10 }}>
           <Link href="/profile">
-            <Pill>Profile</Pill>
+            <Pill variant="white">Profile</Pill>
           </Link>
           <Link href="/profile/workspace">
-            <Pill>Workspace</Pill>
+            <Pill variant="white">Workspace</Pill>
           </Link>
           <Link href="/profile/bio">
-            <Pill>Bio</Pill>
+            <Pill variant="white">Bio</Pill>
           </Link>
         </View>
       }
