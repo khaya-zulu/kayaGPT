@@ -1,26 +1,20 @@
 import { styled } from "styled-components/native";
 
-import {
-  Pressable,
-  PressableProps,
-  StyleProp,
-  TextStyle,
-  View,
-} from "react-native";
+import { StyleProp, TextStyle, View } from "react-native";
 
 import { Text } from "@/components/text";
 
-import { sky800, zinc100, zinc600 } from "@/constants/theme";
+import { sky50, sky800, zinc600 } from "@/constants/theme";
 import { ChatCircleDots } from "phosphor-react-native";
 import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 import { BlurView } from "expo-blur";
 import { ChatHistoryQueryOutput } from "@/queries/chat";
 import { formatRelative } from "@/utils/date";
 
 const MessageOverviewBox = styled(Rounded)`
-  border: 1px solid ${zinc100};
+  border: 1px solid ${sky50};
   overflow: hidden;
   width: 100%;
 `;

@@ -1,5 +1,5 @@
 import { Keyboard, View } from "react-native";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { styled } from "styled-components/native";
 
 import * as Crypto from "expo-crypto";
@@ -95,20 +95,22 @@ export default function IndexPage() {
             alignItems: "flex-end",
           }}
         >
-          <View
-            style={{
-              flexDirection: "row",
-            }}
-          >
-            <WorkspaceImage
-              source={require("../assets/images/workspace.png")}
-            />
-            <AvatarImage
-              source={{
-                uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
+          <Link href="/profile">
+            <View
+              style={{
+                flexDirection: "row",
               }}
-            />
-          </View>
+            >
+              <WorkspaceImage
+                source={require("../assets/images/workspace.png")}
+              />
+              <AvatarImage
+                source={{
+                  uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
+                }}
+              />
+            </View>
+          </Link>
           <View>
             <Text style={{ marginLeft: "auto" }}>Hi Khaya 👋</Text>
             <Text>18:58 PM, 22°C</Text>

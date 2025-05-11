@@ -10,14 +10,9 @@ import {
 
 import { Text } from "@/components/text";
 
-import { sky800, zinc200, sky200, sky50, zinc100 } from "@/constants/theme";
-import {
-  ArrowDown,
-  ArrowLeft,
-  ChatCircleDots,
-  Cube,
-} from "phosphor-react-native";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { zinc200, zinc100 } from "@/constants/theme";
+import { ArrowDown, ArrowLeft, ChatCircleDots } from "phosphor-react-native";
+import { useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { isWeb } from "@/constants/platform";
 import { BlurView } from "expo-blur";
@@ -25,9 +20,10 @@ import { useChat } from "@/hooks/use-chat";
 import { useChatMessagesQuery } from "@/queries/chat";
 import { useWatch } from "@/hooks/use-watch";
 
-import { BoxWithChat } from "@/features/main-app-box";
 import { Rounded } from "@/components/rounded";
-import { LinearGradient } from "expo-linear-gradient";
+
+import { BoxWithChat } from "@/features/main-app-box";
+import { ChatMessage } from "@/features/chat-message";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -38,62 +34,6 @@ const Container = styled.Pressable`
   gap: 20px;
   flex: 1;
 `;
-
-const Message = ({
-  role,
-  children,
-}: {
-  role: "Assistant" | "User";
-  children: ReactNode;
-}) => {
-  const isAssistant = role === "Assistant";
-  const textColor = isAssistant ? sky800 : undefined;
-
-  const colors = isAssistant
-    ? ["#ffffff" + "80", sky50 + "80"]
-    : ["#ffffff" + "00", "#ffffff" + "00"];
-
-  return (
-    <View
-      style={{
-        flexDirection: "row",
-        gap: 15,
-      }}
-    >
-      <Cube
-        color={textColor}
-        weight="duotone"
-        size={20}
-        style={{
-          transform: [{ translateY: 2.5 }],
-          opacity: role === "Assistant" ? 1 : 0,
-        }}
-        // flip x, todo: use for loading
-        // style={{
-        //   transform: [{ rotateY: "180deg" }],
-        // }}
-      />
-
-      <Rounded
-        style={{
-          flex: 1,
-          overflow: isAssistant ? "hidden" : undefined,
-          borderWidth: isAssistant ? 1 : 0,
-          borderColor: isAssistant ? sky50 : undefined,
-        }}
-      >
-        <LinearGradient
-          colors={colors as any}
-          style={{
-            padding: isAssistant ? 20 : 0,
-          }}
-        >
-          <Text>{children}</Text>
-        </LinearGradient>
-      </Rounded>
-    </View>
-  );
-};
 
 const ToolbarBox = styled.View`
   flex-direction: row;
@@ -151,7 +91,11 @@ export default function ChatIdPage() {
           })
         );
 
-        scrollViewRef.current?.scrollToEnd();
+        setTimeout(() => {
+          scrollViewRef.current?.scrollToEnd({
+            animated: false,
+          });
+        }, 50);
       }
     }
   });
@@ -260,18 +204,12 @@ export default function ChatIdPage() {
               }}
             >
               {messages.map((m) => (
-                <Message
+                <ChatMessage
                   key={m.id}
                   role={m.role === "assistant" ? "Assistant" : "User"}
-                >
-                  {m.parts.map((p) => {
-                    if (p.type === "text") {
-                      return <Text key={m.id + p.text}>{p.text}</Text>;
-                    }
-
-                    return null;
-                  })}
-                </Message>
+                  messageId={m.id}
+                  parts={m.parts}
+                />
               ))}
             </View>
           </Container>

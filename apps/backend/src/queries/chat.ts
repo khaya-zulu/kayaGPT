@@ -1,33 +1,22 @@
-import { generateObject } from "ai";
-import { z } from "zod";
+import { schema, db, desc, eq, asc } from "@kgpt/db";
 
-import { schema, db, desc, eq, sql } from "@kgpt/db";
-
-import { createOpenAIModel } from "@/utils/models";
 import { Env } from "@/utils/env";
 
-export const createChat = async ({
-  prompt,
-  id,
-  env,
-}: {
-  prompt: string;
-  id: string;
-  env: Env;
-}) => {
+export const createChat = async (
+  env: Env,
+  {
+    id,
+    title,
+  }: {
+    prompt: string;
+    id: string;
+    title: string;
+  }
+) => {
   try {
-    const { object } = await generateObject({
-      model: await createOpenAIModel(env, ["gpt-4o-mini"]),
-      schema: z.object({
-        title: z.string(),
-      }),
-      system: "Generate a title for a message app based on the prompt",
-      prompt,
-    });
-
     await db(env.DB).insert(schema.chat).values({
       id,
-      title: object.title,
+      title,
     });
   } catch (error) {
     console.error("Error creating chat:", error);
@@ -46,6 +35,7 @@ export const getChatHistory = async (env: Env) => {
       .from(schema.chatMessage)
       .groupBy(schema.chatMessage.chatId)
       .orderBy(desc(schema.chatMessage.createdAt))
+      .where(eq(schema.chatMessage.role, "assistant"))
       .as("chatMessagesSubquery");
 
     const chats = await db(env.DB)

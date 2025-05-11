@@ -2,7 +2,6 @@ import {
   Pressable,
   PressableProps,
   SafeAreaView,
-  TextInput,
   TextInputProps,
   View,
 } from "react-native";
@@ -30,12 +29,12 @@ import {
   roundedFull,
   sky800,
   sky200,
-  fontSpaceGrotesk,
 } from "@/constants/theme";
 import { ColorPicker } from "@/features/chat-box/color-picker";
 import { Text } from "@/components/text";
 import { isWeb } from "@/constants/platform";
 import { ChatBoxToolbar } from "./toolbar";
+import { TextInput } from "@/components/text-input";
 
 const InputBox = styled.View`
   background-color: #fff;
@@ -111,10 +110,12 @@ export const ChatBox = ({
   value,
   onChange,
   onSubmit,
+  toolbar,
 }: {
   value: string;
   onChange: TextInputProps["onChange"];
   onSubmit: PressableProps["onPress"];
+  toolbar?: ReactNode;
 }) => {
   const arrowUpButtonRef = useRef<View>(null);
 
@@ -122,7 +123,7 @@ export const ChatBox = ({
     <InputContainer>
       {isWeb ? <ColorPicker /> : null}
       <View style={{ flex: 1, position: "relative" }}>
-        {isWeb ? <ChatBoxToolbar /> : null}
+        {isWeb ? (toolbar ?? <ChatBoxToolbar />) : null}
 
         <InputLinearBox>
           <InputBox>
@@ -132,10 +133,7 @@ export const ChatBox = ({
                   multiline
                   numberOfLines={1}
                   placeholder="Type something..."
-                  placeholderTextColor={zinc600}
                   style={{
-                    fontFamily: fontSpaceGrotesk,
-                    outline: "none",
                     marginBottom: 20,
                   }}
                   onChange={onChange}

@@ -42,12 +42,14 @@ export const BoxWithChat = ({
   value,
   onChange,
   onSubmit,
+  toolbar,
 }: {
   children: ReactNode;
   isSafeAreaDisabled?: boolean;
   value: string;
   onChange: TextInputProps["onChange"];
   onSubmit: PressableProps["onPress"];
+  toolbar?: ReactNode;
 }) => {
   const Component = isSafeAreaDisabled ? Fragment : SafeAreaView;
   const props = isSafeAreaDisabled ? {} : { style: { flex: 1 } };
@@ -63,7 +65,12 @@ export const BoxWithChat = ({
         }}
       >
         <Component {...props}>{children}</Component>
-        <ChatBox value={value} onChange={onChange} onSubmit={onSubmit} />
+        <ChatBox
+          value={value}
+          onChange={onChange}
+          onSubmit={onSubmit}
+          toolbar={toolbar}
+        />
       </View>
     </MainAppBox>
   );

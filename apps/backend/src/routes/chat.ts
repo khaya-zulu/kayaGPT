@@ -1,4 +1,4 @@
-import { streamText, Message } from "ai";
+import { streamText, Message, generateObject } from "ai";
 
 import { createChat, getChatHistory, getChatTitleById } from "@/queries/chat";
 import {
@@ -8,6 +8,7 @@ import {
 
 import { createOpenAIModel } from "@/utils/models";
 import { app } from "@/utils/server";
+import { z } from "zod";
 
 export const chatRoute = app
   .get("/", async (c) => {
@@ -35,10 +36,22 @@ export const chatRoute = app
     const isNewMessage = body.messages.length === 1;
 
     if (isNewMessage) {
-      await createChat({
-        prompt: body.messages[0].content,
-        env: c.env,
+      const startingPrompt = body.messages[0].content;
+
+      const { object } = await generateObject({
+        model: await createOpenAIModel(c.env, ["gpt-4o-mini"]),
+        schema: z.object({
+          title: z.string(),
+        }),
+        system:
+          "Generate a short title that summarizes a prompt. The title should be short and concise.",
+        prompt: startingPrompt,
+      });
+
+      await createChat(c.env, {
+        prompt: startingPrompt,
         id: chatId,
+        title: object.title,
       });
     }
 
@@ -56,6 +69,8 @@ export const chatRoute = app
       model: openai,
       messages: body.messages,
       onError: console.error,
+      system:
+        "You are a helpful personal assistant. You are meant to help the user be more productive. Be friendly and concise.",
       onFinish: async (message) => {
         await createChatMessage(c.env, {
           chatId,
