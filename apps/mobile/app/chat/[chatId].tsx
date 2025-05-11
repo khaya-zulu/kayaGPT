@@ -10,16 +10,24 @@ import {
 
 import { Text } from "@/components/text";
 
-import { sky800, zinc200 } from "@/constants/theme";
-import { ArrowLeft, ChatCircleDots, Cube } from "phosphor-react-native";
-import { BoxWithChat } from "@/features/main-app-box";
-import { ReactNode, useEffect, useState } from "react";
+import { sky800, zinc200, sky200, sky50, zinc100 } from "@/constants/theme";
+import {
+  ArrowDown,
+  ArrowLeft,
+  ChatCircleDots,
+  Cube,
+} from "phosphor-react-native";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { isWeb } from "@/constants/platform";
 import { BlurView } from "expo-blur";
 import { useChat } from "@/hooks/use-chat";
 import { useChatMessagesQuery } from "@/queries/chat";
 import { useWatch } from "@/hooks/use-watch";
+
+import { BoxWithChat } from "@/features/main-app-box";
+import { Rounded } from "@/components/rounded";
+import { LinearGradient } from "expo-linear-gradient";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -38,10 +46,20 @@ const Message = ({
   role: "Assistant" | "User";
   children: ReactNode;
 }) => {
-  const textColor = role === "Assistant" ? sky800 : undefined;
+  const isAssistant = role === "Assistant";
+  const textColor = isAssistant ? sky800 : undefined;
+
+  const colors = isAssistant
+    ? ["#ffffff" + "80", sky50 + "80"]
+    : ["#ffffff" + "00", "#ffffff" + "00"];
 
   return (
-    <View style={{ flexDirection: "row", gap: 15 }}>
+    <View
+      style={{
+        flexDirection: "row",
+        gap: 15,
+      }}
+    >
       <Cube
         color={textColor}
         weight="duotone"
@@ -55,7 +73,24 @@ const Message = ({
         //   transform: [{ rotateY: "180deg" }],
         // }}
       />
-      <Text style={{ color: textColor, flex: 1 }}>{children}</Text>
+
+      <Rounded
+        style={{
+          flex: 1,
+          overflow: isAssistant ? "hidden" : undefined,
+          borderWidth: isAssistant ? 1 : 0,
+          borderColor: isAssistant ? sky50 : undefined,
+        }}
+      >
+        <LinearGradient
+          colors={colors as any}
+          style={{
+            padding: isAssistant ? 20 : 0,
+          }}
+        >
+          <Text>{children}</Text>
+        </LinearGradient>
+      </Rounded>
     </View>
   );
 };
@@ -70,7 +105,13 @@ export default function ChatIdPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ message?: string; chatId: string }>();
 
+  const scrollViewRef = useRef<ScrollView>(null);
+
   const [isNewMessage, setIsNewMessage] = useState(false);
+  const [scrollViewHeight, setScrollViewHeight] = useState(0);
+  const [scrollViewContentHeight, setScrollViewContentHeight] = useState(0);
+
+  const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
 
   const {
     handleInputChange,
@@ -109,6 +150,8 @@ export default function ChatIdPage() {
             };
           })
         );
+
+        scrollViewRef.current?.scrollToEnd();
       }
     }
   });
@@ -138,7 +181,12 @@ export default function ChatIdPage() {
           },
         } as unknown as React.ChangeEvent<HTMLInputElement>);
       }}
-      onSubmit={handleSubmit}
+      onSubmit={() => {
+        scrollViewRef.current?.scrollToEnd({
+          animated: true,
+        });
+        handleSubmit();
+      }}
     >
       {!isWeb ? (
         <ToolbarBox>
@@ -184,8 +232,20 @@ export default function ChatIdPage() {
           </SafeAreaView>
         </ToolbarBox>
       ) : null}
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView>
+      <SafeAreaView style={{ flex: 1, position: "relative" }}>
+        <ScrollView
+          ref={scrollViewRef}
+          scrollEventThrottle={16}
+          onScroll={(ev) => {
+            const scrollY = ev.nativeEvent.contentOffset.y;
+            const totalHeight = scrollViewContentHeight - scrollViewHeight;
+
+            setIsScrollToBottomVisible(scrollY < totalHeight - 200);
+          }}
+          onLayout={(ev) => {
+            setScrollViewHeight(ev.nativeEvent.layout.height);
+          }}
+        >
           <Container onPress={() => Keyboard.dismiss()}>
             <View
               style={{
@@ -193,7 +253,10 @@ export default function ChatIdPage() {
                 paddingTop: 20,
                 flexDirection: "column",
                 gap: 18,
-                paddingBottom: 20,
+                paddingBottom: 200,
+              }}
+              onLayout={(ev) => {
+                setScrollViewContentHeight(ev.nativeEvent.layout.height);
               }}
             >
               {messages.map((m) => (
@@ -213,6 +276,32 @@ export default function ChatIdPage() {
             </View>
           </Container>
         </ScrollView>
+        {isScrollToBottomVisible ? (
+          <View
+            style={{
+              flexDirection: "row",
+              position: "absolute",
+              bottom: 5,
+              left: 0,
+              width: "100%",
+              justifyContent: "center",
+            }}
+          >
+            <Pressable onPress={() => scrollViewRef.current?.scrollToEnd()}>
+              <Rounded
+                size="full"
+                style={{
+                  padding: 10,
+                  backgroundColor: "#fff",
+                  borderWidth: 1,
+                  borderColor: zinc100,
+                }}
+              >
+                <ArrowDown size={15} />
+              </Rounded>
+            </Pressable>
+          </View>
+        ) : null}
       </SafeAreaView>
     </BoxWithChat>
   );

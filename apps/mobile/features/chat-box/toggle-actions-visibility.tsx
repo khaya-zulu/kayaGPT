@@ -1,9 +1,6 @@
-import { View } from "react-native";
-
-import { Text } from "@/components/text";
 import { zinc600, zinc100, roundedFull } from "@/constants/theme";
 
-import { CaretLeft, Minus, Plus } from "phosphor-react-native";
+import { CaretLeft } from "phosphor-react-native";
 import styled from "styled-components/native";
 
 const IconBox = styled.View`
@@ -17,7 +14,7 @@ const IconBox = styled.View`
   border: 2px solid ${zinc100};
 `;
 
-export const ViewActionsFeature = () => {
+export const ToggleActionsVisibility = () => {
   return (
     <IconBox>
       <CaretLeft size={12} color={zinc600} weight="bold" />

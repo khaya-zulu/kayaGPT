@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 
 import {
   rose200,
@@ -22,7 +22,7 @@ const ColorButton = styled.Pressable<{ isSelected: boolean; color: string }>`
   align-items: center;
 `;
 
-export const ColorPickerFeature = () => {
+export const ColorPicker = () => {
   const selectedColor = sky500;
 
   return (

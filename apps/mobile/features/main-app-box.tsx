@@ -8,13 +8,11 @@ import {
   TextInputProps,
   View,
 } from "react-native";
+
 import { BackgroundImageFeature } from "@/features/background-image";
+import { ChatBox } from "@/features/chat-box";
 
 import { isIOS, isWeb } from "@/constants/platform";
-import { InputBoxFeature } from "./index/index";
-
-import { useChat } from "@ai-sdk/react";
-import { fetch as expoFetch } from "expo/fetch";
 
 export const MainAppBox = ({ children }: { children: ReactNode }) => {
   return (
@@ -65,11 +63,7 @@ export const BoxWithChat = ({
         }}
       >
         <Component {...props}>{children}</Component>
-        <InputBoxFeature
-          value={value}
-          onChange={onChange}
-          onSubmit={onSubmit}
-        />
+        <ChatBox value={value} onChange={onChange} onSubmit={onSubmit} />
       </View>
     </MainAppBox>
   );

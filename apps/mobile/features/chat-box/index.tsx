@@ -6,8 +6,21 @@ import {
   TextInputProps,
   View,
 } from "react-native";
+import { ReactNode, useRef } from "react";
 
 import { styled } from "styled-components/native";
+import {
+  ArrowUp,
+  ClockCounterClockwise,
+  GithubLogo,
+  GlobeSimple,
+  LinkedinLogo,
+  LinkSimple,
+  Microphone,
+  PlusCircle,
+  XLogo,
+} from "phosphor-react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 import {
   zinc200,
@@ -19,29 +32,10 @@ import {
   sky200,
   fontSpaceGrotesk,
 } from "@/constants/theme";
-
-import { ViewActionsFeature } from "./index/view-actions";
-import {
-  ArrowLeft,
-  ArrowUp,
-  ClockCounterClockwise,
-  GithubLogo,
-  GlobeSimple,
-  LinkedinLogo,
-  LinkSimple,
-  Microphone,
-  PlusCircle,
-  XLogo,
-} from "phosphor-react-native";
-import { ColorPickerFeature } from "./index/color-picker";
+import { ColorPicker } from "@/features/chat-box/color-picker";
 import { Text } from "@/components/text";
-import { LinearGradient } from "expo-linear-gradient";
 import { isWeb } from "@/constants/platform";
-import { ReactNode, useRef } from "react";
-import { MessageTags } from "./message-tags";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { BackToolbar } from "./back-toolbar";
-import { BlurView } from "expo-blur";
+import { ChatBoxToolbar } from "./toolbar";
 
 const InputBox = styled.View`
   background-color: #fff;
@@ -113,7 +107,7 @@ const Options = () => {
   );
 };
 
-export const InputBoxFeature = ({
+export const ChatBox = ({
   value,
   onChange,
   onSubmit,
@@ -122,36 +116,13 @@ export const InputBoxFeature = ({
   onChange: TextInputProps["onChange"];
   onSubmit: PressableProps["onPress"];
 }) => {
-  const { chatId } = useLocalSearchParams();
-
   const arrowUpButtonRef = useRef<View>(null);
 
   return (
     <InputContainer>
-      {isWeb ? <ColorPickerFeature /> : null}
+      {isWeb ? <ColorPicker /> : null}
       <View style={{ flex: 1, position: "relative" }}>
-        {isWeb ? (
-          <View
-            style={{
-              flexDirection: "row",
-              padding: 10,
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            {chatId ? <BackToolbar /> : null}
-            {!chatId ? <MessageTags /> : null}
-
-            <View
-              style={{ flexDirection: "row", gap: 15, alignItems: "center" }}
-            >
-              <ViewActionsFeature />
-              <LinkSimple size={17} weight="bold" color={zinc600} />
-              <ClockCounterClockwise size={17} weight="bold" color={zinc600} />
-              <Microphone size={19} weight="fill" />
-            </View>
-          </View>
-        ) : null}
+        {isWeb ? <ChatBoxToolbar /> : null}
 
         <InputLinearBox>
           <InputBox>
@@ -159,7 +130,7 @@ export const InputBoxFeature = ({
               <View style={{ padding: 20 }}>
                 <TextInput
                   multiline
-                  numberOfLines={3}
+                  numberOfLines={1}
                   placeholder="Type something..."
                   placeholderTextColor={zinc600}
                   style={{
