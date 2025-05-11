@@ -1,7 +1,7 @@
 import { generateObject } from "ai";
 import { z } from "zod";
 
-import { chat, chatMessage, db, desc, eq, sql } from "@kgpt/db";
+import { schema, db, desc, eq, sql } from "@kgpt/db";
 
 import { createOpenAIModel } from "@/utils/models";
 import { Env } from "@/utils/env";
@@ -25,7 +25,7 @@ export const createChat = async ({
       prompt,
     });
 
-    await db(env.DB).insert(chat).values({
+    await db(env.DB).insert(schema.chat).values({
       id,
       title: object.title,
     });
@@ -35,34 +35,57 @@ export const createChat = async ({
   }
 };
 
-export const getChatHistory = async ({ env }: { env: Env }) => {
+export const getChatHistory = async (env: Env) => {
   try {
     const chatMessagesSubquery = db(env.DB)
       .select({
-        chatId: chatMessage.chatId,
-        content: chatMessage.content,
-        createdAt: chatMessage.createdAt,
+        chatId: schema.chatMessage.chatId,
+        content: schema.chatMessage.content,
+        createdAt: schema.chatMessage.createdAt,
       })
-      .from(chatMessage)
-      .groupBy(chatMessage.chatId)
-      .orderBy(desc(chatMessage.createdAt))
+      .from(schema.chatMessage)
+      .groupBy(schema.chatMessage.chatId)
+      .orderBy(desc(schema.chatMessage.createdAt))
       .as("chatMessagesSubquery");
 
     const chats = await db(env.DB)
       .select({
-        id: chat.id,
-        title: chat.title,
+        id: schema.chat.id,
+        title: schema.chat.title,
         lastMessage: {
           content: chatMessagesSubquery.content,
           createdAt: chatMessagesSubquery.createdAt,
         },
       })
-      .from(chat)
-      .leftJoin(chatMessagesSubquery, eq(chatMessagesSubquery.chatId, chat.id));
+      .from(schema.chat)
+      .leftJoin(
+        chatMessagesSubquery,
+        eq(chatMessagesSubquery.chatId, schema.chat.id)
+      );
 
     return chats;
   } catch (error) {
     console.error("Error getting chat history:", error);
+    throw error;
+  }
+};
+
+export const getChatTitleById = async (env: Env, props: { chatId: string }) => {
+  try {
+    const [chatTitle] = await db(env.DB)
+      .select({
+        title: schema.chat.title,
+      })
+      .from(schema.chat)
+      .where(eq(schema.chat.id, props.chatId));
+
+    if (!chatTitle) {
+      throw new Error(`Chat with ID ${props.chatId} not found`);
+    }
+
+    return chatTitle;
+  } catch (error) {
+    console.error("Error getting chat title by ID:", error);
     throw error;
   }
 };

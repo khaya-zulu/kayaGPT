@@ -14,3 +14,31 @@ export const useChatHistoryQuery = () => {
     },
   });
 };
+
+export const useChatMessagesQuery = (props: {
+  chatId: string;
+  isEnabled?: boolean;
+}) => {
+  return useQuery({
+    queryKey: [`/chat/${props.chatId}/messages`],
+    queryFn: async () => {
+      const response = await client.api.chat[":chatId"].messages.$get({
+        param: { chatId: props.chatId },
+      });
+      return response.json();
+    },
+    enabled: props.isEnabled,
+  });
+};
+
+export const useChatTitleQuery = (chatId: string) => {
+  return useQuery({
+    queryKey: [`/chat/${chatId}/title`],
+    queryFn: async () => {
+      const response = await client.api.chat[":chatId"].title.$get({
+        param: { chatId },
+      });
+      return response.json();
+    },
+  });
+};

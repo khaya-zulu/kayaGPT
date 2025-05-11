@@ -59,7 +59,7 @@ export const BoxWithChat = ({
       <View
         style={{
           flex: 1,
-          padding: isWeb ? 40 : 0,
+          padding: isWeb ? 20 : 0,
           flexDirection: "column",
           position: "relative",
         }}

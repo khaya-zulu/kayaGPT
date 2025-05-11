@@ -1,21 +1,29 @@
 import { styled } from "styled-components/native";
 
-import { Keyboard, Pressable, View, SafeAreaView } from "react-native";
+import {
+  Keyboard,
+  Pressable,
+  View,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 
 import { Text } from "@/components/text";
 
 import { sky800, zinc200 } from "@/constants/theme";
 import { ArrowLeft, ChatCircleDots, Cube } from "phosphor-react-native";
 import { BoxWithChat } from "@/features/main-app-box";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { isWeb } from "@/constants/platform";
 import { BlurView } from "expo-blur";
 import { useChat } from "@/hooks/use-chat";
+import { useChatMessagesQuery } from "@/queries/chat";
+import { useWatch } from "@/hooks/use-watch";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
-  max-width: 512;
+  max-width: 600px;
   margin: 0 auto;
   width: 100%;
   flex-direction: column;
@@ -62,8 +70,47 @@ export default function ChatIdPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ message?: string; chatId: string }>();
 
-  const { handleInputChange, input, handleSubmit, append, messages } = useChat({
+  const [isNewMessage, setIsNewMessage] = useState(false);
+
+  const {
+    handleInputChange,
+    input,
+    handleSubmit,
+    append,
+    messages,
+    setMessages,
+  } = useChat({
     chatId: params.chatId,
+  });
+
+  const messagesQuery = useChatMessagesQuery({
+    chatId: params.chatId,
+    // only fetch if the page navigation is not
+    // the result of a new message
+    isEnabled: !isNewMessage && !params.message,
+  });
+
+  useWatch(messagesQuery.isSuccess, (prev, curr) => {
+    if (curr) {
+      const chatMessages = messagesQuery.data?.messages;
+      if (chatMessages) {
+        setMessages(
+          chatMessages.map((cm) => {
+            return {
+              id: cm.id,
+              role: cm.role === "assistant" ? "assistant" : "user",
+              content: cm.content,
+              parts: [
+                {
+                  type: "text",
+                  text: cm.content,
+                },
+              ],
+            };
+          })
+        );
+      }
+    }
   });
 
   useEffect(() => {
@@ -72,9 +119,10 @@ export default function ChatIdPage() {
         role: "user",
         content: params.message,
       });
-    }
 
-    router.setParams({ message: undefined });
+      router.setParams({ message: undefined });
+      setIsNewMessage(true);
+    }
   }, [params.message]);
 
   return (
@@ -137,31 +185,34 @@ export default function ChatIdPage() {
         </ToolbarBox>
       ) : null}
       <SafeAreaView style={{ flex: 1 }}>
-        <Container onPress={() => Keyboard.dismiss()}>
-          <View
-            style={{
-              paddingHorizontal: 20,
-              paddingTop: 20,
-              flexDirection: "column",
-              gap: 18,
-            }}
-          >
-            {messages.map((m) => (
-              <Message
-                key={m.id}
-                role={m.role === "assistant" ? "Assistant" : "User"}
-              >
-                {m.parts.map((p) => {
-                  if (p.type === "text") {
-                    return <Text key={m.id + p.text}>{p.text}</Text>;
-                  }
+        <ScrollView>
+          <Container onPress={() => Keyboard.dismiss()}>
+            <View
+              style={{
+                paddingHorizontal: 20,
+                paddingTop: 20,
+                flexDirection: "column",
+                gap: 18,
+                paddingBottom: 20,
+              }}
+            >
+              {messages.map((m) => (
+                <Message
+                  key={m.id}
+                  role={m.role === "assistant" ? "Assistant" : "User"}
+                >
+                  {m.parts.map((p) => {
+                    if (p.type === "text") {
+                      return <Text key={m.id + p.text}>{p.text}</Text>;
+                    }
 
-                  return null;
-                })}
-              </Message>
-            ))}
-          </View>
-        </Container>
+                    return null;
+                  })}
+                </Message>
+              ))}
+            </View>
+          </Container>
+        </ScrollView>
       </SafeAreaView>
     </BoxWithChat>
   );

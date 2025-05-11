@@ -1,5 +1,5 @@
 import { type AppType } from "@kgpt/backend";
-import { hc, InferResponseType } from "hono/client";
+import { hc } from "hono/client";
 
 export const client = hc<AppType>("http://localhost:8787/");
 

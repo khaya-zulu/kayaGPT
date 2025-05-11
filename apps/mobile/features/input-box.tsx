@@ -20,7 +20,7 @@ import {
   fontSpaceGrotesk,
 } from "@/constants/theme";
 
-import { ViewActionsFeature } from "./view-actions";
+import { ViewActionsFeature } from "./index/view-actions";
 import {
   ArrowLeft,
   ArrowUp,
@@ -33,13 +33,15 @@ import {
   PlusCircle,
   XLogo,
 } from "phosphor-react-native";
-import { ColorPickerFeature } from "./color-picker";
+import { ColorPickerFeature } from "./index/color-picker";
 import { Text } from "@/components/text";
 import { LinearGradient } from "expo-linear-gradient";
 import { isWeb } from "@/constants/platform";
 import { ReactNode, useRef } from "react";
-import { MessageTags } from "../message-tags";
+import { MessageTags } from "./message-tags";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { BackToolbar } from "./back-toolbar";
+import { BlurView } from "expo-blur";
 
 const InputBox = styled.View`
   background-color: #fff;
@@ -111,22 +113,6 @@ const Options = () => {
   );
 };
 
-const BackToolbar = () => {
-  const router = useRouter();
-
-  return (
-    <Pressable
-      onPress={() => {
-        router.navigate("/");
-      }}
-      style={{ flexDirection: "row", gap: 15, alignItems: "center" }}
-    >
-      <ArrowLeft weight="bold" size={14} />
-      <Text>Hello world</Text>
-    </Pressable>
-  );
-};
-
 export const InputBoxFeature = ({
   value,
   onChange,
@@ -143,14 +129,12 @@ export const InputBoxFeature = ({
   return (
     <InputContainer>
       {isWeb ? <ColorPickerFeature /> : null}
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, position: "relative" }}>
         {isWeb ? (
           <View
             style={{
               flexDirection: "row",
-              paddingBottom: 16,
-              paddingLeft: 10,
-              paddingRight: 10,
+              padding: 10,
               justifyContent: "space-between",
               alignItems: "center",
             }}

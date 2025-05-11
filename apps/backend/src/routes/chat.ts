@@ -1,14 +1,30 @@
-import { createChat, getChatHistory } from "@/queries/chat";
-import { createChatMessage } from "@/queries/chat-message";
+import { streamText, Message } from "ai";
+
+import { createChat, getChatHistory, getChatTitleById } from "@/queries/chat";
+import {
+  createChatMessage,
+  getChatMessagesByChatId,
+} from "@/queries/chat-message";
 
 import { createOpenAIModel } from "@/utils/models";
-import { streamText, Message } from "ai";
 import { app } from "@/utils/server";
 
 export const chatRoute = app
   .get("/", async (c) => {
-    const chats = await getChatHistory({ env: c.env });
+    const chats = await getChatHistory(c.env);
     return c.json({ chats });
+  })
+  .get("/:chatId/title", async (c) => {
+    const chatId = c.req.param("chatId");
+
+    const chat = await getChatTitleById(c.env, { chatId });
+    return c.json({ chat });
+  })
+  .get("/:chatId/messages", async (c) => {
+    const chatId = c.req.param("chatId");
+    const messages = await getChatMessagesByChatId(c.env, { chatId });
+
+    return c.json({ messages });
   })
   .post("/:chatId", async (c) => {
     const body = await c.req.json<{ messages: Message[] }>();
@@ -21,19 +37,19 @@ export const chatRoute = app
     if (isNewMessage) {
       await createChat({
         prompt: body.messages[0].content,
-        id: chatId,
         env: c.env,
+        id: chatId,
       });
-    } else {
-      const lastMessage = body.messages.at(-1);
+    }
 
-      if (lastMessage) {
-        await createChatMessage(c.env, {
-          chatId,
-          content: lastMessage.content,
-          role: "user",
-        });
-      }
+    const lastMessage = body.messages.at(-1);
+
+    if (lastMessage) {
+      await createChatMessage(c.env, {
+        chatId,
+        content: lastMessage.content,
+        role: "user",
+      });
     }
 
     const result = streamText({

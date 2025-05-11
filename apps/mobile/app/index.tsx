@@ -126,6 +126,7 @@ export default function IndexPage() {
             return (
               <MessageOverview
                 key={c.id}
+                chatId={c.id}
                 style={{ transform: [{ translateY: -idx * 20 }] }}
                 title={c.title}
                 message={c.lastMessage}
