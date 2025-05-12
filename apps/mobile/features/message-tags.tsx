@@ -1,3 +1,4 @@
+import { Pill } from "@/components/pill";
 import { Rounded } from "@/components/rounded";
 import { Text } from "@/components/text";
 import { isWeb } from "@/constants/platform";
@@ -20,39 +21,13 @@ export const MessageTags = () => {
           <MagnifyingGlass size={16} weight="bold" />
         </Pressable>
       ) : null}
-      <Rounded
-        size="lg"
-        style={{ paddingHorizontal: 10, backgroundColor: sky200 + "4d" }}
-      >
-        <Text fontSize="sm" style={{ color: sky800, fontWeight: "bold" }}>
-          All
-        </Text>
-      </Rounded>
-      <Rounded
-        size="lg"
-        style={{
-          paddingHorizontal: 10,
-          backgroundColor: zinc200 + "4d",
-          flexDirection: "row",
-          gap: 12,
-          borderWidth: 1,
-          borderColor: zinc300 + "e6",
-        }}
-      >
+
+      <Pill variant="primary">All</Pill>
+      <Pill>
         <Text>Scheduled</Text>
-        <Text>10</Text>
-      </Rounded>
-      <Rounded
-        size="lg"
-        style={{
-          paddingHorizontal: 10,
-          backgroundColor: zinc200 + "4d",
-          borderWidth: 1,
-          borderColor: zinc300 + "e6",
-        }}
-      >
-        <Text>Pinned</Text>
-      </Rounded>
+        <Text style={{ marginLeft: 10 }}>10</Text>
+      </Pill>
+      <Pill>Pinned</Pill>
 
       {!isWeb ? (
         <Pressable style={{ marginLeft: "auto" }}>

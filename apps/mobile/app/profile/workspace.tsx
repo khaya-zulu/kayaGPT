@@ -16,7 +16,7 @@ export default function WorkspacePage() {
         role="Assistant"
         actions={
           <View style={{ flexDirection: "row", gap: 10 }}>
-            <Pill noText>
+            <Pill variant="filled" noText>
               <View
                 style={{
                   flexDirection: "row",
@@ -26,8 +26,10 @@ export default function WorkspacePage() {
                   paddingHorizontal: 10,
                 }}
               >
-                <ImageSquare size={20} />
-                <Text>Upload</Text>
+                <ImageSquare size={18} color="#fff" />
+                <Text style={{ color: "#fff" }} fontSize="sm">
+                  Upload
+                </Text>
               </View>
             </Pill>
           </View>
@@ -45,7 +47,7 @@ export default function WorkspacePage() {
           >
             <Image
               source={{
-                uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
+                uri: "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
               }}
               style={{
                 borderRadius: "13px",
