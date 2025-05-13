@@ -32,10 +32,12 @@ export default function BioPage() {
         }
       >
         <View style={{ flexDirection: "column", gap: 5 }}>
-          <Text style={{ marginLeft: 10 }}>Username</Text>
+          <Text style={{ marginLeft: 10 }} fontSize="sm">
+            Username
+          </Text>
           <Rounded
             style={{
-              padding: 20,
+              padding: 15,
               backgroundColor: "#ffffff",
               borderWidth: 2,
               borderColor: sky50,
@@ -44,12 +46,12 @@ export default function BioPage() {
             <TextInput placeholder="Display Name (Name & Surname)" />
           </Rounded>
 
-          <Text style={{ marginLeft: 10, marginTop: 10 }}>
+          <Text style={{ marginLeft: 10, marginTop: 10 }} fontSize="sm">
             Biograph (Public)?
           </Text>
           <Rounded
             style={{
-              padding: 20,
+              padding: 15,
               backgroundColor: "#ffffff",
               borderWidth: 2,
               borderColor: sky50,

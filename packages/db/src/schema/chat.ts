@@ -1,6 +1,6 @@
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-import { dateNow, id } from "./utils";
+import { dateNow } from "./utils";
 
 export const chat = sqliteTable("chat", {
   id: text("id").unique().notNull(),

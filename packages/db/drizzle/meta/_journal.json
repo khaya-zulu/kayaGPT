@@ -43,6 +43,13 @@
       "when": 1746912483216,
       "tag": "0005_aspiring_red_hulk",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1747150458228,
+      "tag": "0006_unique_shatterstar",
+      "breakpoints": true
     }
   ]
 }
