@@ -16,12 +16,15 @@
   },
   "dependencies": {
     "@ai-sdk/react": "1.2.12",
+    "@clerk/clerk-expo": "^2.11.4",
     "@expo/vector-icons": "^14.0.2",
     "@react-native-masked-view/masked-view": "0.3.2",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "@tanstack/react-query": "^5.75.7",
+    "add": "^2.0.6",
     "expo": "53.0.9",
+    "expo-auth-session": "^6.1.5",
     "expo-blur": "~14.1.4",
     "expo-constants": "~17.1.6",
     "expo-crypto": "~14.1.4",
@@ -30,6 +33,7 @@
     "expo-linear-gradient": "~14.1.4",
     "expo-linking": "~7.1.4",
     "expo-router": "~5.0.6",
+    "expo-secure-store": "^14.2.3",
     "expo-splash-screen": "~0.30.8",
     "expo-status-bar": "~2.2.3",
     "expo-symbols": "~0.4.4",
@@ -48,7 +52,8 @@
     "react-native-svg": "15.11.2",
     "react-native-web": "^0.20.0",
     "react-native-webview": "13.13.5",
-    "styled-components": "6.1.18"
+    "styled-components": "6.1.18",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

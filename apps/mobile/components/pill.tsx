@@ -1,18 +1,16 @@
 import { Rounded } from "./rounded";
 import { Text } from "./text";
 import { ReactNode } from "react";
-import { TextProps, View } from "react-native";
+import { Pressable, TextProps } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import {
   sky200,
   sky50,
-  sky500,
   sky800,
   zinc100,
   zinc200,
   zinc300,
-  zinc400,
 } from "@/constants/theme";
 
 export const Pill = ({
@@ -20,11 +18,13 @@ export const Pill = ({
   style,
   noText,
   variant = "outline",
+  onPress,
 }: {
   children: ReactNode;
   style?: TextProps["style"];
   noText?: boolean;
   variant?: "filled" | "outline" | "white" | "primary";
+  onPress?: () => void;
 }) => {
   const colors = {
     filled: ["#222222", "#222222"],
@@ -55,7 +55,7 @@ export const Pill = ({
   };
 
   return (
-    <View style={{ position: "relative" }}>
+    <Pressable style={{ position: "relative" }} onPress={onPress}>
       <Rounded
         size="lg"
         style={{
@@ -103,6 +103,6 @@ export const Pill = ({
           )}
         </BlurView>
       </Rounded>
-    </View>
+    </Pressable>
   );
 };
