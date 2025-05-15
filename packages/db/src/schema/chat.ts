@@ -1,16 +1,16 @@
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-import { dateNow } from "./utils";
+import { dateNow, id } from "./utils";
 
 export const chat = sqliteTable("chat", {
-  id: text("id").unique().notNull(),
+  id,
   title: text("text").notNull(),
   updatedAt: dateNow("updated_at"),
   createdAt: dateNow("created_at"),
 });
 
 export const chatMessage = sqliteTable("chat_message", {
-  id: text("id").unique().notNull(),
+  id,
   content: text("content").notNull(),
   role: text("role").notNull().$type<"user" | "assistant">(),
   chatId: text("chat_id").notNull(),

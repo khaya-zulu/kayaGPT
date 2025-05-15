@@ -9,25 +9,26 @@ import {
 import { createOpenAIModel } from "@/utils/models";
 import { app } from "@/utils/server";
 import { z } from "zod";
+import { privateAuth } from "@/utils/auth";
 
 export const chatRoute = app
-  .get("/", async (c) => {
+  .get("/", privateAuth, async (c) => {
     const chats = await getChatHistory(c.env);
     return c.json({ chats });
   })
-  .get("/:chatId/title", async (c) => {
+  .get("/:chatId/title", privateAuth, async (c) => {
     const chatId = c.req.param("chatId");
 
     const chat = await getChatTitleById(c.env, { chatId });
     return c.json({ chat });
   })
-  .get("/:chatId/messages", async (c) => {
+  .get("/:chatId/messages", privateAuth, async (c) => {
     const chatId = c.req.param("chatId");
     const messages = await getChatMessagesByChatId(c.env, { chatId });
 
     return c.json({ messages });
   })
-  .post("/:chatId", async (c) => {
+  .post("/:chatId", privateAuth, async (c) => {
     const body = await c.req.json<{ messages: Message[] }>();
     const chatId = c.req.param("chatId");
 

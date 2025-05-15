@@ -5,9 +5,11 @@ export type ChatHistoryQueryOutput = InferResponseType<
   typeof client.api.chat.$get
 >;
 
+export const chatHistoryQueryKey = [client.api.chat.$url().pathname];
+
 export const useChatHistoryQuery = () => {
   return useQuery({
-    queryKey: ["/chat"],
+    queryKey: chatHistoryQueryKey,
     queryFn: async () => {
       const response = await client.api.chat.$get();
       return response.json();
@@ -15,12 +17,20 @@ export const useChatHistoryQuery = () => {
   });
 };
 
+export const chatMessageQueryKey = (props: { chatId: string }) => {
+  return [
+    client.api.chat[":chatId"].messages.$url({
+      param: props,
+    }).pathname,
+  ];
+};
+
 export const useChatMessagesQuery = (props: {
   chatId: string;
   isEnabled?: boolean;
 }) => {
   return useQuery({
-    queryKey: [`/chat/${props.chatId}/messages`],
+    queryKey: chatMessageQueryKey(props),
     queryFn: async () => {
       const response = await client.api.chat[":chatId"].messages.$get({
         param: { chatId: props.chatId },
@@ -31,12 +41,16 @@ export const useChatMessagesQuery = (props: {
   });
 };
 
+export const chatTitleQueryKey = (props: { chatId: string }) => {
+  return [client.api.chat[":chatId"].title.$url({ param: props })];
+};
+
 export const useChatTitleQuery = (
   chatId: string,
   props?: { isEnabled?: boolean }
 ) => {
   return useQuery({
-    queryKey: [`/chat/${chatId}/title`],
+    queryKey: chatTitleQueryKey({ chatId }),
     queryFn: async () => {
       const response = await client.api.chat[":chatId"].title.$get({
         param: { chatId },
