@@ -7,7 +7,7 @@ import * as Crypto from "expo-crypto";
 import { Text } from "@/components/text";
 
 import { rounded2xl, zinc400 } from "@/constants/theme";
-import { BoxWithChat } from "@/features/main-app-box";
+import { ChatFrame } from "@/features/main-app-box";
 import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
 import { MessageTags } from "@/features/message-tags";
@@ -68,7 +68,7 @@ export default function IndexPage() {
   const chatHistoryQuery = useChatHistoryQuery();
 
   return (
-    <BoxWithChat
+    <ChatFrame
       onChange={(ev) => {
         handleInputChange({
           ...ev,
@@ -139,6 +139,6 @@ export default function IndexPage() {
           })}
         </MessageOverviewBox>
       </Container>
-    </BoxWithChat>
+    </ChatFrame>
   );
 }

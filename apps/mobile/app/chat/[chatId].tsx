@@ -22,10 +22,9 @@ import { useWatch } from "@/hooks/use-watch";
 
 import { Rounded } from "@/components/rounded";
 
-import { BoxWithChat } from "@/features/main-app-box";
+import { ChatFrame } from "@/features/main-app-box";
 import { ChatMessage } from "@/features/chat-message";
 import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
-import { useAuth } from "@clerk/clerk-expo";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -49,10 +48,6 @@ export default function ChatIdPage() {
 
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const { getToken } = useAuth();
-
-  const [authToken, setAuthToken] = useState<string | null>(null);
-
   const [isNewMessage, setIsNewMessage] = useState(false);
   const [scrollViewHeight, setScrollViewHeight] = useState(0);
   const [scrollViewContentHeight, setScrollViewContentHeight] = useState(0);
@@ -68,7 +63,6 @@ export default function ChatIdPage() {
     setMessages,
   } = useChat({
     chatId: params.chatId,
-    authToken,
   });
 
   const isMessageQueryEnabled = !isNewMessage && !params.message;
@@ -109,16 +103,6 @@ export default function ChatIdPage() {
     }
   });
 
-  // todo: fetch the token globally and store in memory (context)
-  useEffect(() => {
-    const fetchToken = async () => {
-      const token = await getToken();
-      setAuthToken(token);
-    };
-
-    fetchToken();
-  }, []);
-
   useEffect(() => {
     if (!!params.message && params.message !== "undefined") {
       append({
@@ -132,7 +116,7 @@ export default function ChatIdPage() {
   }, [params.message]);
 
   return (
-    <BoxWithChat
+    <ChatFrame
       isSafeAreaDisabled
       value={input}
       onChange={(ev) => {
@@ -261,6 +245,6 @@ export default function ChatIdPage() {
           </View>
         ) : null}
       </SafeAreaView>
-    </BoxWithChat>
+    </ChatFrame>
   );
 }

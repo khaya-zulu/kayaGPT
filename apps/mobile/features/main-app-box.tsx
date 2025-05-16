@@ -9,6 +9,8 @@ import {
   View,
 } from "react-native";
 
+import { styled } from "styled-components/native";
+
 import { BackgroundImageFeature } from "@/features/background-image";
 import { ChatBox } from "@/features/chat-box";
 
@@ -22,7 +24,10 @@ export const MainAppBox = ({ children }: { children: ReactNode }) => {
         backgroundColor: "#fff",
         width: "100%",
       }}
-      source={require("../assets/images/workspace.png")}
+      // source={require("../assets/images/workspace.png")}
+      source={{
+        uri: "http://localhost:8787/api/workspace/temp/sxrmqobrfiq2e76en6su4t49",
+      }}
       resizeMode="cover"
     >
       <BackgroundImageFeature />
@@ -36,7 +41,17 @@ export const MainAppBox = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const BoxWithChat = ({
+export const ChatMessageFrame = styled.View`
+  max-width: 600px;
+  margin: auto;
+  flex: 1;
+  padding: 10px;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+`;
+
+export const ChatFrame = ({
   children,
   isSafeAreaDisabled,
   value,

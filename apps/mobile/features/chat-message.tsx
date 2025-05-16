@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import { View } from "react-native";
+import { View, ViewProps } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Message } from "@ai-sdk/react";
 import { Cube } from "phosphor-react-native";
@@ -34,10 +34,12 @@ export const ChatMessage = ({
 
   return (
     <View
-      style={{
-        flexDirection: "row",
-        gap: 15,
-      }}
+      style={[
+        {
+          flexDirection: "row",
+          gap: 15,
+        },
+      ]}
     >
       <Cube
         color={textColor}

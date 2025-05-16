@@ -3,9 +3,7 @@
   "name": "backend",
   "main": "src/index.ts",
   "compatibility_date": "2025-05-06",
-  // "compatibility_flags": [
-  //   "nodejs_compat",
-  // ],
+  "compatibility_flags": ["nodejs_compat"],
   // "vars": {
   //   "MY_VAR": "my-variable"
   // },
@@ -15,12 +13,12 @@
   //     "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
   //   }
   // ],
-  // "r2_buckets": [
-  //   {
-  //     "binding": "MY_BUCKET",
-  //     "bucket_name": "my-bucket"
-  //   }
-  // ],
+  "r2_buckets": [
+    {
+      "binding": "WORKSPACE",
+      "bucket_name": "kgpt-workspace",
+    },
+  ],
   "d1_databases": [
     {
       "binding": "DB",

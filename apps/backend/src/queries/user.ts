@@ -67,3 +67,26 @@ export const updateUserById = async (
     throw new Error("Failed to update user");
   }
 };
+
+export const getUserDescriptionById = async (
+  env: Env,
+  props: { userId: string }
+) => {
+  try {
+    const [user] = await db(env.DB)
+      .select({
+        description: schema.user.description,
+      })
+      .from(schema.user)
+      .where(eq(schema.user.id, props.userId));
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (error: any) {
+    console.error("Error fetching user description by ID:", error.message);
+    throw new Error("Failed to fetch user description");
+  }
+};
