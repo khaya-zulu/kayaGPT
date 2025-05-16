@@ -1,7 +1,8 @@
 export type Env = {
   OPENAI_API_KEY: string;
   DB: D1Database;
-  WORKSPACE: R2Bucket;
+  R2_WORKSPACE: R2Bucket;
+  R2_PROFILE: R2Bucket;
 };
 
 export type Context = {

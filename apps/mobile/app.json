@@ -37,12 +37,16 @@
       [
         "expo-font",
         {
-          "fonts": [
-            "./assets/fonts/SpaceGrotesk-Medium.ttf"
-          ]
+          "fonts": ["./assets/fonts/SpaceGrotesk-Medium.ttf"]
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "This app accesses your photos to allow you to upload a profile picture."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

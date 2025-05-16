@@ -15,8 +15,12 @@
   // ],
   "r2_buckets": [
     {
-      "binding": "WORKSPACE",
+      "binding": "R2_WORKSPACE",
       "bucket_name": "kgpt-workspace",
+    },
+    {
+      "binding": "R2_PROFILE",
+      "bucket_name": "kgpt-profile",
     },
   ],
   "d1_databases": [

@@ -14,6 +14,7 @@ import { createOpenAIModel } from "@/utils/models";
 import { zValidator } from "@hono/zod-validator";
 
 import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
+import { downloadImage } from "@/services/download-image";
 
 export const userRoute = createApp()
   .get("/bio", privateAuth, async (c) => {
@@ -54,18 +55,30 @@ export const userRoute = createApp()
     ),
     async (c) => {
       const query = c.req.valid("query");
-      const workspace = await c.env.WORKSPACE.get(query.key);
+      const workspace = await c.env.R2_WORKSPACE.get(query.key);
 
       if (!workspace) {
         return c.json({ success: false });
       }
 
       const userId = c.get("userId");
-      await c.env.WORKSPACE.put(userId, workspace.body);
+      await c.env.R2_WORKSPACE.put(userId, workspace.body);
 
       return c.json({ success: true });
     }
   )
+  .post("/profile/upload", privateAuth, async (c) => {
+    const userId = c.get("userId");
+    const body = await c.req.parseBody();
+
+    await c.env.R2_PROFILE.put(userId, body["file"]);
+
+    return c.json({ success: true });
+  })
+  .get("/profile/:key", privateAuth, async (c) => {
+    const userId = c.get("userId");
+    return downloadImage(c, c.env.R2_PROFILE, { key: userId });
+  })
   .post("/workspace/generate", privateAuth, async (c) => {
     const userId = c.get("userId");
 

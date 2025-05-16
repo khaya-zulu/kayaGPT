@@ -3007,7 +3007,6 @@ __metadata:
     "@types/fs-extra": ^11.0.4
     ai: ^4.3.15
     dotenv: ^16.5.0
-    fs-extra: ^11.3.0
     hono: 4.7.9
     openai: ^4.98.0
     wrangler: 4.14.4
@@ -6140,6 +6139,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-image-loader@npm:~5.1.0":
+  version: 5.1.0
+  resolution: "expo-image-loader@npm:5.1.0"
+  peerDependencies:
+    expo: "*"
+  checksum: dafd182e9cea5c6b81202f62d4016be51e5669e13f76e0a514b58b9c502c7366e5b5df02d600897e0d302acd1823eb5b2ca23a2c3f7242f173d2414caed42e1a
+  languageName: node
+  linkType: hard
+
+"expo-image-picker@npm:16.1.4":
+  version: 16.1.4
+  resolution: "expo-image-picker@npm:16.1.4"
+  dependencies:
+    expo-image-loader: ~5.1.0
+  peerDependencies:
+    expo: "*"
+  checksum: 66fc8c4724c7b8219645259de4d9e61353120398ef2339fd8a5225e0a13a26d4a9851edd6d230086e4ff0997754eea0387d9f5f191502fb64e34228a1e65e340
+  languageName: node
+  linkType: hard
+
 "expo-keep-awake@npm:~14.1.4":
   version: 14.1.4
   resolution: "expo-keep-awake@npm:14.1.4"
@@ -6560,17 +6579,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^11.3.0":
-  version: 11.3.0
-  resolution: "fs-extra@npm:11.3.0"
-  dependencies:
-    graceful-fs: ^4.2.0
-    jsonfile: ^6.0.1
-    universalify: ^2.0.0
-  checksum: f983c706e0c22b0c0747a8e9c76aed6f391ba2d76734cf2757cd84da13417b402ed68fe25bace65228856c61d36d3b41da198f1ffbf33d0b34283a2f7a62c6e9
-  languageName: node
-  linkType: hard
-
 "fs-minipass@npm:^3.0.0":
   version: 3.0.3
   resolution: "fs-minipass@npm:3.0.3"
@@ -6746,7 +6754,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6, graceful-fs@npm:^4.2.9":
+"graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6, graceful-fs@npm:^4.2.9":
   version: 4.2.11
   resolution: "graceful-fs@npm:4.2.11"
   checksum: ac85f94da92d8eb6b7f5a8b20ce65e43d66761c55ce85ac96df6865308390da45a8d3f0296dd3a663de65d30ba497bd46c696cc1e248c72b13d6d567138a4fc7
@@ -7924,19 +7932,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonfile@npm:^6.0.1":
-  version: 6.1.0
-  resolution: "jsonfile@npm:6.1.0"
-  dependencies:
-    graceful-fs: ^4.1.6
-    universalify: ^2.0.0
-  dependenciesMeta:
-    graceful-fs:
-      optional: true
-  checksum: 7af3b8e1ac8fe7f1eccc6263c6ca14e1966fcbc74b618d3c78a0a2075579487547b94f72b7a1114e844a1e15bb00d440e5d1720bfc4612d790a6f285d5ea8354
-  languageName: node
-  linkType: hard
-
 "kleur@npm:^3.0.3":
   version: 3.0.3
   resolution: "kleur@npm:3.0.3"
@@ -8730,6 +8725,7 @@ __metadata:
     expo-crypto: ~14.1.4
     expo-font: ~13.3.1
     expo-haptics: ~14.1.4
+    expo-image-picker: 16.1.4
     expo-linear-gradient: ~14.1.4
     expo-linking: ~7.1.4
     expo-router: ~5.0.6
@@ -11397,13 +11393,6 @@ __metadata:
   version: 0.2.0
   resolution: "universalify@npm:0.2.0"
   checksum: e86134cb12919d177c2353196a4cc09981524ee87abf621f7bc8d249dbbbebaec5e7d1314b96061497981350df786e4c5128dbf442eba104d6e765bc260678b5
-  languageName: node
-  linkType: hard
-
-"universalify@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "universalify@npm:2.0.1"
-  checksum: ecd8469fe0db28e7de9e5289d32bd1b6ba8f7183db34f3bfc4ca53c49891c2d6aa05f3fb3936a81285a905cc509fb641a0c3fc131ec786167eff41236ae32e60
   languageName: node
   linkType: hard
 
