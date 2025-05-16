@@ -17,3 +17,16 @@ export const useUserBioMutation = () => {
     },
   });
 };
+
+export const useUseWorkspaceMutation = () => {
+  return useMutation({
+    mutationKey: [client.api.user.bio["use-workspace"].$url().pathname],
+    mutationFn: async (props: { key: string }) => {
+      const response = await client.api.user.bio["use-workspace"].$post({
+        query: props,
+      });
+
+      return response.json();
+    },
+  });
+};

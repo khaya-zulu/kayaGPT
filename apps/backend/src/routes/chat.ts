@@ -7,11 +7,11 @@ import {
 } from "@/queries/chat-message";
 
 import { createOpenAIModel } from "@/utils/models";
-import { app } from "@/utils/server";
+import { createApp } from "@/utils/server";
 import { z } from "zod";
 import { privateAuth } from "@/utils/auth";
 
-export const chatRoute = app
+export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
     const chats = await getChatHistory(c.env);
     return c.json({ chats });

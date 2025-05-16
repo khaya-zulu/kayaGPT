@@ -55,7 +55,7 @@ export const generateWorkspaceTool = (env: Env, props: { userId: string }) => {
 
         if (base64) {
           const imageBytes = Buffer.from(base64, "base64");
-          const key = `/temp/${props.userId}/${createId()}`;
+          const key = `temp/${props.userId}/${createId()}`;
 
           await env.WORKSPACE.put(key, imageBytes, {
             httpMetadata: {

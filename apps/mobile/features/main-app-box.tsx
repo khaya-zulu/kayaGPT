@@ -26,7 +26,7 @@ export const MainAppBox = ({ children }: { children: ReactNode }) => {
       }}
       // source={require("../assets/images/workspace.png")}
       source={{
-        uri: "http://localhost:8787/api/workspace/temp/sxrmqobrfiq2e76en6su4t49",
+        uri: "http://localhost:8787/api/workspace/sxrmqobrfiq2e76en6su4t49",
       }}
       resizeMode="cover"
     >

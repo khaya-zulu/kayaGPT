@@ -7,7 +7,7 @@ import {
   updateUserById,
 } from "@/queries/user";
 
-import { app } from "@/utils/server";
+import { createApp } from "@/utils/server";
 import { privateAuth } from "@/utils/auth";
 import { createOpenAIModel } from "@/utils/models";
 
@@ -15,7 +15,7 @@ import { zValidator } from "@hono/zod-validator";
 
 import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
 
-export const userRoute = app
+export const userRoute = createApp()
   .get("/bio", privateAuth, async (c) => {
     const userId = c.get("userId");
     const user = await getUserById(c.env, { id: userId });
@@ -43,6 +43,29 @@ export const userRoute = app
       return c.json({ success: true });
     }
   )
+  .post(
+    "bio/use-workspace",
+    privateAuth,
+    zValidator(
+      "query",
+      z.object({
+        key: z.string(),
+      })
+    ),
+    async (c) => {
+      const query = c.req.valid("query");
+      const workspace = await c.env.WORKSPACE.get(query.key);
+
+      if (!workspace) {
+        return c.json({ success: false });
+      }
+
+      const userId = c.get("userId");
+      await c.env.WORKSPACE.put(userId, workspace.body);
+
+      return c.json({ success: true });
+    }
+  )
   .post("/workspace/generate", privateAuth, async (c) => {
     const userId = c.get("userId");
 
@@ -54,8 +77,8 @@ export const userRoute = app
 
     const result = await streamText({
       system:
-        "You are a helpful assistant that generates images for a workspace background. You will be provided with a reference image and a prompt. Use the reference image to generate an image that matches the prompt. Obviously, personalize the image to the user. As your answer return the prompt you used." +
-        "Here is information about the user:" +
+        `You generate personalized workspace images using a reference and a short prompt. Keep the final prompt concise and focused (20 words max). Return only the prompt used.
+Here is information about the user:` +
         "\n\n" +
         user.description,
       messages: body.messages,
