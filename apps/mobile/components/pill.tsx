@@ -12,6 +12,7 @@ import {
   zinc200,
   zinc300,
 } from "@/constants/theme";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 export const Pill = ({
   children,
@@ -26,32 +27,34 @@ export const Pill = ({
   variant?: "filled" | "outline" | "white" | "primary";
   onPress?: () => void;
 }) => {
+  const { colorSettings } = useUserSettings();
+
   const colors = {
     filled: ["#222222", "#222222"],
     outline: [zinc200, zinc200],
     white: [zinc200 + "CC", zinc100],
-    primary: [sky200, sky200],
+    primary: [colorSettings[200], colorSettings[200]],
   };
 
   const borderColor = {
     filled: "#5b5b5b",
     outline: zinc300,
     white: zinc200,
-    primary: sky200,
+    primary: colorSettings[200],
   };
 
   const text = {
     filled: "#fff",
     outline: undefined,
     white: undefined,
-    primary: sky800,
+    primary: colorSettings[800],
   };
 
   const backgroundColor = {
     filled: "#fff",
     outline: "#fff",
     white: "#fff",
-    primary: sky50,
+    primary: colorSettings[50],
   };
 
   return (

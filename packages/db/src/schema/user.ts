@@ -9,11 +9,29 @@ export const user = sqliteTable("user", {
   email: text("email").unique(),
   description: text("description").default(""),
   colorSettings: text("settings", { mode: "json" })
-    .$type<{ 50: string; 100: string; 200: string }>()
+    .$type<{
+      50: string;
+      100: string;
+      200: string;
+      300: string;
+      400: string;
+      base: string;
+      600: string;
+      700: string;
+      800: string;
+      900: string;
+    }>()
     .default({
       50: "#fafafa",
       100: "#f4f4f5",
       200: "#e4e4e7",
+      300: "#d4d4d8",
+      400: "#a1a1aa",
+      base: "#71717a",
+      600: "#52525b",
+      700: "#3f3f46",
+      800: "#27272a",
+      900: "#18181b",
     }),
   social: text("social")
     .$type<{

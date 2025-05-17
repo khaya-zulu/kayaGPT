@@ -4,9 +4,15 @@ import { View } from "react-native";
 
 import { getColors, type ImageColorsResult } from "react-native-image-colors";
 
-type WebImageColors = Extract<ImageColorsResult, { platform: "web" }>;
+export type WebImageColors = Extract<ImageColorsResult, { platform: "web" }>;
 
-export const ColorPalette = ({ src }: { src: string }) => {
+export const ColorPalette = ({
+  src,
+  onLoad,
+}: {
+  src: string;
+  onLoad?: (colors: WebImageColors) => void;
+}) => {
   const [colorPalette, setColorPalette] = useState<
     WebImageColors | undefined
   >();
@@ -17,6 +23,7 @@ export const ColorPalette = ({ src }: { src: string }) => {
 
       if (colors.platform === "web") {
         setColorPalette(colors);
+        onLoad?.(colors);
       }
     };
 

@@ -1,14 +1,13 @@
 import { ReactNode } from "react";
 
-import { View, ViewProps } from "react-native";
+import { View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Message } from "@ai-sdk/react";
 import { Cube } from "phosphor-react-native";
 
-import { sky800, sky50 } from "@/constants/theme";
-
 import { Text } from "@/components/text";
 import { Rounded } from "@/components/rounded";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 export const ChatMessage = ({
   role,
@@ -28,10 +27,13 @@ export const ChatMessage = ({
   hideCube?: boolean;
 }) => {
   const isAssistant = role === "Assistant";
-  const textColor = isAssistant ? sky800 : undefined;
+
+  const { colorSettings } = useUserSettings();
+
+  const textColor = isAssistant ? colorSettings[800] : undefined;
 
   const colors = isAssistant
-    ? ["#ffffff" + "80", sky50 + "80"]
+    ? ["#ffffff" + "80", colorSettings[50] + "80"]
     : ["#ffffff" + "00", "#ffffff" + "00"];
 
   return (
@@ -63,7 +65,7 @@ export const ChatMessage = ({
           style={{
             overflow: isAssistant ? "hidden" : undefined,
             borderWidth: isAssistant ? 1 : 0,
-            borderColor: isAssistant ? sky50 : undefined,
+            borderColor: isAssistant ? colorSettings[50] : undefined,
             width: "100%",
           }}
         >

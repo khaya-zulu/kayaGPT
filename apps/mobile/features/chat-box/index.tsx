@@ -35,6 +35,7 @@ import { Text } from "@/components/text";
 import { isWeb } from "@/constants/platform";
 import { ChatBoxToolbar } from "./toolbar";
 import { TextInput } from "@/components/text-input";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 const InputBox = styled.View`
   background-color: #fff;
@@ -62,7 +63,8 @@ const RoundedBox = styled.View`
 `;
 
 const InputLinearBox = ({ children }: { children: ReactNode }) => {
-  const colors: any = ["#ffffff" + "00", sky200];
+  const { colorSettings } = useUserSettings();
+  const colors: any = ["#ffffff" + "00", colorSettings[300]];
 
   return (
     <RoundedBox style={{ overflow: "hidden" }}>
@@ -76,9 +78,9 @@ const InputLinearBox = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const ArrowUpButton = styled(Pressable)`
+const ArrowUpButton = styled(Pressable)<{ backgroundColor: string }>`
   padding: 6px;
-  background-color: ${sky800};
+  background-color: ${(props) => props.backgroundColor};
   border-radius: ${roundedFull};
 `;
 
@@ -118,6 +120,8 @@ export const ChatBox = ({
   toolbar?: ReactNode;
 }) => {
   const arrowUpButtonRef = useRef<View>(null);
+
+  const { colorSettings } = useUserSettings();
 
   return (
     <InputContainer>
@@ -164,9 +168,9 @@ export const ChatBox = ({
                     ref={arrowUpButtonRef}
                     style={{
                       padding: 6,
-                      backgroundColor: sky800,
                       borderRadius: roundedFull,
                     }}
+                    backgroundColor={colorSettings[800]}
                     onPress={onSubmit}
                   >
                     <ArrowUp size={14} color="#fff" weight="bold" />

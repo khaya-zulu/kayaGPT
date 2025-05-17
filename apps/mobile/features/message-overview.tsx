@@ -4,7 +4,7 @@ import { StyleProp, TextStyle, View } from "react-native";
 
 import { Text } from "@/components/text";
 
-import { sky50, sky800, zinc600 } from "@/constants/theme";
+import { sky800, zinc600 } from "@/constants/theme";
 import { ChatCircleDots } from "phosphor-react-native";
 import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
@@ -12,9 +12,10 @@ import { Link } from "expo-router";
 import { BlurView } from "expo-blur";
 import { ChatHistoryQueryOutput } from "@/queries/chat";
 import { formatRelative } from "@/utils/date";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
-const MessageOverviewBox = styled(Rounded)`
-  border: 1px solid ${sky50};
+const MessageOverviewBox = styled(Rounded)<{ borderColor?: string }>`
+  border: 1px solid ${(props) => props.borderColor};
   overflow: hidden;
   width: 100%;
 `;
@@ -30,9 +31,11 @@ export const MessageOverview = ({
   chatId?: string;
   message: ChatHistoryQueryOutput["chats"][number]["lastMessage"];
 }) => {
+  const { colorSettings } = useUserSettings();
+
   return (
     <Link href={`/chat/${chatId}`} style={style}>
-      <MessageOverviewBox>
+      <MessageOverviewBox borderColor={colorSettings[50]}>
         <View
           style={{
             height: "100%",
@@ -72,7 +75,7 @@ export const MessageOverview = ({
               <Text fontSize="sm">{title}</Text>
             </View>
 
-            <Text fontSize="sm" style={{ color: sky800 }}>
+            <Text fontSize="sm" style={{ color: colorSettings["900"] }}>
               {message?.createdAt
                 ? formatRelative(new Date(message?.createdAt))
                 : "-"}

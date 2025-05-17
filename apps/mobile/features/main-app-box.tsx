@@ -21,7 +21,7 @@ export const MainAppBox = ({
   backgroundStyle,
 }: {
   children: ReactNode;
-  backgroundStyle?: { opacity?: number; intensity?: number };
+  backgroundStyle?: { opacity?: number; intensity?: number; color?: string };
 }) => {
   return (
     <ImageBackground

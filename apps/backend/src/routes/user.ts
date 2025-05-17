@@ -7,6 +7,7 @@ import {
   getUserDescriptionById,
   getUserSettingsById,
   updateUserById,
+  updateUserSettingsById,
 } from "@/queries/user";
 
 import { createApp } from "@/utils/server";
@@ -17,6 +18,7 @@ import { zValidator } from "@hono/zod-validator";
 
 import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
 import { downloadImage } from "@/services/download-image";
+import { calculateShade, calculateTint } from "@/utils/color";
 
 export const userRoute = createApp()
   .get("/overview/:username", async (c) => {
@@ -67,14 +69,15 @@ export const userRoute = createApp()
     "bio/use-workspace",
     privateAuth,
     zValidator(
-      "query",
+      "json",
       z.object({
         key: z.string(),
+        color: z.string(),
       })
     ),
     async (c) => {
-      const query = c.req.valid("query");
-      const workspace = await c.env.R2_WORKSPACE.get(query.key);
+      const body = c.req.valid("json");
+      const workspace = await c.env.R2_WORKSPACE.get(body.key);
 
       if (!workspace) {
         return c.json({ success: false });
@@ -82,6 +85,22 @@ export const userRoute = createApp()
 
       const userId = c.get("userId");
       await c.env.R2_WORKSPACE.put(userId, workspace.body);
+
+      await updateUserSettingsById(c.env, {
+        userId,
+        colorSettings: {
+          "50": calculateTint({ hexColor: body.color, percentage: 0.95 }),
+          "100": calculateTint({ hexColor: body.color, percentage: 0.9 }),
+          "200": calculateTint({ hexColor: body.color, percentage: 0.8 }),
+          "300": calculateTint({ hexColor: body.color, percentage: 0.6 }),
+          "400": calculateTint({ hexColor: body.color, percentage: 0.3 }),
+          base: body.color, // base color is 500
+          "600": calculateShade({ hexColor: body.color, percentage: 0.1 }),
+          "700": calculateShade({ hexColor: body.color, percentage: 0.2 }),
+          "800": calculateShade({ hexColor: body.color, percentage: 0.35 }),
+          "900": calculateShade({ hexColor: body.color, percentage: 0.5 }),
+        },
+      });
 
       return c.json({ success: true });
     }

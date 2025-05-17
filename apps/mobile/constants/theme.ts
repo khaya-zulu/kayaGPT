@@ -10,8 +10,11 @@ export const zinc100 = "#f4f4f5";
 export const zinc200 = "#e4e4e7";
 export const zinc300 = "#d4d4d8";
 export const zinc400 = "#a1a1aa";
+export const zinc500 = "#71717a";
 export const zinc600 = "#52525c";
+export const zinc700 = "#3f3f46";
 export const zinc800 = "#27272a";
+export const zinc900 = "#18181b";
 
 export const rose200 = "#fecdd3";
 export const violet200 = "#ddd6fe";

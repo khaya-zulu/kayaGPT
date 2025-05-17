@@ -1,6 +1,8 @@
 import { Env } from "@/utils/env";
-import { db, eq, schema } from "@kgpt/db";
+import { db, eq, schema, InferSelectModel } from "@kgpt/db";
 import { createId } from "@paralleldrive/cuid2";
+
+type UserSelect = InferSelectModel<typeof schema.user>;
 
 export const findOrCreateUser = async (env: Env, props: { email: string }) => {
   try {
@@ -151,5 +153,22 @@ export const getUserSettingsById = async (
   } catch (error: any) {
     console.error("Error fetching user settings by ID:", error.message);
     throw new Error("Failed to fetch user settings");
+  }
+};
+
+export const updateUserSettingsById = async (
+  env: Env,
+  props: { userId: string; colorSettings: UserSelect["colorSettings"] }
+) => {
+  try {
+    await db(env.DB)
+      .update(schema.user)
+      .set({
+        colorSettings: props.colorSettings,
+      })
+      .where(eq(schema.user.id, props.userId));
+  } catch (error: any) {
+    console.error("Error updating user settings by ID:", error.message);
+    throw new Error("Failed to update user settings");
   }
 };

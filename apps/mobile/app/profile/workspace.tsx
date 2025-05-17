@@ -3,6 +3,8 @@ import { Desk } from "phosphor-react-native";
 
 import * as Crypto from "expo-crypto";
 
+import { type UseChatOptions, type UseChatHelpers } from "@ai-sdk/react";
+
 import { ChatMessage } from "@/features/chat-message";
 import { ChatFrame, ChatMessageFrame } from "@/features/main-app-box";
 import { ProfileToolbar } from "@/features/chat-box/profile-toolbar";
@@ -12,15 +14,114 @@ import { Rounded } from "@/components/rounded";
 import { Text } from "@/components/text";
 import { useChat } from "@/hooks/use-chat";
 import { useUseWorkspaceMutation } from "@/mutations/user";
-import { ColorPalette } from "@/features/color-palette";
+import { ColorPalette, WebImageColors } from "@/features/color-palette";
+import { useState } from "react";
+
+const WorkspaceMessage = ({
+  message,
+}: {
+  message: UseChatHelpers["messages"][number];
+}) => {
+  const [colors, setColors] = useState<WebImageColors | undefined>(undefined);
+
+  const useWorkspaceMutation = useUseWorkspaceMutation();
+
+  const [toolInv] = message.parts.filter(
+    (p) =>
+      p.type === "tool-invocation" &&
+      p.toolInvocation.toolName === "generateImage"
+  );
+
+  const response =
+    toolInv?.type === "tool-invocation" &&
+    toolInv.toolInvocation.state === "result"
+      ? (toolInv.toolInvocation as {
+          result: { key: string };
+          args: { prompt: string };
+        })
+      : undefined;
+
+  return (
+    <ChatMessage
+      messageId={message.id}
+      content={message.content || response?.args.prompt}
+      role={message.role === "assistant" ? "Assistant" : "User"}
+      actions={
+        <View style={{ flexDirection: "row", gap: 10 }}>
+          {message.role === "assistant" && response?.result.key ? (
+            <>
+              <Pill
+                variant="filled"
+                noText
+                onPress={() => {
+                  if (!colors) return;
+
+                  useWorkspaceMutation.mutate({
+                    key: response?.result.key,
+                    color: colors.vibrant,
+                  });
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 10,
+                    paddingVertical: 2.5,
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  <Desk size={18} color="#fff" />
+                  <Text style={{ color: "#fff" }} fontSize="sm">
+                    Use as workspace
+                  </Text>
+                </View>
+              </Pill>
+            </>
+          ) : null}
+        </View>
+      }
+    >
+      {response ? (
+        <Text>
+          <Rounded
+            size="2xl"
+            style={{
+              padding: 5,
+              backgroundColor: "#ffffff",
+              marginTop: 10,
+              transform: [{ rotate: "2deg" }],
+            }}
+          >
+            <Image
+              source={{
+                uri: `http://localhost:8787/api/workspace/${response.result.key}`,
+              }}
+              style={{
+                borderRadius: "13px",
+                height: 125,
+                width: 125,
+              }}
+            />
+          </Rounded>
+        </Text>
+      ) : null}
+
+      {response?.result.key ? (
+        <ColorPalette
+          src={`http://localhost:8787/api/workspace/${response.result.key}`}
+          onLoad={setColors}
+        />
+      ) : null}
+    </ChatMessage>
+  );
+};
 
 export default function WorkspacePage() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     chatId: Crypto.randomUUID(),
     path: `/user/workspace/generate`,
   });
-
-  const useWorkspaceMutation = useUseWorkspaceMutation();
 
   return (
     <ChatFrame
@@ -69,93 +170,9 @@ export default function WorkspacePage() {
             </Text>
             <ColorPalette src="http://localhost:8787/api/workspace/sxrmqobrfiq2e76en6su4t49" />
           </ChatMessage>
-          {messages.map((m) => {
-            const [toolInv] = m.parts.filter(
-              (p) =>
-                p.type === "tool-invocation" &&
-                p.toolInvocation.toolName === "generateImage"
-            );
-
-            const response =
-              toolInv?.type === "tool-invocation" &&
-              toolInv.toolInvocation.state === "result"
-                ? (toolInv.toolInvocation as {
-                    result: { key: string };
-                    args: { prompt: string };
-                  })
-                : undefined;
-
-            return (
-              <ChatMessage
-                messageId={m.id}
-                content={m.content || response?.args.prompt}
-                role={m.role === "assistant" ? "Assistant" : "User"}
-                actions={
-                  <View style={{ flexDirection: "row", gap: 10 }}>
-                    {m.role === "assistant" && response?.result.key ? (
-                      <>
-                        <Pill
-                          variant="filled"
-                          noText
-                          onPress={() => {
-                            useWorkspaceMutation.mutate({
-                              key: response?.result.key,
-                            });
-                          }}
-                        >
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              alignItems: "center",
-                              gap: 10,
-                              paddingVertical: 2.5,
-                              paddingHorizontal: 10,
-                            }}
-                          >
-                            <Desk size={18} color="#fff" />
-                            <Text style={{ color: "#fff" }} fontSize="sm">
-                              Use as workspace
-                            </Text>
-                          </View>
-                        </Pill>
-                      </>
-                    ) : null}
-                  </View>
-                }
-              >
-                {response ? (
-                  <Text>
-                    <Rounded
-                      size="2xl"
-                      style={{
-                        padding: 5,
-                        backgroundColor: "#ffffff",
-                        marginTop: 10,
-                        transform: [{ rotate: "2deg" }],
-                      }}
-                    >
-                      <Image
-                        source={{
-                          uri: `http://localhost:8787/api/workspace/${response.result.key}`,
-                        }}
-                        style={{
-                          borderRadius: "13px",
-                          height: 125,
-                          width: 125,
-                        }}
-                      />
-                    </Rounded>
-                  </Text>
-                ) : null}
-
-                {response?.result.key ? (
-                  <ColorPalette
-                    src={`http://localhost:8787/api/workspace/${response.result.key}`}
-                  />
-                ) : null}
-              </ChatMessage>
-            );
-          })}
+          {messages.map((m) => (
+            <WorkspaceMessage key={m.id} message={m} />
+          ))}
         </ChatMessageFrame>
       </ScrollView>
     </ChatFrame>

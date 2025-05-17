@@ -6,14 +6,7 @@ import { styled } from "styled-components/native";
 import { isWeb } from "@/constants/platform";
 
 import { Rounded } from "@/components/rounded";
-import {
-  roundedMd,
-  sky100,
-  sky200,
-  sky50,
-  zinc100,
-  zinc400,
-} from "@/constants/theme";
+import { roundedMd, zinc100, zinc400 } from "@/constants/theme";
 import { Text } from "@/components/text";
 import {
   Circle,
@@ -28,9 +21,10 @@ import { Pill } from "@/components/pill";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useUserOverviewQuery } from "@/queries/users";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
-const SpaceBox = styled(Rounded)`
-  border: 1px solid ${sky100};
+const SpaceBox = styled(Rounded)<{ borderColor: string }>`
+  border: 1px solid ${(props) => props.borderColor};
   overflow: hidden;
   width: 100%;
   border-top-right-radius: ${roundedMd};
@@ -50,11 +44,19 @@ const MenuBox = styled(View)`
 export default function SpaceIdPage() {
   const { username } = useLocalSearchParams<{ username: string }>();
 
+  const { colorSettings } = useUserSettings();
+
   const userOverviewQuery = useUserOverviewQuery(username);
   const userOverview = userOverviewQuery.data;
 
   return (
-    <MainAppBox backgroundStyle={{ opacity: 0.6, intensity: 10 }}>
+    <MainAppBox
+      backgroundStyle={{
+        opacity: 0.7,
+        intensity: 20,
+        color: colorSettings[50],
+      }}
+    >
       <View
         style={{
           width: "100%",
@@ -79,7 +81,7 @@ export default function SpaceIdPage() {
             >
               <Circle size={18} weight="fill" color="#e7e5e4" />
               <Circle size={18} weight="fill" color="#e7e5e4" />
-              <Circle size={18} weight="fill" color="#a7f3d0" />
+              <Circle size={18} weight="fill" color={colorSettings.base} />
             </View>
 
             <MenuBox>
@@ -88,7 +90,7 @@ export default function SpaceIdPage() {
             </MenuBox>
 
             <View style={{ padding: 5 }}>
-              <SpaceBox>
+              <SpaceBox borderColor={colorSettings[100]}>
                 <View
                   style={{
                     height: "100%",
@@ -96,7 +98,7 @@ export default function SpaceIdPage() {
                     position: "absolute",
                     top: 0,
                     left: 0,
-                    backgroundColor: sky50,
+                    backgroundColor: colorSettings[50],
                     opacity: isWeb ? 0.5 : 0.2,
                   }}
                 />
@@ -104,7 +106,7 @@ export default function SpaceIdPage() {
                 <BlurView
                   intensity={20}
                   style={{
-                    backgroundColor: sky50 + "80",
+                    backgroundColor: colorSettings[50] + "80",
                     padding: 20,
                   }}
                 >
@@ -125,7 +127,7 @@ export default function SpaceIdPage() {
           }}
         >
           <LinearGradient
-            colors={["#ffffff" + "00", sky200]}
+            colors={["#ffffff" + "00", colorSettings[300]]}
             style={{ padding: 1 }}
           >
             <Rounded
