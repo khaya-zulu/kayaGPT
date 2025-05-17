@@ -35,7 +35,13 @@ export const findOrCreateUser = async (env: Env, props: { email: string }) => {
 export const getUserById = async (env: Env, props: { id: string }) => {
   try {
     const [user] = await db(env.DB)
-      .select()
+      .select({
+        id: schema.user.id,
+        email: schema.user.email,
+        displayName: schema.user.displayName,
+        description: schema.user.description,
+        username: schema.user.username,
+      })
       .from(schema.user)
       .where(eq(schema.user.id, props.id));
 
@@ -44,8 +50,8 @@ export const getUserById = async (env: Env, props: { id: string }) => {
     }
 
     return user;
-  } catch (error) {
-    console.error("Error fetching user by ID:", error);
+  } catch (error: any) {
+    console.error("Error fetching user by ID:", error.message);
     throw new Error("Failed to fetch user");
   }
 };
@@ -56,7 +62,13 @@ export const getUserByUsername = async (
 ) => {
   try {
     const [user] = await db(env.DB)
-      .select()
+      .select({
+        id: schema.user.id,
+        email: schema.user.email,
+        displayName: schema.user.displayName,
+        description: schema.user.description,
+        username: schema.user.username,
+      })
       .from(schema.user)
       .where(eq(schema.user.username, props.username));
 
@@ -115,5 +127,29 @@ export const getUserDescriptionById = async (
   } catch (error: any) {
     console.error("Error fetching user description by ID:", error.message);
     throw new Error("Failed to fetch user description");
+  }
+};
+
+export const getUserSettingsById = async (
+  env: Env,
+  props: { userId: string }
+) => {
+  try {
+    const [user] = await db(env.DB)
+      .select({
+        id: schema.user.id,
+        colorSettings: schema.user.colorSettings,
+      })
+      .from(schema.user)
+      .where(eq(schema.user.id, props.userId));
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (error: any) {
+    console.error("Error fetching user settings by ID:", error.message);
+    throw new Error("Failed to fetch user settings");
   }
 };

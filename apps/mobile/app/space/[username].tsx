@@ -13,16 +13,12 @@ import {
   sky50,
   zinc100,
   zinc400,
-  zinc50,
-  zinc600,
 } from "@/constants/theme";
 import { Text } from "@/components/text";
 import {
   Circle,
   GithubLogo,
   House,
-  HouseSimple,
-  Lighthouse,
   LinkedinLogo,
   SunHorizon,
   XLogo,

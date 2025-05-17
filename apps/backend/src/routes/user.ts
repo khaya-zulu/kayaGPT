@@ -5,6 +5,7 @@ import {
   getUserById,
   getUserByUsername,
   getUserDescriptionById,
+  getUserSettingsById,
   updateUserById,
 } from "@/queries/user";
 
@@ -21,6 +22,12 @@ export const userRoute = createApp()
   .get("/overview/:username", async (c) => {
     const username = c.req.param("username");
     const user = await getUserByUsername(c.env, { username });
+
+    return c.json(user);
+  })
+  .get("/settings", privateAuth, async (c) => {
+    const userId = c.get("userId");
+    const user = await getUserSettingsById(c.env, { userId });
 
     return c.json(user);
   })

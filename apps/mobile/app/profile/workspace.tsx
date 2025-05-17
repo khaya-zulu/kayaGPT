@@ -1,5 +1,5 @@
 import { View, Image, ScrollView } from "react-native";
-import { Desk, ImageSquare } from "phosphor-react-native";
+import { Desk } from "phosphor-react-native";
 
 import * as Crypto from "expo-crypto";
 
@@ -12,6 +12,7 @@ import { Rounded } from "@/components/rounded";
 import { Text } from "@/components/text";
 import { useChat } from "@/hooks/use-chat";
 import { useUseWorkspaceMutation } from "@/mutations/user";
+import { ColorPalette } from "@/features/color-palette";
 
 export default function WorkspacePage() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
@@ -66,6 +67,7 @@ export default function WorkspacePage() {
                 />
               </Rounded>
             </Text>
+            <ColorPalette src="http://localhost:8787/api/workspace/sxrmqobrfiq2e76en6su4t49" />
           </ChatMessage>
           {messages.map((m) => {
             const [toolInv] = m.parts.filter(
@@ -89,34 +91,36 @@ export default function WorkspacePage() {
                 content={m.content || response?.args.prompt}
                 role={m.role === "assistant" ? "Assistant" : "User"}
                 actions={
-                  m.role === "assistant" && response?.result.key ? (
-                    <View style={{ flexDirection: "row", gap: 10 }}>
-                      <Pill
-                        variant="filled"
-                        noText
-                        onPress={() => {
-                          useWorkspaceMutation.mutate({
-                            key: response?.result.key,
-                          });
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 10,
-                            paddingVertical: 2.5,
-                            paddingHorizontal: 10,
+                  <View style={{ flexDirection: "row", gap: 10 }}>
+                    {m.role === "assistant" && response?.result.key ? (
+                      <>
+                        <Pill
+                          variant="filled"
+                          noText
+                          onPress={() => {
+                            useWorkspaceMutation.mutate({
+                              key: response?.result.key,
+                            });
                           }}
                         >
-                          <Desk size={18} color="#fff" />
-                          <Text style={{ color: "#fff" }} fontSize="sm">
-                            Use as workspace
-                          </Text>
-                        </View>
-                      </Pill>
-                    </View>
-                  ) : null
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              gap: 10,
+                              paddingVertical: 2.5,
+                              paddingHorizontal: 10,
+                            }}
+                          >
+                            <Desk size={18} color="#fff" />
+                            <Text style={{ color: "#fff" }} fontSize="sm">
+                              Use as workspace
+                            </Text>
+                          </View>
+                        </Pill>
+                      </>
+                    ) : null}
+                  </View>
                 }
               >
                 {response ? (
@@ -142,6 +146,12 @@ export default function WorkspacePage() {
                       />
                     </Rounded>
                   </Text>
+                ) : null}
+
+                {response?.result.key ? (
+                  <ColorPalette
+                    src={`http://localhost:8787/api/workspace/${response.result.key}`}
+                  />
                 ) : null}
               </ChatMessage>
             );

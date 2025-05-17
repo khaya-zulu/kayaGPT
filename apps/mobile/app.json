@@ -16,7 +16,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.example.mobile"
     },
     "web": {
       "bundler": "metro",
@@ -37,7 +42,9 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/SpaceGrotesk-Medium.ttf"]
+          "fonts": [
+            "./assets/fonts/SpaceGrotesk-Medium.ttf"
+          ]
         }
       ],
       "expo-web-browser",

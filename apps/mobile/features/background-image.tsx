@@ -1,6 +1,7 @@
 import { ImageBackground } from "react-native";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
+import { sky50 } from "@/constants/theme";
 
 export const BackgroundImageFeature = ({
   opacity,
@@ -35,7 +36,7 @@ export const BackgroundImageFeature = ({
         resizeMode="repeat"
       />
       <LinearGradient
-        colors={["#e0f2fe" + "80", "#ffffff" + "00"]}
+        colors={[sky50 + "80", "#ffffff" + "00"]}
         style={{
           height: "100%",
           width: "100%",
