@@ -33,7 +33,7 @@ export const ChatMessage = ({
   const textColor = isAssistant ? colorSettings[800] : undefined;
 
   const colors = isAssistant
-    ? ["#ffffff" + "80", colorSettings[50] + "80"]
+    ? [colorSettings[100] + "B3", colorSettings[100] + "80"]
     : ["#ffffff" + "00", "#ffffff" + "00"];
 
   return (

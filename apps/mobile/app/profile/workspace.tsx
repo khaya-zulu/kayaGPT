@@ -1,5 +1,5 @@
 import { View, Image, ScrollView } from "react-native";
-import { Desk } from "phosphor-react-native";
+import { Circle, CursorClick, Desk } from "phosphor-react-native";
 
 import * as Crypto from "expo-crypto";
 
@@ -16,13 +16,15 @@ import { useChat } from "@/hooks/use-chat";
 import { useUseWorkspaceMutation } from "@/mutations/user";
 import { ColorPalette, WebImageColors } from "@/features/color-palette";
 import { useState } from "react";
+import { useUserSettings } from "@/hooks/use-user-settings";
+import { zinc100, zinc200, zinc300 } from "@/constants/theme";
 
 const WorkspaceMessage = ({
   message,
 }: {
   message: UseChatHelpers["messages"][number];
 }) => {
-  const [colors, setColors] = useState<WebImageColors | undefined>(undefined);
+  const [color, setColor] = useState<string | undefined>();
 
   const useWorkspaceMutation = useUseWorkspaceMutation();
 
@@ -54,11 +56,11 @@ const WorkspaceMessage = ({
                 variant="filled"
                 noText
                 onPress={() => {
-                  if (!colors) return;
+                  if (!color) return;
 
                   useWorkspaceMutation.mutate({
                     key: response?.result.key,
-                    color: colors.vibrant,
+                    color,
                   });
                 }}
               >
@@ -71,10 +73,34 @@ const WorkspaceMessage = ({
                     paddingHorizontal: 10,
                   }}
                 >
-                  <Desk size={18} color="#fff" />
-                  <Text style={{ color: "#fff" }} fontSize="sm">
-                    Use as workspace
-                  </Text>
+                  {color ? (
+                    <>
+                      <CursorClick size={18} color="#fff" />
+                      <Text style={{ color: "#fff" }} fontSize="sm">
+                        Use as workspace
+                      </Text>
+                    </>
+                  ) : null}
+                  {!color ? (
+                    <>
+                      <View style={{ flexDirection: "row" }}>
+                        <Circle color={zinc300} weight="fill" />
+                        <Circle
+                          color={zinc200}
+                          style={{ marginLeft: -15 }}
+                          weight="fill"
+                        />
+                        <Circle
+                          color={zinc100}
+                          style={{ marginLeft: -15 }}
+                          weight="fill"
+                        />
+                      </View>
+                      <Text style={{ color: "#fff" }} fontSize="sm">
+                        Pick a color
+                      </Text>
+                    </>
+                  ) : null}
                 </View>
               </Pill>
             </>
@@ -110,7 +136,7 @@ const WorkspaceMessage = ({
       {response?.result.key ? (
         <ColorPalette
           src={`http://localhost:8787/api/workspace/${response.result.key}`}
-          onLoad={setColors}
+          onSelected={setColor}
         />
       ) : null}
     </ChatMessage>
@@ -118,6 +144,8 @@ const WorkspaceMessage = ({
 };
 
 export default function WorkspacePage() {
+  const { colorSettings } = useUserSettings();
+
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     chatId: Crypto.randomUUID(),
     path: `/user/workspace/generate`,
@@ -168,7 +196,11 @@ export default function WorkspacePage() {
                 />
               </Rounded>
             </Text>
-            <ColorPalette src="http://localhost:8787/api/workspace/sxrmqobrfiq2e76en6su4t49" />
+            <ColorPalette
+              src="http://localhost:8787/api/workspace/sxrmqobrfiq2e76en6su4t49"
+              defaultColor={colorSettings.base}
+              isSavedPalette
+            />
           </ChatMessage>
           {messages.map((m) => (
             <WorkspaceMessage key={m.id} message={m} />

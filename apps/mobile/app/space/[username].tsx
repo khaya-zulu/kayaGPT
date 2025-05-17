@@ -54,7 +54,6 @@ export default function SpaceIdPage() {
       backgroundStyle={{
         opacity: 0.7,
         intensity: 20,
-        color: colorSettings[50],
       }}
     >
       <View
@@ -118,7 +117,7 @@ export default function SpaceIdPage() {
         </Rounded>
 
         <Rounded
-          size={28}
+          size={35}
           style={{
             position: "absolute",
             bottom: 20,
@@ -131,7 +130,7 @@ export default function SpaceIdPage() {
             style={{ padding: 1 }}
           >
             <Rounded
-              size={28}
+              size={35}
               style={{
                 backgroundColor: "#fff",
                 overflow: "hidden",
@@ -171,7 +170,7 @@ export default function SpaceIdPage() {
                 <View
                   style={{ flexDirection: "row", gap: 5, alignItems: "center" }}
                 >
-                  <Pill variant="filled" noText>
+                  <Pill variant="primary" noText>
                     <Text
                       style={{
                         paddingHorizontal: 10,
@@ -180,13 +179,12 @@ export default function SpaceIdPage() {
                     >
                       <XLogo
                         size={18}
-                        color="#fff"
                         style={{ transform: [{ translateY: 2 }] }}
                       />
                     </Text>
                   </Pill>
 
-                  <Pill variant="filled" noText>
+                  <Pill variant="primary" noText>
                     <Text
                       style={{
                         paddingHorizontal: 10,
@@ -195,13 +193,12 @@ export default function SpaceIdPage() {
                     >
                       <GithubLogo
                         size={18}
-                        color="#fff"
                         style={{ transform: [{ translateY: 2 }] }}
                       />
                     </Text>
                   </Pill>
 
-                  <Pill variant="filled" noText>
+                  <Pill variant="primary" noText>
                     <Text
                       style={{
                         paddingHorizontal: 10,
@@ -210,7 +207,6 @@ export default function SpaceIdPage() {
                     >
                       <LinkedinLogo
                         size={18}
-                        color="#fff"
                         style={{ transform: [{ translateY: 2 }] }}
                       />
                     </Text>

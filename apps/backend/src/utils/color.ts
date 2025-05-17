@@ -51,3 +51,18 @@ export const calculateShade = (opts: {
       .join("")
   );
 };
+
+export const getColorPalette = (base: string) => {
+  return {
+    "50": calculateTint({ hexColor: base, percentage: 0.95 }),
+    "100": calculateTint({ hexColor: base, percentage: 0.9 }),
+    "200": calculateTint({ hexColor: base, percentage: 0.8 }),
+    "300": calculateTint({ hexColor: base, percentage: 0.6 }),
+    "400": calculateTint({ hexColor: base, percentage: 0.3 }),
+    base, // base color is 500
+    "600": calculateShade({ hexColor: base, percentage: 0.1 }),
+    "700": calculateShade({ hexColor: base, percentage: 0.2 }),
+    "800": calculateShade({ hexColor: base, percentage: 0.35 }),
+    "900": calculateShade({ hexColor: base, percentage: 0.5 }),
+  };
+};

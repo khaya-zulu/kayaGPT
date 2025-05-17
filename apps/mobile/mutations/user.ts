@@ -34,3 +34,20 @@ export const useUseWorkspaceMutation = () => {
     },
   });
 };
+
+type WorkspaceColorPaletteInput = InferRequestType<
+  (typeof client.api.user.workspace)["color-palette"]["$post"]
+>["json"];
+
+export const useWorkspaceColorPaletteMutation = () => {
+  return useMutation({
+    mutationKey: [client.api.user.workspace["color-palette"].$url().pathname],
+    mutationFn: async (props: WorkspaceColorPaletteInput) => {
+      const response = await client.api.user.workspace["color-palette"].$post({
+        json: props,
+      });
+
+      return response.json();
+    },
+  });
+};

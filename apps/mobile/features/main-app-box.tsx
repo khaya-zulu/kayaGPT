@@ -15,6 +15,7 @@ import { BackgroundImageFeature } from "@/features/background-image";
 import { ChatBox } from "@/features/chat-box";
 
 import { isIOS, isWeb } from "@/constants/platform";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 export const MainAppBox = ({
   children,
@@ -23,6 +24,7 @@ export const MainAppBox = ({
   children: ReactNode;
   backgroundStyle?: { opacity?: number; intensity?: number; color?: string };
 }) => {
+  const { colorSettings } = useUserSettings();
   return (
     <ImageBackground
       style={{
@@ -39,6 +41,7 @@ export const MainAppBox = ({
       <BackgroundImageFeature
         opacity={backgroundStyle?.opacity}
         intensity={backgroundStyle?.intensity}
+        color={colorSettings[100]}
       />
       <KeyboardAvoidingView
         style={{ flex: 1 }}

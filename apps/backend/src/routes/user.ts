@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Message, streamText, tool } from "ai";
+import { Message, streamText } from "ai";
 
 import {
   getUserById,
@@ -18,7 +18,7 @@ import { zValidator } from "@hono/zod-validator";
 
 import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
 import { downloadImage } from "@/services/download-image";
-import { calculateShade, calculateTint } from "@/utils/color";
+import { getColorPalette } from "@/utils/color";
 
 export const userRoute = createApp()
   .get("/overview/:username", async (c) => {
@@ -88,18 +88,7 @@ export const userRoute = createApp()
 
       await updateUserSettingsById(c.env, {
         userId,
-        colorSettings: {
-          "50": calculateTint({ hexColor: body.color, percentage: 0.95 }),
-          "100": calculateTint({ hexColor: body.color, percentage: 0.9 }),
-          "200": calculateTint({ hexColor: body.color, percentage: 0.8 }),
-          "300": calculateTint({ hexColor: body.color, percentage: 0.6 }),
-          "400": calculateTint({ hexColor: body.color, percentage: 0.3 }),
-          base: body.color, // base color is 500
-          "600": calculateShade({ hexColor: body.color, percentage: 0.1 }),
-          "700": calculateShade({ hexColor: body.color, percentage: 0.2 }),
-          "800": calculateShade({ hexColor: body.color, percentage: 0.35 }),
-          "900": calculateShade({ hexColor: body.color, percentage: 0.5 }),
-        },
+        colorSettings: getColorPalette(body.color),
       });
 
       return c.json({ success: true });
@@ -117,6 +106,27 @@ export const userRoute = createApp()
     const userId = c.get("userId");
     return downloadImage(c, c.env.R2_PROFILE, { key: userId });
   })
+  .post(
+    "/workspace/color-palette",
+    privateAuth,
+    zValidator(
+      "json",
+      z.object({
+        color: z.string(),
+      })
+    ),
+    async (c) => {
+      const userId = c.get("userId");
+      const body = c.req.valid("json");
+
+      await updateUserSettingsById(c.env, {
+        colorSettings: getColorPalette(body.color),
+        userId,
+      });
+
+      return c.json({ success: true });
+    }
+  )
   .post("/workspace/generate", privateAuth, async (c) => {
     const userId = c.get("userId");
 
