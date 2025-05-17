@@ -4,14 +4,7 @@ import { ReactNode } from "react";
 import { Pressable, TextProps } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
-import {
-  sky200,
-  sky50,
-  sky800,
-  zinc100,
-  zinc200,
-  zinc300,
-} from "@/constants/theme";
+import { zinc100, zinc200, zinc300 } from "@/constants/theme";
 import { useUserSettings } from "@/hooks/use-user-settings";
 
 export const Pill = ({
@@ -20,12 +13,14 @@ export const Pill = ({
   noText,
   variant = "outline",
   onPress,
+  borderColor,
 }: {
   children: ReactNode;
   style?: TextProps["style"];
   noText?: boolean;
   variant?: "filled" | "outline" | "white" | "primary";
   onPress?: () => void;
+  borderColor?: string;
 }) => {
   const { colorSettings } = useUserSettings();
 
@@ -36,7 +31,7 @@ export const Pill = ({
     primary: [colorSettings[200], colorSettings[200]],
   };
 
-  const borderColor = {
+  const variantBorderColor = {
     filled: "#5b5b5b",
     outline: zinc300,
     white: zinc200,
@@ -82,7 +77,7 @@ export const Pill = ({
         size="lg"
         style={{
           borderWidth: 1,
-          borderColor: borderColor[variant],
+          borderColor: borderColor ?? variantBorderColor[variant],
           overflow: "hidden",
           position: "relative",
         }}
