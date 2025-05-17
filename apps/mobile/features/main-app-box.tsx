@@ -22,7 +22,7 @@ export const MainAppBox = ({
   backgroundStyle,
 }: {
   children: ReactNode;
-  backgroundStyle?: { opacity?: number; intensity?: number; color?: string };
+  backgroundStyle?: { opacity?: number; intensity?: number };
 }) => {
   const { colorSettings } = useUserSettings();
   return (

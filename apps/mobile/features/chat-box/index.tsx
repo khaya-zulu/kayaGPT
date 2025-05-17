@@ -5,7 +5,7 @@ import {
   TextInputProps,
   View,
 } from "react-native";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useRef, useState } from "react";
 
 import { styled } from "styled-components/native";
 import {
@@ -121,6 +121,9 @@ export const ChatBox = ({
 }) => {
   const arrowUpButtonRef = useRef<View>(null);
 
+  const [height, setHeight] = useState(20);
+  const [isShiftPressed, setIsShiftPressed] = useState(false);
+
   const { colorSettings } = useUserSettings();
 
   return (
@@ -135,17 +138,34 @@ export const ChatBox = ({
               <View style={{ padding: 20 }}>
                 <TextInput
                   multiline
-                  numberOfLines={1}
                   placeholder="Type something..."
                   style={{
                     marginBottom: 20,
+                    minHeight: 20,
+                    height,
                   }}
-                  onChange={onChange}
+                  onChange={(ev) => {
+                    onChange?.(ev);
+                  }}
+                  onContentSizeChange={(ev) => {
+                    setHeight(ev.nativeEvent.contentSize.height);
+                  }}
                   onKeyPress={(ev) => {
-                    if (isWeb && ev.nativeEvent.key === "Enter") {
-                      arrowUpButtonRef.current?.focus();
+                    if (isWeb) {
+                      if (ev.nativeEvent.key === "Enter" && !isShiftPressed) {
+                        arrowUpButtonRef.current?.focus();
+                        onSubmit?.(undefined as any);
+                      }
 
-                      onSubmit?.(undefined as any);
+                      if (ev.nativeEvent.key === "Shift") {
+                        setIsShiftPressed(true);
+                      }
+                    }
+                  }}
+                  // @ts-ignore
+                  onKeyUp={(ev) => {
+                    if (isWeb && ev.nativeEvent.key === "Shift") {
+                      setIsShiftPressed(false);
                     }
                   }}
                   value={value}

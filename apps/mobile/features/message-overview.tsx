@@ -35,7 +35,7 @@ export const MessageOverview = ({
 
   return (
     <Link href={`/chat/${chatId}`} style={style}>
-      <MessageOverviewBox borderColor={colorSettings[50]}>
+      <MessageOverviewBox borderColor={colorSettings[100]}>
         <View
           style={{
             height: "100%",
