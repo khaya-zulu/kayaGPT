@@ -16,7 +16,13 @@ import { ChatBox } from "@/features/chat-box";
 
 import { isIOS, isWeb } from "@/constants/platform";
 
-export const MainAppBox = ({ children }: { children: ReactNode }) => {
+export const MainAppBox = ({
+  children,
+  backgroundStyle,
+}: {
+  children: ReactNode;
+  backgroundStyle?: { opacity?: number; intensity?: number };
+}) => {
   return (
     <ImageBackground
       style={{
@@ -30,7 +36,10 @@ export const MainAppBox = ({ children }: { children: ReactNode }) => {
       }}
       resizeMode="cover"
     >
-      <BackgroundImageFeature />
+      <BackgroundImageFeature
+        opacity={backgroundStyle?.opacity}
+        intensity={backgroundStyle?.intensity}
+      />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={isIOS ? "padding" : "position"}

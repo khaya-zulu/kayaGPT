@@ -1,5 +1,5 @@
 import { View, Image, ScrollView } from "react-native";
-import { ImageSquare } from "phosphor-react-native";
+import { Desk, ImageSquare } from "phosphor-react-native";
 
 import * as Crypto from "expo-crypto";
 
@@ -109,7 +109,7 @@ export default function WorkspacePage() {
                             paddingHorizontal: 10,
                           }}
                         >
-                          <ImageSquare size={18} color="#fff" />
+                          <Desk size={18} color="#fff" />
                           <Text style={{ color: "#fff" }} fontSize="sm">
                             Use as workspace
                           </Text>

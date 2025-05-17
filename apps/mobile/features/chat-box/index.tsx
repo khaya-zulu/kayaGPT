@@ -155,14 +155,6 @@ export const ChatBox = ({
                     alignItems: "center",
                   }}
                 >
-                  {isWeb ? (
-                    <View style={{ flexDirection: "row", gap: 15 }}>
-                      <GlobeSimple size={17} weight="bold" color={zinc600} />
-                      <GithubLogo size={17} weight="bold" color={zinc600} />
-                      <LinkedinLogo size={17} weight="bold" color={zinc600} />
-                      <XLogo size={17} weight="bold" color={zinc600} />
-                    </View>
-                  ) : null}
                   {!isWeb ? <Options /> : null}
                   <View>
                     <RoundedText fontSize="sm">GPT‑4.1</RoundedText>

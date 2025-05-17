@@ -3,6 +3,7 @@ import { Message, streamText, tool } from "ai";
 
 import {
   getUserById,
+  getUserByUsername,
   getUserDescriptionById,
   updateUserById,
 } from "@/queries/user";
@@ -17,6 +18,12 @@ import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
 import { downloadImage } from "@/services/download-image";
 
 export const userRoute = createApp()
+  .get("/overview/:username", async (c) => {
+    const username = c.req.param("username");
+    const user = await getUserByUsername(c.env, { username });
+
+    return c.json(user);
+  })
   .get("/bio", privateAuth, async (c) => {
     const userId = c.get("userId");
     const user = await getUserById(c.env, { id: userId });
@@ -28,17 +35,22 @@ export const userRoute = createApp()
     privateAuth,
     zValidator(
       "json",
-      z.object({ description: z.string(), displayName: z.string() })
+      z.object({
+        description: z.string(),
+        displayName: z.string(),
+        username: z.string(),
+      })
     ),
     async (c) => {
       const userId = c.get("userId");
 
-      const { description, displayName } = c.req.valid("json");
+      const { description, displayName, username } = c.req.valid("json");
 
       await updateUserById(c.env, {
         id: userId,
         displayName,
         description,
+        username,
       });
 
       return c.json({ success: true });

@@ -104,11 +104,13 @@ export default function IndexPage() {
               }}
             >
               <WorkspaceImage
-                source={require("../assets/images/workspace.png")}
+                source={{
+                  uri: "http://localhost:8787/api/workspace/sxrmqobrfiq2e76en6su4t49",
+                }}
               />
               <AvatarImage
                 source={{
-                  uri: "https://pbs.twimg.com/profile_images/1830330700920201220/tQz0-0Xq_400x400.jpg",
+                  uri: "http://localhost:8787/api/user/profile/sxrmqobrfiq2e76en6su4t49",
                 }}
               />
             </View>

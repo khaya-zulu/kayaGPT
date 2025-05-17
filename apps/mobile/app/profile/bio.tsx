@@ -22,6 +22,7 @@ export default function BioPage() {
     defaultValues: {
       displayName: userBioQuery.data?.displayName ?? "",
       description: userBioQuery.data?.description ?? "",
+      username: userBioQuery.data?.username ?? "",
     },
   });
 
@@ -37,13 +38,18 @@ export default function BioPage() {
                 selector={(state) => [
                   state.values.displayName,
                   state.values.description,
+                  state.values.username,
                 ]}
-                children={([displayName, description]) => (
+                children={([displayName, description, username]) => (
                   <Pill
                     variant="filled"
                     noText
                     onPress={() => {
-                      userBioMutation.mutate({ description, displayName });
+                      userBioMutation.mutate({
+                        description,
+                        displayName,
+                        username,
+                      });
                     }}
                   >
                     <View
@@ -68,6 +74,32 @@ export default function BioPage() {
         >
           <View style={{ flexDirection: "column", gap: 5 }}>
             <Text style={{ marginLeft: 10 }} fontSize="sm">
+              Username
+            </Text>
+
+            <form.Field
+              name="username"
+              children={(field) => (
+                <Rounded
+                  style={{
+                    padding: 10,
+                    backgroundColor: "#ffffff",
+                    borderWidth: 2,
+                    borderColor: sky50,
+                  }}
+                  size="lg"
+                >
+                  <TextInput
+                    placeholder="@username"
+                    value={field.state.value}
+                    onChangeText={field.handleChange}
+                    onBlur={field.handleBlur}
+                  />
+                </Rounded>
+              )}
+            />
+
+            <Text style={{ marginLeft: 10 }} fontSize="sm">
               Display Name
             </Text>
 
@@ -76,7 +108,7 @@ export default function BioPage() {
               children={(field) => (
                 <Rounded
                   style={{
-                    padding: 15,
+                    padding: 10,
                     backgroundColor: "#ffffff",
                     borderWidth: 2,
                     borderColor: sky50,
@@ -102,7 +134,7 @@ export default function BioPage() {
               children={(field) => (
                 <Rounded
                   style={{
-                    padding: 15,
+                    padding: 10,
                     backgroundColor: "#ffffff",
                     borderWidth: 2,
                     borderColor: sky50,

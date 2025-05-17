@@ -28,7 +28,7 @@ import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
   width: 100%;
   flex-direction: column;

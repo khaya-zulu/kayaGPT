@@ -2,7 +2,13 @@ import { ImageBackground } from "react-native";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 
-export const BackgroundImageFeature = () => {
+export const BackgroundImageFeature = ({
+  opacity,
+  intensity,
+}: {
+  opacity?: number;
+  intensity?: number;
+}) => {
   return (
     <>
       <BlurView
@@ -12,7 +18,7 @@ export const BackgroundImageFeature = () => {
           position: "absolute",
           left: 0,
         }}
-        intensity={20}
+        intensity={intensity ?? 20}
       />
       <ImageBackground
         style={{
@@ -21,6 +27,7 @@ export const BackgroundImageFeature = () => {
           width: "100%",
           position: "absolute",
           left: 0,
+          opacity,
         }}
         source={{
           uri: "https://www.transparenttextures.com/patterns/worn-dots.png",

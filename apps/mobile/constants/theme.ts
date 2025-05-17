@@ -5,6 +5,7 @@ export const sky200 = "#bae6fd";
 export const sky100 = "#e0f2fe";
 export const sky50 = "#f0f9ff";
 
+export const zinc50 = "#fafafa";
 export const zinc100 = "#f4f4f5";
 export const zinc200 = "#e4e4e7";
 export const zinc300 = "#d4d4d8";

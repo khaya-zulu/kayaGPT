@@ -17,6 +17,7 @@ export const ChatMessage = ({
   messageId,
   content,
   actions,
+  hideCube,
 }: {
   role: "Assistant" | "User";
   children?: ReactNode;
@@ -24,6 +25,7 @@ export const ChatMessage = ({
   content?: string;
   messageId: string;
   actions?: ReactNode;
+  hideCube?: boolean;
 }) => {
   const isAssistant = role === "Assistant";
   const textColor = isAssistant ? sky800 : undefined;
@@ -41,19 +43,21 @@ export const ChatMessage = ({
         },
       ]}
     >
-      <Cube
-        color={textColor}
-        weight="duotone"
-        size={20}
-        style={{
-          transform: [{ translateY: 2.5 }],
-          opacity: role === "Assistant" ? 1 : 0,
-        }}
-        // flip x, todo: use for loading
-        // style={{
-        //   transform: [{ rotateY: "180deg" }],
-        // }}
-      />
+      {!hideCube ? (
+        <Cube
+          color={textColor}
+          weight="duotone"
+          size={20}
+          style={{
+            transform: [{ translateY: 2.5 }],
+            opacity: role === "Assistant" ? 1 : 0,
+          }}
+          // flip x, todo: use for loading
+          // style={{
+          //   transform: [{ rotateY: "180deg" }],
+          // }}
+        />
+      ) : null}
       <View style={{ flex: 1, flexDirection: "column", gap: 10 }}>
         <Rounded
           style={{
