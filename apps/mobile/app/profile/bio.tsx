@@ -13,10 +13,13 @@ import { useUserBioQuery } from "@/queries/users";
 import { useUserBioMutation } from "@/mutations/user";
 import { ChatFrame, ChatMessageFrame } from "@/features/main-app-box";
 import { ProfileToolbar } from "@/features/chat-box/profile-toolbar";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 export default function BioPage() {
   const userBioQuery = useUserBioQuery();
   const userBioMutation = useUserBioMutation();
+
+  const { colorSettings } = useUserSettings();
 
   const form = useForm({
     defaultValues: {
@@ -85,7 +88,7 @@ export default function BioPage() {
                     padding: 10,
                     backgroundColor: "#ffffff",
                     borderWidth: 2,
-                    borderColor: sky50,
+                    borderColor: colorSettings[50],
                   }}
                   size="lg"
                 >
@@ -111,7 +114,7 @@ export default function BioPage() {
                     padding: 10,
                     backgroundColor: "#ffffff",
                     borderWidth: 2,
-                    borderColor: sky50,
+                    borderColor: colorSettings[50],
                   }}
                   size="lg"
                 >
@@ -137,7 +140,7 @@ export default function BioPage() {
                     padding: 10,
                     backgroundColor: "#ffffff",
                     borderWidth: 2,
-                    borderColor: sky50,
+                    borderColor: colorSettings[50],
                   }}
                   size="lg"
                 >

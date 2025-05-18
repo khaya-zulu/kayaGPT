@@ -33,7 +33,7 @@ export const ChatMessage = ({
   const textColor = isAssistant ? colorSettings[800] : undefined;
 
   const colors = isAssistant
-    ? [colorSettings[100] + "B3", colorSettings[100] + "80"]
+    ? [colorSettings[50], "#fff"]
     : ["#ffffff" + "00", "#ffffff" + "00"];
 
   return (
@@ -65,7 +65,7 @@ export const ChatMessage = ({
           style={{
             overflow: isAssistant ? "hidden" : undefined,
             borderWidth: isAssistant ? 1 : 0,
-            borderColor: isAssistant ? colorSettings[200] : undefined,
+            borderColor: isAssistant ? colorSettings[100] : undefined,
             width: "100%",
           }}
         >
