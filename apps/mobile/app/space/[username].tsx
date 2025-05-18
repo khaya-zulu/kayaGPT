@@ -77,7 +77,7 @@ export default function SpaceIdPage() {
       >
         <Rounded
           style={{
-            backgroundColor: "#ffffff" + "e6",
+            backgroundColor: "#ffffff",
             overflow: "hidden",
             borderWidth: 1,
             borderColor: colorSettings[100] + "80",

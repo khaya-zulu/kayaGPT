@@ -1,4 +1,4 @@
-import { schema, db, desc, eq, asc } from "@kgpt/db";
+import { schema, db, desc, eq, asc, isNotNull, isNull } from "@kgpt/db";
 
 import { Env } from "@/utils/env";
 
@@ -51,7 +51,8 @@ export const getChatHistory = async (env: Env) => {
       .leftJoin(
         chatMessagesSubquery,
         eq(chatMessagesSubquery.chatId, schema.chat.id)
-      );
+      )
+      .where(isNull(schema.chat.deletedAt));
 
     return chats;
   } catch (error) {
@@ -76,6 +77,20 @@ export const getChatTitleById = async (env: Env, props: { chatId: string }) => {
     return chatTitle;
   } catch (error) {
     console.error("Error getting chat title by ID:", error);
+    throw error;
+  }
+};
+
+export const deleteChatById = async (env: Env, props: { chatId: string }) => {
+  try {
+    await db(env.DB)
+      .update(schema.chat)
+      .set({
+        deletedAt: new Date(),
+      })
+      .where(eq(schema.chat.id, props.chatId));
+  } catch (error: any) {
+    console.error("Error deleting chat by ID:", error.message);
     throw error;
   }
 };

@@ -4,8 +4,9 @@ import {
   ClockCounterClockwise,
   LinkSimple,
   Microphone,
+  Trash,
 } from "phosphor-react-native";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { ToggleActionsVisibility } from "./toggle-actions-visibility";
 import { zinc600 } from "@/constants/theme";
 
@@ -34,8 +35,10 @@ export const BackToolbar = ({
 
 export const ChatBoxToolbar = ({
   isTitleEnabled,
+  onChatDelete,
 }: {
   isTitleEnabled?: boolean;
+  onChatDelete?: () => void;
 }) => {
   const { chatId } = useLocalSearchParams();
 
@@ -54,9 +57,15 @@ export const ChatBoxToolbar = ({
 
         <View style={{ flexDirection: "row", gap: 15, alignItems: "center" }}>
           <ToggleActionsVisibility />
-          <LinkSimple size={17} weight="bold" color={zinc600} />
+          {chatId ? (
+            <Pressable onPress={onChatDelete}>
+              <Trash size={18} weight="bold" color={"#e11d48"} />
+            </Pressable>
+          ) : null}
+
+          {/* <LinkSimple size={17} weight="bold" color={zinc600} />
           <ClockCounterClockwise size={17} weight="bold" color={zinc600} />
-          <Microphone size={19} weight="fill" />
+          <Microphone size={19} weight="fill" /> */}
         </View>
       </View>
     </>

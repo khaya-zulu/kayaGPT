@@ -1,6 +1,11 @@
 import { streamText, Message, generateObject } from "ai";
 
-import { createChat, getChatHistory, getChatTitleById } from "@/queries/chat";
+import {
+  createChat,
+  deleteChatById,
+  getChatHistory,
+  getChatTitleById,
+} from "@/queries/chat";
 import {
   createChatMessage,
   getChatMessagesByChatId,
@@ -15,6 +20,13 @@ export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
     const chats = await getChatHistory(c.env);
     return c.json({ chats });
+  })
+  .post("/:chatId/delete", privateAuth, async (c) => {
+    await deleteChatById(c.env, {
+      chatId: c.req.param("chatId"),
+    });
+
+    return c.json({ success: true });
   })
   .get("/:chatId/title", privateAuth, async (c) => {
     const chatId = c.req.param("chatId");

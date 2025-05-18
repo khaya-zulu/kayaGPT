@@ -25,6 +25,7 @@ import { Rounded } from "@/components/rounded";
 import { ChatFrame } from "@/features/main-app-box";
 import { ChatMessage } from "@/features/chat-message";
 import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
+import { useChatDeleteMutation } from "@/mutations/chat";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -66,6 +67,8 @@ export default function ChatIdPage() {
   });
 
   const isMessageQueryEnabled = !isNewMessage && !params.message;
+
+  const chatDeleteMutation = useChatDeleteMutation();
 
   const messagesQuery = useChatMessagesQuery({
     chatId: params.chatId,
@@ -134,7 +137,15 @@ export default function ChatIdPage() {
         });
         handleSubmit();
       }}
-      toolbar={<ChatBoxToolbar isTitleEnabled={isMessageQueryEnabled} />}
+      toolbar={
+        <ChatBoxToolbar
+          isTitleEnabled={isMessageQueryEnabled}
+          onChatDelete={async () => {
+            await chatDeleteMutation.mutateAsync({ chatId: params.chatId });
+            router.navigate("/");
+          }}
+        />
+      }
     >
       {!isWeb ? (
         <ToolbarBox>

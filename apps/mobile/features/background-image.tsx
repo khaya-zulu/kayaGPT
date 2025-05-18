@@ -1,4 +1,4 @@
-import { ImageBackground } from "react-native";
+import { ImageBackground, View } from "react-native";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { zinc50 } from "@/constants/theme";
@@ -23,14 +23,23 @@ export const BackgroundImageFeature = ({
         }}
         intensity={intensity ?? 20}
       />
-      <ImageBackground
+      <View
         style={{
-          backgroundColor: "#ffffff" + "d9",
+          backgroundColor: color + "d9",
           height: "100%",
           width: "100%",
           position: "absolute",
           left: 0,
           opacity,
+        }}
+      />
+      <ImageBackground
+        style={{
+          height: "100%",
+          width: "100%",
+          position: "absolute",
+          left: 0,
+          opacity: 0.55,
         }}
         source={{
           uri: "https://www.transparenttextures.com/patterns/worn-dots.png",
