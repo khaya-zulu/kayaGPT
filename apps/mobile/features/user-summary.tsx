@@ -46,7 +46,12 @@ export const UserSummary = ({ description }: { description: string }) => {
 
           <Sun size={40} />
         </Rounded>
-        <Rounded style={{ flex: 1, overflow: "hidden" }}>
+        <Rounded
+          style={{
+            flex: 1,
+            overflow: "hidden",
+          }}
+        >
           <LinearGradient
             colors={["#d9835e", userSettings.colorSettings[700]]}
             style={{ height: "100%" }}
@@ -61,10 +66,10 @@ export const UserSummary = ({ description }: { description: string }) => {
               intensity={100}
               tint="dark"
             >
+              <Text style={{ color: "#fff" }}>Jun 19{"\n"}Wednesday</Text>
               <Text fontSize="lg" style={{ color: "#fff" }}>
                 10:00 AM
               </Text>
-              <Text style={{ color: "#fff" }}>Jun 19{"\n"}Wednesday</Text>
             </BlurView>
           </LinearGradient>
         </Rounded>
