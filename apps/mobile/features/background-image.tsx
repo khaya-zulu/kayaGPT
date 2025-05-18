@@ -23,6 +23,7 @@ export const BackgroundImageFeature = ({
           left: 0,
         }}
         intensity={intensity ?? 20}
+        tint="dark"
       />
       <LinearGradient
         colors={[colorSettings[50], colorSettings[50], colorSettings[50]]}

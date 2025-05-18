@@ -8,6 +8,8 @@ import { textSm, fontSpaceGrotesk } from "@/constants/theme";
 const FONT_SIZE = {
   sm: textSm,
   base: 16,
+  lg: 20,
+  "2xl": 24,
 } as const;
 
 export const Text = styled.Text<{ fontSize?: keyof typeof FONT_SIZE }>`
