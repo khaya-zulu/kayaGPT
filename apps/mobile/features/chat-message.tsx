@@ -65,7 +65,7 @@ export const ChatMessage = ({
           style={{
             overflow: isAssistant ? "hidden" : undefined,
             borderWidth: isAssistant ? 1 : 0,
-            borderColor: isAssistant ? colorSettings[100] : undefined,
+            borderColor: isAssistant ? colorSettings[100] + "e6" : undefined,
             width: "100%",
           }}
         >

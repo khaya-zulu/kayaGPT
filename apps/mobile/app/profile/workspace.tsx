@@ -14,7 +14,7 @@ import { Rounded } from "@/components/rounded";
 import { Text } from "@/components/text";
 import { useChat } from "@/hooks/use-chat";
 import { useUseWorkspaceMutation } from "@/mutations/user";
-import { ColorPalette, WebImageColors } from "@/features/color-palette";
+import { ColorPalette } from "@/features/color-palette";
 import { useState } from "react";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { zinc100, zinc200, zinc300 } from "@/constants/theme";
@@ -26,7 +26,15 @@ const WorkspaceMessage = ({
 }) => {
   const [color, setColor] = useState<string | undefined>();
 
-  const useWorkspaceMutation = useUseWorkspaceMutation();
+  const userSettings = useUserSettings();
+
+  const useWorkspaceMutation = useUseWorkspaceMutation({
+    onSuccess: async () => {
+      console.log("Workspace updated");
+      userSettings.invalidateWorkspaceUrl();
+      await userSettings.invalidate();
+    },
+  });
 
   const [toolInv] = message.parts.filter(
     (p) =>
@@ -75,9 +83,11 @@ const WorkspaceMessage = ({
                 >
                   {color ? (
                     <>
-                      <CursorClick size={18} color="#fff" />
+                      <CursorClick size={14} color="#fff" />
                       <Text style={{ color: "#fff" }} fontSize="sm">
-                        Use as workspace
+                        {useWorkspaceMutation.isPending
+                          ? "..."
+                          : "Use as workspace"}
                       </Text>
                     </>
                   ) : null}
@@ -144,7 +154,7 @@ const WorkspaceMessage = ({
 };
 
 export default function WorkspacePage() {
-  const { colorSettings } = useUserSettings();
+  const userSettings = useUserSettings();
 
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     chatId: Crypto.randomUUID(),
@@ -196,9 +206,10 @@ export default function WorkspacePage() {
                 />
               </Rounded>
             </Text>
+
             <ColorPalette
               src="http://localhost:8787/api/workspace/sxrmqobrfiq2e76en6su4t49"
-              defaultColor={colorSettings.base}
+              defaultColor={userSettings.colorSettings.base}
               isSavedPalette
             />
           </ChatMessage>

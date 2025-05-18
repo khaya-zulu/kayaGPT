@@ -62,7 +62,7 @@ export default function SpaceIdPage() {
   return (
     <MainAppBox
       backgroundStyle={{
-        opacity: 0.4,
+        opacity: 0.3,
         intensity: 20,
       }}
     >

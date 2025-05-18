@@ -1,4 +1,6 @@
 import { Rounded } from "@/components/rounded";
+import { useUserSettings } from "@/hooks/use-user-settings";
+import { useWatch } from "@/hooks/use-watch";
 import { useWorkspaceColorPaletteMutation } from "@/mutations/user";
 import { Circle } from "phosphor-react-native";
 import { useEffect, useState } from "react";
@@ -27,7 +29,12 @@ export const ColorPalette = ({
   isSavedPalette?: boolean;
   defaultColor?: string;
 }) => {
-  const workspacePalette = useWorkspaceColorPaletteMutation();
+  const userSettings = useUserSettings();
+  const workspacePalette = useWorkspaceColorPaletteMutation({
+    onSuccess: async () => {
+      return userSettings.invalidate();
+    },
+  });
 
   const [colorPalette, setColorPalette] = useState<
     WebImageColors | undefined
@@ -37,15 +44,17 @@ export const ColorPalette = ({
     defaultColor
   );
 
-  const handleColorChange = (color?: string) => {
+  const handleColorChange = async (color?: string) => {
     if (color && colorPalette) {
       setSelectedColor(color);
       onSelected?.(color);
 
       if (isSavedPalette) {
-        workspacePalette.mutate({
+        await workspacePalette.mutateAsync({
           color,
         });
+
+        await userSettings.invalidate();
       }
     }
   };
@@ -66,6 +75,12 @@ export const ColorPalette = ({
   const vibrant = colorPalette?.vibrant;
   const darkVibrant = colorPalette?.darkVibrant;
   const darkMuted = colorPalette?.darkMuted;
+
+  useWatch(defaultColor, (prev, curr) => {
+    if (prev !== undefined) {
+      setSelectedColor(curr);
+    }
+  });
 
   return (
     <View style={{ flexDirection: "row", gap: 10, marginTop: 10 }}>

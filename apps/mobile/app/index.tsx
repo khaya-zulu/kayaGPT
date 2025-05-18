@@ -16,6 +16,7 @@ import { MessageOverview } from "@/features/message-overview";
 import { useChat } from "@/hooks/use-chat";
 import { useChatHistoryQuery } from "@/queries/chat";
 import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -62,6 +63,7 @@ const MessageOverviewBox = styled(Rounded)`
 
 export default function IndexPage() {
   const router = useRouter();
+  const userSettings = useUserSettings();
 
   const { handleInputChange, input, setInput } = useChat({});
 
@@ -105,7 +107,7 @@ export default function IndexPage() {
             >
               <WorkspaceImage
                 source={{
-                  uri: "http://localhost:8787/api/workspace/sxrmqobrfiq2e76en6su4t49",
+                  uri: userSettings.workspaceUrl,
                 }}
               />
               <AvatarImage
@@ -128,12 +130,11 @@ export default function IndexPage() {
             </>
           ) : null}
 
-          {chatHistoryQuery.data?.chats.map((c, idx) => {
+          {chatHistoryQuery.data?.chats.map((c) => {
             return (
               <MessageOverview
                 key={c.id}
                 chatId={c.id}
-                style={{ transform: [{ translateY: -idx * 20 }] }}
                 title={c.title}
                 message={c.lastMessage}
               />

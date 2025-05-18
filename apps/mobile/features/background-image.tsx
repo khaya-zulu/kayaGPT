@@ -1,17 +1,18 @@
-import { ImageBackground, View } from "react-native";
+import { ImageBackground } from "react-native";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
-import { zinc50 } from "@/constants/theme";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 export const BackgroundImageFeature = ({
   opacity,
   intensity,
-  color = zinc50,
 }: {
   opacity?: number;
   intensity?: number;
   color?: string;
 }) => {
+  const { colorSettings } = useUserSettings();
+
   return (
     <>
       <BlurView
@@ -23,9 +24,10 @@ export const BackgroundImageFeature = ({
         }}
         intensity={intensity ?? 20}
       />
-      <View
+      <LinearGradient
+        colors={[colorSettings[50], colorSettings[50], colorSettings[50]]}
         style={{
-          backgroundColor: color + "d9",
+          // backgroundColor: color + "d9",
           height: "100%",
           width: "100%",
           position: "absolute",
@@ -45,17 +47,6 @@ export const BackgroundImageFeature = ({
           uri: "https://www.transparenttextures.com/patterns/worn-dots.png",
         }}
         resizeMode="repeat"
-      />
-      <LinearGradient
-        colors={[color + "80", "#ffffff" + "00"]}
-        style={{
-          height: "100%",
-          width: "100%",
-          position: "absolute",
-          left: 0,
-        }}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
       />
     </>
   );

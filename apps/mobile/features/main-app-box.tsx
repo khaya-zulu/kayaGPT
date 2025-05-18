@@ -24,7 +24,7 @@ export const MainAppBox = ({
   children: ReactNode;
   backgroundStyle?: { opacity?: number; intensity?: number };
 }) => {
-  const { colorSettings } = useUserSettings();
+  const userSettings = useUserSettings();
   return (
     <ImageBackground
       style={{
@@ -34,14 +34,14 @@ export const MainAppBox = ({
       }}
       // source={require("../assets/images/workspace.png")}
       source={{
-        uri: "http://localhost:8787/api/workspace/sxrmqobrfiq2e76en6su4t49",
+        uri: userSettings.workspaceUrl,
       }}
       resizeMode="cover"
     >
       <BackgroundImageFeature
         opacity={backgroundStyle?.opacity}
         intensity={backgroundStyle?.intensity}
-        color={colorSettings[100]}
+        color={userSettings.colorSettings[800]}
       />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -82,7 +82,7 @@ export const ChatFrame = ({
   const props = isSafeAreaDisabled ? {} : { style: { flex: 1 } };
 
   return (
-    <MainAppBox>
+    <MainAppBox backgroundStyle={{ opacity: 0.98, intensity: 50 }}>
       <View
         style={{
           flex: 1,

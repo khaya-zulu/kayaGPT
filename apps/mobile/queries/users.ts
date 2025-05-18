@@ -44,6 +44,7 @@ export const useUserSettingsQuery = () => {
     queryKey: userSettingsQueryKey,
     queryFn: async () => {
       const response = await client.api.user.settings.$get();
+      console.log("user settings");
       return response.json();
     },
   });

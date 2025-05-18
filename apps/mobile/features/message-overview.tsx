@@ -4,7 +4,13 @@ import { StyleProp, TextStyle, View } from "react-native";
 
 import { Text } from "@/components/text";
 
-import { sky800, zinc600 } from "@/constants/theme";
+import {
+  rounded2xl,
+  roundedLg,
+  roundedMd,
+  sky800,
+  zinc600,
+} from "@/constants/theme";
 import { ChatCircleDots } from "phosphor-react-native";
 import { isWeb } from "@/constants/platform";
 import { Rounded } from "@/components/rounded";
@@ -20,6 +26,15 @@ const MessageOverviewBox = styled(Rounded)<{ borderColor?: string }>`
   width: 100%;
 `;
 
+const MessagePreviewBox = styled(Rounded)<{ borderColor: string }>`
+  border: 1px solid ${(props) => props.borderColor};
+  overflow: hidden;
+  width: 100%;
+  border-radius: 14px;
+  border-top-right-radius: ${roundedLg};
+  border-top-left-radius: ${roundedLg};
+`;
+
 export const MessageOverview = ({
   style,
   title,
@@ -32,6 +47,73 @@ export const MessageOverview = ({
   message: ChatHistoryQueryOutput["chats"][number]["lastMessage"];
 }) => {
   const { colorSettings } = useUserSettings();
+
+  return (
+    <Link href={`/chat/${chatId}`}>
+      <Rounded
+        style={{
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#fff",
+          padding: 5,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            padding: 10,
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              alignItems: "center",
+            }}
+          >
+            <ChatCircleDots size={18} weight="bold" />
+            <Text fontSize="sm">{title}</Text>
+          </View>
+
+          <Text fontSize="sm" style={{ color: colorSettings["900"] }}>
+            {message?.createdAt
+              ? formatRelative(new Date(message?.createdAt))
+              : "-"}
+          </Text>
+        </View>
+        <MessagePreviewBox borderColor={colorSettings[100] + "e6"}>
+          <View
+            style={{
+              height: "100%",
+              width: "100%",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              backgroundColor: colorSettings[50],
+              opacity: isWeb ? 0.5 : 0.2,
+            }}
+          />
+          <BlurView
+            intensity={20}
+            style={{
+              backgroundColor: colorSettings[50] + "80",
+              padding: 10,
+            }}
+          >
+            <Text fontSize="sm" numberOfLines={2}>
+              AI:{" "}
+              <Text style={{ color: colorSettings[900] }}>
+                {message?.content ?? "-"}
+              </Text>
+            </Text>
+          </BlurView>
+        </MessagePreviewBox>
+      </Rounded>
+    </Link>
+  );
 
   return (
     <Link href={`/chat/${chatId}`} style={style}>

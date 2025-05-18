@@ -1,5 +1,10 @@
 import { client, InferRequestType } from "@/utils/client";
-import { useMutation } from "@tanstack/react-query";
+import {
+  MutationOptions,
+  QueryOptions,
+  useMutation,
+} from "@tanstack/react-query";
+import { InferMutationsOptions, MutationOptionsHelper } from ".";
 
 type UserBioMutationInput = InferRequestType<
   typeof client.api.user.bio.update.$post
@@ -18,14 +23,16 @@ export const useUserBioMutation = () => {
   });
 };
 
-type UseWorkspaceMutationInput = InferRequestType<
-  (typeof client.api.user.bio)["use-workspace"]["$post"]
->["json"];
+type UseWorkspaceMutationOptions = InferMutationsOptions<
+  (typeof client.api.user.bio)["use-workspace"]["$post"],
+  "json"
+>;
 
-export const useUseWorkspaceMutation = () => {
+export const useUseWorkspaceMutation = (opts: UseWorkspaceMutationOptions) => {
   return useMutation({
+    ...opts,
     mutationKey: [client.api.user.bio["use-workspace"].$url().pathname],
-    mutationFn: async (props: UseWorkspaceMutationInput) => {
+    mutationFn: async (props) => {
       const response = await client.api.user.bio["use-workspace"].$post({
         json: props,
       });
@@ -35,14 +42,18 @@ export const useUseWorkspaceMutation = () => {
   });
 };
 
-type WorkspaceColorPaletteInput = InferRequestType<
-  (typeof client.api.user.workspace)["color-palette"]["$post"]
->["json"];
+type WorkspaceColorPaletteMutationOptions = InferMutationsOptions<
+  (typeof client.api.user.workspace)["color-palette"]["$post"],
+  "json"
+>;
 
-export const useWorkspaceColorPaletteMutation = () => {
+export const useWorkspaceColorPaletteMutation = (
+  opts: WorkspaceColorPaletteMutationOptions
+) => {
   return useMutation({
+    ...opts,
     mutationKey: [client.api.user.workspace["color-palette"].$url().pathname],
-    mutationFn: async (props: WorkspaceColorPaletteInput) => {
+    mutationFn: async (props) => {
       const response = await client.api.user.workspace["color-palette"].$post({
         json: props,
       });

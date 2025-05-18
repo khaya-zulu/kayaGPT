@@ -9,33 +9,48 @@ import {
   zinc800,
   zinc900,
 } from "@/constants/theme";
-import { useUserSettingsQuery, UserSettingsQueryOutput } from "@/queries/users";
-import { createContext, ReactNode, useContext } from "react";
+import {
+  useUserSettingsQuery,
+  type UserSettingsQueryOutput,
+  userSettingsQueryKey,
+} from "@/queries/users";
+import { useQueryClient } from "@tanstack/react-query";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 type UserContextType = {
   colorSettings: NonNullable<UserSettingsQueryOutput["colorSettings"]>;
+  isLoading: boolean;
+  userId?: string;
 };
 
 const UserSettingsContext = createContext<UserContextType>(null as any);
 
 export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
-  const { data } = useUserSettingsQuery();
+  const { data, isLoading, isPending } = useUserSettingsQuery();
+
+  const colorSettings = data?.colorSettings;
+
+  if (isPending) {
+    return null;
+  }
 
   return (
     <UserSettingsContext.Provider
       value={{
         colorSettings: {
-          "50": data?.colorSettings?.[50] ?? zinc50,
-          "100": data?.colorSettings?.[100] ?? zinc100,
-          "200": data?.colorSettings?.[200] ?? zinc200,
-          "300": data?.colorSettings?.[300] ?? zinc300,
-          "400": data?.colorSettings?.[400] ?? zinc400,
-          base: data?.colorSettings?.["base"] ?? zinc500,
-          "600": data?.colorSettings?.[600] ?? zinc500,
-          "700": data?.colorSettings?.[700] ?? zinc600,
-          "800": data?.colorSettings?.[800] ?? zinc800,
-          "900": data?.colorSettings?.[900] ?? zinc900,
+          "50": colorSettings?.[50] ?? zinc50,
+          "100": colorSettings?.[100] ?? zinc100,
+          "200": colorSettings?.[200] ?? zinc200,
+          "300": colorSettings?.[300] ?? zinc300,
+          "400": colorSettings?.[400] ?? zinc400,
+          base: colorSettings?.["base"] ?? zinc500,
+          "600": colorSettings?.[600] ?? zinc500,
+          "700": colorSettings?.[700] ?? zinc600,
+          "800": colorSettings?.[800] ?? zinc800,
+          "900": colorSettings?.[900] ?? zinc900,
         },
+        isLoading,
+        userId: data?.id,
       }}
     >
       {children}
@@ -44,5 +59,19 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useUserSettings = () => {
-  return useContext(UserSettingsContext);
+  const context = useContext(UserSettingsContext);
+
+  const [ms, setMs] = useState<number>();
+
+  const query = useQueryClient();
+
+  return {
+    ...context,
+    workspaceUrl: `http://localhost:8787/api/workspace/${context.userId}${ms ? `?ms=${ms}` : ""}`,
+    invalidate: () =>
+      query.invalidateQueries({ queryKey: userSettingsQueryKey }),
+    invalidateWorkspaceUrl: () => {
+      setMs(Date.now());
+    },
+  };
 };
