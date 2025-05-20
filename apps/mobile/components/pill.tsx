@@ -14,7 +14,6 @@ export const Pill = ({
   variant = "outline",
   onPress,
   borderColor,
-  rounded,
 }: {
   children: ReactNode;
   style?: TextProps["style"];
@@ -22,7 +21,6 @@ export const Pill = ({
   variant?: "filled" | "outline" | "white" | "primary";
   onPress?: () => void;
   borderColor?: string;
-  rounded: string;
 }) => {
   const { colorSettings } = useUserSettings();
 

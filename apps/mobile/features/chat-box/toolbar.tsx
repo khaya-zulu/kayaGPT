@@ -49,6 +49,7 @@ export const ChatBoxToolbar = ({
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
+          gap: 10,
         }}
       >
         {chatId ? <BackToolbar isTitleEnabled={isTitleEnabled} /> : null}

@@ -73,11 +73,9 @@ export const UserSummary = ({ description }: { description: string }) => {
             </BlurView>
           </LinearGradient>
         </Rounded>
-        <Rounded style={{ backgroundColor: "#fff", overflow: "hidden" }}>
-          <LinearGradient
-            colors={[zinc800, zinc700]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+        <Rounded style={{ overflow: "hidden" }}>
+          <BlurView
+            tint="prominent"
             style={{
               paddingHorizontal: 25,
               paddingVertical: 15,
@@ -161,7 +159,7 @@ export const UserSummary = ({ description }: { description: string }) => {
                 />
               </Text>
             </Pill>
-          </LinearGradient>
+          </BlurView>
         </Rounded>
       </View>
     </View>

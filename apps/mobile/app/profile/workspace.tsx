@@ -3,7 +3,7 @@ import { Circle, CursorClick, Desk } from "phosphor-react-native";
 
 import * as Crypto from "expo-crypto";
 
-import { type UseChatOptions, type UseChatHelpers } from "@ai-sdk/react";
+import { type UseChatHelpers } from "@ai-sdk/react";
 
 import { ChatMessage } from "@/features/chat-message";
 import { ChatFrame, ChatMessageFrame } from "@/features/main-app-box";
@@ -57,65 +57,63 @@ const WorkspaceMessage = ({
       content={message.content || response?.args.prompt}
       role={message.role === "assistant" ? "Assistant" : "User"}
       actions={
-        <View style={{ flexDirection: "row", gap: 10 }}>
-          {message.role === "assistant" && response?.result.key ? (
-            <>
-              <Pill
-                variant="filled"
-                noText
-                onPress={() => {
-                  if (!color) return;
+        message.role === "assistant" && response?.result.key ? (
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            <Pill
+              variant="filled"
+              noText
+              onPress={() => {
+                if (!color) return;
 
-                  useWorkspaceMutation.mutate({
-                    key: response?.result.key,
-                    color,
-                  });
+                useWorkspaceMutation.mutate({
+                  key: response?.result.key,
+                  color,
+                });
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                  paddingVertical: 2.5,
+                  paddingHorizontal: 10,
                 }}
               >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                    paddingVertical: 2.5,
-                    paddingHorizontal: 10,
-                  }}
-                >
-                  {color ? (
-                    <>
-                      <CursorClick size={14} color="#fff" />
-                      <Text style={{ color: "#fff" }} fontSize="sm">
-                        {useWorkspaceMutation.isPending
-                          ? "..."
-                          : "Use as workspace"}
-                      </Text>
-                    </>
-                  ) : null}
-                  {!color ? (
-                    <>
-                      <View style={{ flexDirection: "row" }}>
-                        <Circle color={zinc300} weight="fill" />
-                        <Circle
-                          color={zinc200}
-                          style={{ marginLeft: -15 }}
-                          weight="fill"
-                        />
-                        <Circle
-                          color={zinc100}
-                          style={{ marginLeft: -15 }}
-                          weight="fill"
-                        />
-                      </View>
-                      <Text style={{ color: "#fff" }} fontSize="sm">
-                        Pick a color
-                      </Text>
-                    </>
-                  ) : null}
-                </View>
-              </Pill>
-            </>
-          ) : null}
-        </View>
+                {color ? (
+                  <>
+                    <CursorClick size={14} color="#fff" />
+                    <Text style={{ color: "#fff" }} fontSize="sm">
+                      {useWorkspaceMutation.isPending
+                        ? "..."
+                        : "Use as workspace"}
+                    </Text>
+                  </>
+                ) : null}
+                {!color ? (
+                  <>
+                    <View style={{ flexDirection: "row" }}>
+                      <Circle color={zinc300} weight="fill" />
+                      <Circle
+                        color={zinc200}
+                        style={{ marginLeft: -15 }}
+                        weight="fill"
+                      />
+                      <Circle
+                        color={zinc100}
+                        style={{ marginLeft: -15 }}
+                        weight="fill"
+                      />
+                    </View>
+                    <Text style={{ color: "#fff" }} fontSize="sm">
+                      Pick a color
+                    </Text>
+                  </>
+                ) : null}
+              </View>
+            </Pill>
+          </View>
+        ) : null
       }
     >
       {response ? (
