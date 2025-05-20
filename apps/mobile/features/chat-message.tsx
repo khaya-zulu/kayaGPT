@@ -5,10 +5,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Message } from "@ai-sdk/react";
 import { Cube } from "phosphor-react-native";
 
-import { Text } from "@/components/text";
+import { Text, AnimatedText } from "@/components/text";
 import { Rounded } from "@/components/rounded";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { BlurView } from "expo-blur";
+import { FadeIn } from "react-native-reanimated";
 
 export const ChatMessage = ({
   role,
@@ -72,6 +73,10 @@ export const ChatMessage = ({
                     size={18}
                     color={colorSettings["base"]}
                     weight="duotone"
+                    // flip x, todo: use for loading
+                    // style={{
+                    //   transform: [{ rotateY: "180deg" }],
+                    // }}
                   />
                 ) : null}
                 <Text>{role === "Assistant" ? "AI" : "User"}</Text>
@@ -80,14 +85,19 @@ export const ChatMessage = ({
             </View>
             <View style={{ paddingVertical: 20, paddingHorizontal: 25 }}>
               <Text>
-                {content ??
-                  parts?.map((p) => {
-                    if (p.type === "text") {
-                      return <Text key={messageId + p.text}>{p.text}</Text>;
-                    }
-
-                    return null;
-                  })}
+                {parts?.map((p, idx) => {
+                  switch (p.type) {
+                    case "text":
+                      return (
+                        <AnimatedText
+                          entering={FadeIn.delay(300 * idx)}
+                          key={messageId + idx}
+                        >
+                          {p.text}
+                        </AnimatedText>
+                      );
+                  }
+                })}
               </Text>
               {children}
             </View>

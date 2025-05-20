@@ -82,7 +82,7 @@ const BottomHalf = () => {
             gap: 5,
             height: "100%",
           }}
-          tint="prominent"
+          tint="regular"
         >
           <Rounded
             style={{
@@ -170,7 +170,7 @@ export default function IndexPage() {
           }}
         >
           <BlurView
-            tint="prominent"
+            tint="regular"
             style={{ flex: 1, padding: 15, flexDirection: "column", gap: 5 }}
           >
             {chatHistoryQuery.data?.chats.map((c, idx) => {

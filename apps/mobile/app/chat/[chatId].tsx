@@ -218,14 +218,16 @@ export default function ChatIdPage() {
                 setScrollViewContentHeight(ev.nativeEvent.layout.height);
               }}
             >
-              {messages.map((m) => (
-                <ChatMessage
-                  key={m.id}
-                  role={m.role === "assistant" ? "Assistant" : "User"}
-                  messageId={m.id}
-                  parts={m.parts}
-                />
-              ))}
+              {messages.map((m, idx) => {
+                return (
+                  <ChatMessage
+                    key={m.id}
+                    role={m.role === "assistant" ? "Assistant" : "User"}
+                    messageId={m.id}
+                    parts={m.parts}
+                  />
+                );
+              })}
             </View>
           </Container>
         </ScrollView>
