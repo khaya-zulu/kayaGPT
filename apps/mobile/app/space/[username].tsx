@@ -2,7 +2,15 @@ import { BlurView } from "expo-blur";
 import { View, Image } from "react-native";
 
 import { Rounded } from "@/components/rounded";
-import { zinc300, zinc400, zinc700, zinc800, zinc500 } from "@/constants/theme";
+import {
+  zinc300,
+  zinc400,
+  zinc700,
+  zinc800,
+  zinc500,
+  zinc200,
+  zinc600,
+} from "@/constants/theme";
 import { Text } from "@/components/text";
 import {
   Circle,
@@ -50,8 +58,8 @@ export default function SpaceIdPage() {
             size={35}
             style={{
               overflow: "hidden",
-              borderWidth: 1,
-              borderColor: zinc800,
+              borderWidth: 2,
+              borderColor: zinc700,
               maxWidth: 600,
               width: "100%",
               marginHorizontal: "auto",

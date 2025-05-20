@@ -82,7 +82,7 @@ export const ChatFrame = ({
   const props = isSafeAreaDisabled ? {} : { style: { flex: 1 } };
 
   return (
-    <MainAppBox backgroundStyle={{ opacity: 0.98, intensity: 50 }}>
+    <MainAppBox backgroundStyle={{ opacity: 0.3, intensity: 20 }}>
       <View
         style={{
           flex: 1,

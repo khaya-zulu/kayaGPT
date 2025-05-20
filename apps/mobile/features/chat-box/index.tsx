@@ -27,25 +27,18 @@ import {
   zinc600,
   roundedLg,
   roundedFull,
-  sky800,
-  sky200,
+  zinc800,
+  zinc700,
 } from "@/constants/theme";
 import { ColorPicker } from "@/features/chat-box/color-picker";
 import { Text } from "@/components/text";
 import { isWeb } from "@/constants/platform";
-import { ChatBoxToolbar } from "./toolbar";
 import { TextInput } from "@/components/text-input";
 import { useUserSettings } from "@/hooks/use-user-settings";
-
-const InputBox = styled.View`
-  background-color: #fff;
-  border-radius: ${rounded2xl};
-  border-bottom-right-radius: ${isWeb ? rounded2xl : 0};
-  border-bottom-left-radius: ${isWeb ? rounded2xl : 0};
-`;
+import { Rounded } from "@/components/rounded";
 
 const InputContainer = styled.View`
-  max-width: 896px;
+  max-width: 750px;
   margin: 0 auto;
   width: 100%;
   flex-direction: row;
@@ -56,24 +49,34 @@ const InputContainer = styled.View`
 `;
 
 const RoundedBox = styled.View`
-  border-radius: ${rounded2xl};
-  overflow: hidden;
-  border-bottom-right-radius: ${isWeb ? rounded2xl : 0};
-  border-bottom-left-radius: ${isWeb ? rounded2xl : 0};
+  border-radius: 20px;
+  border-bottom-right-radius: ${isWeb ? "20px" : 0};
+  border-bottom-left-radius: ${isWeb ? "20px" : 0};
 `;
 
 const InputLinearBox = ({ children }: { children: ReactNode }) => {
-  const { colorSettings } = useUserSettings();
-  const colors: any = ["#ffffff" + "00", colorSettings[300]];
+  const userSettings = useUserSettings();
 
   return (
-    <RoundedBox style={{ overflow: "hidden" }}>
-      <LinearGradient
-        colors={isWeb ? colors : colors.reverse()}
-        style={{ borderRadius: rounded2xl, padding: isWeb ? 1 : 2 }}
+    <RoundedBox style={{ position: "relative" }}>
+      <Rounded
+        style={{
+          height: "100%",
+          width: "100%",
+          backgroundColor: zinc800 + "cc",
+          transform: [{ translateY: 2 }],
+          position: "absolute",
+        }}
+      />
+      <Rounded
+        style={{
+          borderColor: userSettings.colorSettings[300] + "cc",
+          borderWidth: 2,
+          backgroundColor: "#fff",
+        }}
       >
         {children}
-      </LinearGradient>
+      </Rounded>
     </RoundedBox>
   );
 };
@@ -124,53 +127,68 @@ export const ChatBox = ({
   const [height, setHeight] = useState(20);
   const [isShiftPressed, setIsShiftPressed] = useState(false);
 
-  const { colorSettings } = useUserSettings();
+  const userSettings = useUserSettings();
 
   return (
     <InputContainer>
-      {isWeb ? <ColorPicker /> : null}
       <View style={{ flex: 1, position: "relative" }}>
-        {isWeb ? toolbar : null}
-
         <InputLinearBox>
-          <InputBox>
-            <SafeAreaView>
-              <View style={{ padding: 20 }}>
-                <TextInput
-                  multiline
-                  placeholder="Type something..."
-                  style={{
-                    marginBottom: 20,
-                    minHeight: 20,
-                    height,
-                  }}
-                  onChange={(ev) => {
-                    onChange?.(ev);
-                  }}
-                  onContentSizeChange={(ev) => {
-                    setHeight(ev.nativeEvent.contentSize.height);
-                  }}
-                  onKeyPress={(ev) => {
-                    if (isWeb) {
-                      if (ev.nativeEvent.key === "Enter" && !isShiftPressed) {
-                        arrowUpButtonRef.current?.focus();
-                        onSubmit?.(undefined as any);
-                      }
-
-                      if (ev.nativeEvent.key === "Shift") {
-                        setIsShiftPressed(true);
-                      }
+          <SafeAreaView>
+            <View
+              style={{
+                paddingHorizontal: 20,
+                paddingTop: 10,
+                paddingBottom: 5,
+                borderBottomWidth: 1,
+                borderColor: userSettings.colorSettings[100] + "80",
+              }}
+            >
+              <Text fontSize="sm">12:00 AM Jun 12</Text>
+            </View>
+            <View style={{ paddingVertical: 15, paddingHorizontal: 20 }}>
+              <TextInput
+                multiline
+                placeholder="Type something..."
+                style={{
+                  marginBottom: 20,
+                  minHeight: 20,
+                  height,
+                }}
+                onChange={(ev) => {
+                  onChange?.(ev);
+                }}
+                onContentSizeChange={(ev) => {
+                  setHeight(ev.nativeEvent.contentSize.height);
+                }}
+                onKeyPress={(ev) => {
+                  if (isWeb) {
+                    if (ev.nativeEvent.key === "Enter" && !isShiftPressed) {
+                      arrowUpButtonRef.current?.focus();
+                      onSubmit?.(undefined as any);
                     }
-                  }}
-                  // @ts-ignore
-                  onKeyUp={(ev) => {
-                    if (isWeb && ev.nativeEvent.key === "Shift") {
-                      setIsShiftPressed(false);
-                    }
-                  }}
-                  value={value}
-                />
 
+                    if (ev.nativeEvent.key === "Shift") {
+                      setIsShiftPressed(true);
+                    }
+                  }
+                }}
+                // @ts-ignore
+                onKeyUp={(ev) => {
+                  if (isWeb && ev.nativeEvent.key === "Shift") {
+                    setIsShiftPressed(false);
+                  }
+                }}
+                value={value}
+              />
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                {isWeb ? toolbar : null}
                 <View
                   style={{
                     flexDirection: "row",
@@ -180,6 +198,7 @@ export const ChatBox = ({
                   }}
                 >
                   {!isWeb ? <Options /> : null}
+                  {isWeb ? <ColorPicker /> : null}
                   <View>
                     <RoundedText fontSize="sm">GPT‑4.1</RoundedText>
                   </View>
@@ -190,15 +209,15 @@ export const ChatBox = ({
                       padding: 6,
                       borderRadius: roundedFull,
                     }}
-                    backgroundColor={colorSettings[800]}
+                    backgroundColor={userSettings.colorSettings[800]}
                     onPress={onSubmit}
                   >
                     <ArrowUp size={14} color="#fff" weight="bold" />
                   </ArrowUpButton>
                 </View>
               </View>
-            </SafeAreaView>
-          </InputBox>
+            </View>
+          </SafeAreaView>
         </InputLinearBox>
       </View>
     </InputContainer>

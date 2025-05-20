@@ -1,8 +1,6 @@
 import { Pill } from "@/components/pill";
-import { Rounded } from "@/components/rounded";
 import { Text } from "@/components/text";
 import { isWeb } from "@/constants/platform";
-import { sky200, sky800, zinc200, zinc300 } from "@/constants/theme";
 import { MagnifyingGlass } from "phosphor-react-native";
 import { Pressable, View } from "react-native";
 
@@ -12,7 +10,6 @@ export const MessageTags = () => {
       style={{
         flexDirection: "row",
         gap: 4,
-        paddingHorizontal: 15,
         alignItems: "center",
       }}
     >

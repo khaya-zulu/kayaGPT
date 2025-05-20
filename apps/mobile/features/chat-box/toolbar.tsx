@@ -47,7 +47,6 @@ export const ChatBoxToolbar = ({
       <View
         style={{
           flexDirection: "row",
-          padding: 10,
           justifyContent: "space-between",
           alignItems: "center",
         }}
@@ -56,7 +55,6 @@ export const ChatBoxToolbar = ({
         {!chatId ? <MessageTags /> : null}
 
         <View style={{ flexDirection: "row", gap: 15, alignItems: "center" }}>
-          <ToggleActionsVisibility />
           {chatId ? (
             <Pressable onPress={onChatDelete}>
               <Trash size={18} weight="bold" color={"#e11d48"} />
