@@ -11,9 +11,14 @@ import { ChatMessage } from "@/features/chat-message";
 
 import { useUserBioQuery } from "@/queries/users";
 import { useUserBioMutation } from "@/mutations/user";
-import { ChatFrame, ChatMessageFrame } from "@/features/main-app-box";
+import {
+  ChatFrame,
+  ChatMessageFrame,
+  MainAppBox,
+} from "@/features/main-app-box";
 import { ProfileToolbar } from "@/features/chat-box/profile-toolbar";
 import { useUserSettings } from "@/hooks/use-user-settings";
+import { BlurView } from "expo-blur";
 
 export default function BioPage() {
   const userBioQuery = useUserBioQuery();
@@ -28,6 +33,40 @@ export default function BioPage() {
       username: userBioQuery.data?.username ?? "",
     },
   });
+
+  return (
+    <MainAppBox>
+      <View style={{ flex: 1, padding: 20 }}>
+        <Rounded
+          style={{
+            flex: 1,
+            maxWidth: 600,
+            margin: "auto",
+            width: "100%",
+            overflow: "hidden",
+          }}
+        >
+          <BlurView
+            style={{ flex: 1, paddingVertical: 20, paddingHorizontal: 30 }}
+          >
+            <ChatMessage messageId="1" role="Assistant">
+              <form.Field
+                name="username"
+                children={(field) => (
+                  <TextInput
+                    placeholder="@username"
+                    value={field.state.value}
+                    onChangeText={field.handleChange}
+                    onBlur={field.handleBlur}
+                  />
+                )}
+              />
+            </ChatMessage>
+          </BlurView>
+        </Rounded>
+      </View>
+    </MainAppBox>
+  );
 
   return (
     <ChatFrame toolbar={<ProfileToolbar />}>

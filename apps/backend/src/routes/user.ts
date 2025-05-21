@@ -6,6 +6,7 @@ import {
   getUserByUsername,
   getUserDescriptionById,
   getUserSettingsById,
+  updateSocialLinksById,
   updateUserById,
   updateUserSettingsById,
 } from "@/queries/user";
@@ -19,6 +20,7 @@ import { zValidator } from "@hono/zod-validator";
 import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
 import { downloadImage } from "@/services/download-image";
 import { getColorPalette } from "@/utils/color";
+import { deleteChatById } from "@/queries/chat";
 
 export const userRoute = createApp()
   .get("/overview/:username", async (c) => {
@@ -94,6 +96,35 @@ export const userRoute = createApp()
       return c.json({ success: true });
     }
   )
+  .post(
+    "/profile/social-links",
+    privateAuth,
+    zValidator(
+      "json",
+      z.object({
+        github: z.string(),
+        linkedin: z.string(),
+        website: z.string(),
+        x: z.string(),
+        deleteChatMessageId: z.string().optional(),
+      })
+    ),
+    async (c) => {
+      const userId = c.get("userId");
+      const body = c.req.valid("json");
+
+      await updateSocialLinksById(c.env, {
+        socialLinks: body,
+        userId,
+      });
+
+      if (body.deleteChatMessageId) {
+        await deleteChatById(c.env, { chatId: body.deleteChatMessageId });
+      }
+
+      return c.json({ success: true });
+    }
+  )
   .post("/profile/upload", privateAuth, async (c) => {
     const userId = c.get("userId");
     const body = await c.req.parseBody();
@@ -144,6 +175,7 @@ Here is information about the user:` +
         user.description,
       messages: body.messages,
       model: openai,
+      maxSteps: 2,
       tools: {
         generateImage: generateWorkspaceTool(c.env, { userId }),
       },

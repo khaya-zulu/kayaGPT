@@ -33,6 +33,10 @@ export const useUserOverviewQuery = (username: string) => {
   });
 };
 
+export type UserOverviewQueryOutput = InferResponseType<
+  (typeof client.api.user.overview)[":username"]["$get"]
+>;
+
 export const userSettingsQueryKey = [client.api.user.settings.$url().pathname];
 
 export type UserSettingsQueryOutput = InferResponseType<

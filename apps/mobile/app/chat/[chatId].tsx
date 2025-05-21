@@ -26,9 +26,18 @@ import { ChatFrame } from "@/features/main-app-box";
 import { ChatMessage } from "@/features/chat-message";
 import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
 import { useChatDeleteMutation } from "@/mutations/chat";
+import { Tool } from "@/features/tool-ui";
 
-// todo: this should only be a button on mobile
-const Container = styled.Pressable`
+const MobileKeyboardDismiss = styled.Pressable`
+  max-width: 650px;
+  margin: 0 auto;
+  width: 100%;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+`;
+
+const WebKeyboardDismiss = styled.View`
   max-width: 650px;
   margin: 0 auto;
   width: 100%;
@@ -67,6 +76,8 @@ export default function ChatIdPage() {
   });
 
   const isMessageQueryEnabled = !isNewMessage && !params.message;
+
+  const KeyboardDismiss = isWeb ? WebKeyboardDismiss : MobileKeyboardDismiss;
 
   const chatDeleteMutation = useChatDeleteMutation();
 
@@ -205,7 +216,7 @@ export default function ChatIdPage() {
             setScrollViewHeight(ev.nativeEvent.layout.height);
           }}
         >
-          <Container onPress={() => Keyboard.dismiss()}>
+          <KeyboardDismiss onPress={() => Keyboard.dismiss()}>
             <View
               style={{
                 paddingHorizontal: 20,
@@ -219,17 +230,25 @@ export default function ChatIdPage() {
               }}
             >
               {messages.map((m, idx) => {
+                const tools = m.parts.filter(
+                  (p) => p.type === "tool-invocation"
+                );
+
                 return (
                   <ChatMessage
                     key={m.id}
                     role={m.role === "assistant" ? "Assistant" : "User"}
                     messageId={m.id}
                     parts={m.parts}
-                  />
+                  >
+                    {tools.map((t, idx) => (
+                      <Tool key={"tool" + idx} invocation={t.toolInvocation} />
+                    ))}
+                  </ChatMessage>
                 );
               })}
             </View>
-          </Container>
+          </KeyboardDismiss>
         </ScrollView>
         {isScrollToBottomVisible ? (
           <View

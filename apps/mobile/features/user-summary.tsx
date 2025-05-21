@@ -13,19 +13,21 @@ import {
   LinkedinLogo,
   LinkSimple,
   Sun,
-  Sunglasses,
-  X,
   XLogo,
 } from "phosphor-react-native";
-import { zinc700, zinc800 } from "@/constants/theme";
+import { UserOverviewQueryOutput } from "@/queries/users";
 
-export const UserSummary = ({ description }: { description: string }) => {
+export const UserSummary = ({
+  summary,
+}: {
+  summary?: UserOverviewQueryOutput;
+}) => {
   const userSettings = useUserSettings();
 
   return (
     <View style={{ gap: 10, flexDirection: "row", height: 450 }}>
       <View style={{ flex: 1.5 }}>
-        <DescriptionPreview description={description} />
+        <DescriptionPreview description={summary?.description ?? ""} />
       </View>
       <View style={{ flexDirection: "column", gap: 10, flex: 1 }}>
         <Rounded
@@ -85,65 +87,73 @@ export const UserSummary = ({ description }: { description: string }) => {
             }}
           >
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
-                <Text
-                  style={{
-                    paddingHorizontal: 12,
-                    paddingVertical: 8,
-                  }}
-                >
-                  <XLogo
-                    size={18}
-                    color="#fff"
-                    style={{ transform: [{ translateY: 2 }] }}
-                  />
-                </Text>
-              </Pill>
+              {summary?.social?.x ? (
+                <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
+                  <Text
+                    style={{
+                      paddingHorizontal: 12,
+                      paddingVertical: 8,
+                    }}
+                  >
+                    <XLogo
+                      size={18}
+                      color="#fff"
+                      style={{ transform: [{ translateY: 2 }] }}
+                    />
+                  </Text>
+                </Pill>
+              ) : null}
 
-              <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
-                <Text
-                  style={{
-                    paddingHorizontal: 12,
-                    paddingVertical: 8,
-                  }}
-                >
-                  <GithubLogo
-                    size={18}
-                    color="#fff"
-                    style={{ transform: [{ translateY: 2 }] }}
-                  />
-                </Text>
-              </Pill>
+              {summary?.social?.github ? (
+                <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
+                  <Text
+                    style={{
+                      paddingHorizontal: 12,
+                      paddingVertical: 8,
+                    }}
+                  >
+                    <GithubLogo
+                      size={18}
+                      color="#fff"
+                      style={{ transform: [{ translateY: 2 }] }}
+                    />
+                  </Text>
+                </Pill>
+              ) : null}
 
-              <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
-                <Text
-                  style={{
-                    paddingHorizontal: 12,
-                    paddingVertical: 8,
-                  }}
-                >
-                  <LinkedinLogo
-                    size={18}
-                    color="#fff"
-                    style={{ transform: [{ translateY: 2 }] }}
-                  />
-                </Text>
-              </Pill>
+              {summary?.social?.linkedin ? (
+                <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
+                  <Text
+                    style={{
+                      paddingHorizontal: 12,
+                      paddingVertical: 8,
+                    }}
+                  >
+                    <LinkedinLogo
+                      size={18}
+                      color="#fff"
+                      style={{ transform: [{ translateY: 2 }] }}
+                    />
+                  </Text>
+                </Pill>
+              ) : null}
 
-              <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
-                <Text
-                  style={{
-                    paddingHorizontal: 12,
-                    paddingVertical: 8,
-                  }}
-                >
-                  <Globe
-                    size={18}
-                    color="#fff"
-                    style={{ transform: [{ translateY: 2 }] }}
-                  />
-                </Text>
-              </Pill>
+              {summary?.social?.website ? (
+                <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
+                  <Text
+                    style={{
+                      paddingHorizontal: 12,
+                      paddingVertical: 8,
+                    }}
+                  >
+                    <Globe
+                      size={18}
+                      color="#fff"
+                      style={{ transform: [{ translateY: 2 }] }}
+                    />
+                  </Text>
+                </Pill>
+              ) : null}
             </View>
             <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
               <Text

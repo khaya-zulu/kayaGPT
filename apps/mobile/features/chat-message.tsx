@@ -16,9 +16,7 @@ export const ChatMessage = ({
   children,
   parts,
   messageId,
-  content,
   actions,
-  hideCube,
 }: {
   role: "Assistant" | "User";
   children?: ReactNode;
@@ -31,12 +29,6 @@ export const ChatMessage = ({
   const isAssistant = role === "Assistant";
 
   const { colorSettings } = useUserSettings();
-
-  const textColor = isAssistant ? colorSettings[800] : undefined;
-
-  const colors = isAssistant
-    ? [colorSettings[50], "#fff"]
-    : ["#ffffff" + "00", "#ffffff" + "00"];
 
   return (
     <View style={{ flexDirection: "column", gap: 15 }}>
@@ -105,63 +97,6 @@ export const ChatMessage = ({
         </BlurView>
       </Rounded>
       {actions}
-    </View>
-  );
-
-  return (
-    <View
-      style={[
-        {
-          flexDirection: "row",
-          gap: 15,
-        },
-      ]}
-    >
-      {!hideCube ? (
-        <Cube
-          color={textColor}
-          weight="duotone"
-          size={20}
-          style={{
-            transform: [{ translateY: 2.5 }],
-            opacity: role === "Assistant" ? 1 : 0,
-          }}
-          // flip x, todo: use for loading
-          // style={{
-          //   transform: [{ rotateY: "180deg" }],
-          // }}
-        />
-      ) : null}
-      <View style={{ flex: 1, flexDirection: "column", gap: 10 }}>
-        <Rounded
-          style={{
-            overflow: isAssistant ? "hidden" : undefined,
-            borderWidth: isAssistant ? 1 : 0,
-            borderColor: isAssistant ? colorSettings[100] + "e6" : undefined,
-            width: "100%",
-          }}
-        >
-          <LinearGradient
-            colors={colors as any}
-            style={{
-              padding: isAssistant ? 20 : 0,
-            }}
-          >
-            <Text>
-              {content ??
-                parts?.map((p) => {
-                  if (p.type === "text") {
-                    return <Text key={messageId + p.text}>{p.text}</Text>;
-                  }
-
-                  return null;
-                })}
-            </Text>
-            {children}
-          </LinearGradient>
-        </Rounded>
-        {actions}
-      </View>
     </View>
   );
 };

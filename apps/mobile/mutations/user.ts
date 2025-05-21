@@ -62,3 +62,24 @@ export const useWorkspaceColorPaletteMutation = (
     },
   });
 };
+
+type UpdateSocialLinksMutationOptions = InferMutationsOptions<
+  (typeof client.api.user.profile)["social-links"]["$post"],
+  "json"
+>;
+
+export const useUpdateSocialLinksMutation = (
+  opts?: UpdateSocialLinksMutationOptions
+) => {
+  return useMutation({
+    ...opts,
+    mutationKey: [client.api.user.profile["social-links"].$url().pathname],
+    mutationFn: async (data) => {
+      const response = await client.api.user.profile["social-links"].$post({
+        json: data,
+      });
+
+      return response.json();
+    },
+  });
+};

@@ -97,6 +97,7 @@ const BottomHalf = () => {
               icon={<User size={16} weight="bold" />}
               to="/profile"
             />
+
             <View style={{ width: 1, backgroundColor: zinc200 + "cc" }} />
 
             <NavigationMenuItem

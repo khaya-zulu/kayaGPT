@@ -2,29 +2,14 @@ import { BlurView } from "expo-blur";
 import { View, Image } from "react-native";
 
 import { Rounded } from "@/components/rounded";
-import {
-  zinc300,
-  zinc400,
-  zinc700,
-  zinc800,
-  zinc500,
-  zinc200,
-  zinc600,
-} from "@/constants/theme";
+import { zinc300, zinc400, zinc700, zinc800, zinc500 } from "@/constants/theme";
 import { Text } from "@/components/text";
-import {
-  Circle,
-  GithubLogo,
-  House,
-  LinkedinLogo,
-  XLogo,
-} from "phosphor-react-native";
+import { Circle, House } from "phosphor-react-native";
 import { MainAppBox } from "@/features/main-app-box";
 import { Pill } from "@/components/pill";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useUserOverviewQuery } from "@/queries/users";
-import { DescriptionPreview } from "@/features/description-preview";
 import { UserSummary } from "@/features/user-summary";
 
 export default function SpaceIdPage() {
@@ -51,7 +36,7 @@ export default function SpaceIdPage() {
       >
         {/* <DescriptionPreview description={userOverview?.description} height={380} /> */}
 
-        <UserSummary description={userOverview?.description ?? ""} />
+        <UserSummary summary={userOverview} />
 
         <View style={{ position: "absolute", bottom: 20, width: "100%" }}>
           <Rounded

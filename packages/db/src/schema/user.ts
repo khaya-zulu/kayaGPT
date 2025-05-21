@@ -33,7 +33,7 @@ export const user = sqliteTable("user", {
       800: "#27272a",
       900: "#18181b",
     }),
-  social: text("social")
+  social: text("social", { mode: "json" })
     .$type<{
       github?: string;
       x?: string;

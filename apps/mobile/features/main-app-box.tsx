@@ -39,8 +39,8 @@ export const MainAppBox = ({
       resizeMode="cover"
     >
       <BackgroundImageFeature
-        opacity={backgroundStyle?.opacity}
-        intensity={backgroundStyle?.intensity}
+        opacity={backgroundStyle?.opacity ?? 0.3}
+        intensity={backgroundStyle?.intensity ?? 20}
         color={userSettings.colorSettings[800]}
       />
       <KeyboardAvoidingView

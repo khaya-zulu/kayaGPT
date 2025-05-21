@@ -15,6 +15,7 @@ import { createOpenAIModel } from "@/utils/models";
 import { createApp } from "@/utils/server";
 import { z } from "zod";
 import { privateAuth } from "@/utils/auth";
+import { socialLinksTool } from "@/services/tools/social-links";
 
 export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
@@ -41,6 +42,8 @@ export const chatRoute = createApp()
     return c.json({ messages });
   })
   .post("/:chatId", privateAuth, async (c) => {
+    const userId = c.get("userId");
+
     const body = await c.req.json<{ messages: Message[] }>();
     const chatId = c.req.param("chatId");
 
@@ -82,8 +85,12 @@ export const chatRoute = createApp()
       model: openai,
       messages: body.messages,
       onError: console.error,
+      tools: {
+        socialLinks: socialLinksTool(c.env, { userId }),
+      },
+      maxSteps: 4,
       system:
-        "You are a helpful personal assistant. You are meant to help the user be more productive. Be friendly and concise.",
+        "You are a helpful personal assitant, for my personal website. You are meant to help the user be more productive. Be friendly and concise.",
       onFinish: async (message) => {
         await createChatMessage(c.env, {
           chatId,
