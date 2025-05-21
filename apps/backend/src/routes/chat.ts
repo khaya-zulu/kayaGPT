@@ -16,6 +16,7 @@ import { createApp } from "@/utils/server";
 import { z } from "zod";
 import { privateAuth } from "@/utils/auth";
 import { socialLinksTool } from "@/services/tools/social-links";
+import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
 
 export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
@@ -81,22 +82,17 @@ export const chatRoute = createApp()
       });
     }
 
-    const toolResults: {
-      toolId: string;
-      toolName: string;
-      result: Record<string, any>;
-    }[] = [];
-
     const result = streamText({
       model: openai,
       messages: body.messages,
       onError: console.error,
       tools: {
         socialLinks: socialLinksTool(c.env, { userId }),
+        generateWorkspace: generateWorkspaceTool(c.env, { userId }),
       },
       maxSteps: 4,
       system:
-        "You are a helpful personal assitant, for my personal website. You are meant to help the user be more productive. Be friendly and concise.",
+        "You are a helpful personal assitant, for my personal website. You are meant to help the user be more productive. Be friendly and concise. For tools where an image key is returned, the image will be displayed in the chat, so no need to provide a link to the image.",
       onFinish: async (message) => {
         const toolResults = message.steps
           .map((step) => step.toolResults)

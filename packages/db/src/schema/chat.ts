@@ -13,7 +13,7 @@ export const chat = sqliteTable("chat", {
 type Tool = {
   toolId: string;
   toolName: string;
-  result: Record<string, any>;
+  result?: Record<string, any>;
 };
 
 export const chatMessage = sqliteTable("chat_message", {

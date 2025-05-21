@@ -1,4 +1,3 @@
-import { Rounded } from "@/components/rounded";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useWatch } from "@/hooks/use-watch";
 import { useWorkspaceColorPaletteMutation } from "@/mutations/user";

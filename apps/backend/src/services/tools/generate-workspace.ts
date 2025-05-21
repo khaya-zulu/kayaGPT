@@ -22,6 +22,8 @@ export const generateWorkspaceTool = (env: Env, props: { userId: string }) => {
 
         const referenceImage = await getReferenceImage();
 
+        console.log("Generating workspace...");
+
         const response = await client.images.edit({
           model: "gpt-image-1",
           image: [referenceImage],
@@ -55,15 +57,15 @@ export const generateWorkspaceTool = (env: Env, props: { userId: string }) => {
 
         if (base64) {
           const imageBytes = Buffer.from(base64, "base64");
-          const key = `temp/${props.userId}/${createId()}`;
+          const workspaceKey = `temp/${props.userId}/${createId()}`;
 
-          await env.R2_WORKSPACE.put(key, imageBytes, {
+          await env.R2_WORKSPACE.put(workspaceKey, imageBytes, {
             httpMetadata: {
               contentType: "image/png",
             },
           });
 
-          return { key, prompt };
+          return { workspaceKey, prompt };
         }
       } catch (error: any) {
         console.error("Error generating workspace image:", error.message);

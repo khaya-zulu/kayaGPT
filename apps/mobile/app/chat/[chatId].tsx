@@ -28,7 +28,7 @@ import { ChatFrame } from "@/features/main-app-box";
 import { ChatMessage } from "@/features/chat-message";
 import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
 import { useChatDeleteMutation } from "@/mutations/chat";
-import { Tool } from "@/features/tool-ui";
+import { Tool } from "@/features/tool";
 
 const MobileKeyboardDismiss = styled.Pressable`
   max-width: 650px;

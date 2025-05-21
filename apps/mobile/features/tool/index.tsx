@@ -1,8 +1,11 @@
 import { ToolInvocation } from "@ai-sdk/ui-utils";
+
 import { SocialTool } from "./social";
+import { NewWorkspace } from "./new-workspace";
 
 const Components = {
   socialLinks: SocialTool,
+  generateWorkspace: NewWorkspace,
 };
 
 export const Tool = ({ invocation }: { invocation: ToolInvocation }) => {
