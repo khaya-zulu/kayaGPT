@@ -10,6 +10,7 @@ export const createChatMessage = async (
     chatId: string;
     content: string;
     role: ChatMessageSelect["role"];
+    tools?: ChatMessageSelect["tools"];
   }
 ) => {
   try {
@@ -39,6 +40,7 @@ export const getChatMessagesByChatId = async (
         content: schema.chatMessage.content,
         createdAt: schema.chatMessage.createdAt,
         role: schema.chatMessage.role,
+        tools: schema.chatMessage.tools,
       })
       .from(schema.chatMessage)
       .where(eq(schema.chatMessage.chatId, props.chatId));

@@ -1,5 +1,7 @@
 import { styled } from "styled-components/native";
 
+import { ToolInvocationUIPart } from "@ai-sdk/ui-utils";
+
 import {
   Keyboard,
   Pressable,
@@ -94,6 +96,22 @@ export default function ChatIdPage() {
       if (chatMessages) {
         setMessages(
           chatMessages.map((cm) => {
+            console.log("cm", cm);
+            const toolParts: ToolInvocationUIPart[] = (cm.tools ?? [])?.map(
+              (t) => {
+                return {
+                  type: "tool-invocation",
+                  toolInvocation: {
+                    args: {},
+                    result: t.result,
+                    toolCallId: t.toolId,
+                    toolName: t.toolName,
+                    state: "result",
+                  },
+                };
+              }
+            );
+
             return {
               id: cm.id,
               role: cm.role === "assistant" ? "assistant" : "user",
@@ -103,6 +121,7 @@ export default function ChatIdPage() {
                   type: "text",
                   text: cm.content,
                 },
+                ...toolParts,
               ],
             };
           })

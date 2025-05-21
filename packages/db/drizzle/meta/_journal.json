@@ -99,6 +99,20 @@
       "when": 1747553519677,
       "tag": "0013_lean_nightcrawler",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1747846004254,
+      "tag": "0014_busy_machine_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1747846528896,
+      "tag": "0015_low_rumiko_fujikawa",
+      "breakpoints": true
     }
   ]
 }

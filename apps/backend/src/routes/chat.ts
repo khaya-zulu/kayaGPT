@@ -1,4 +1,4 @@
-import { streamText, Message, generateObject } from "ai";
+import { streamText, Message, generateObject, ToolInvocation } from "ai";
 
 import {
   createChat,
@@ -81,6 +81,12 @@ export const chatRoute = createApp()
       });
     }
 
+    const toolResults: {
+      toolId: string;
+      toolName: string;
+      result: Record<string, any>;
+    }[] = [];
+
     const result = streamText({
       model: openai,
       messages: body.messages,
@@ -92,10 +98,21 @@ export const chatRoute = createApp()
       system:
         "You are a helpful personal assitant, for my personal website. You are meant to help the user be more productive. Be friendly and concise.",
       onFinish: async (message) => {
+        const toolResults = message.steps
+          .map((step) => step.toolResults)
+          .flat();
+
         await createChatMessage(c.env, {
           chatId,
           content: message.text,
           role: "assistant",
+          tools: toolResults.map((t) => {
+            return {
+              toolId: t.toolCallId,
+              toolName: t.toolName,
+              result: t.result,
+            };
+          }),
         });
       },
     });

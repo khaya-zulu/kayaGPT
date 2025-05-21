@@ -10,10 +10,17 @@ export const chat = sqliteTable("chat", {
   deletedAt: integer("deleted_at", { mode: "timestamp" }),
 });
 
+type Tool = {
+  toolId: string;
+  toolName: string;
+  result: Record<string, any>;
+};
+
 export const chatMessage = sqliteTable("chat_message", {
   id,
   content: text("content").notNull(),
   role: text("role").notNull().$type<"user" | "assistant">(),
   chatId: text("chat_id").notNull(),
   createdAt: dateNow("created_at"),
+  tools: text("tools", { mode: "json" }).$type<Tool[]>().default([]),
 });
