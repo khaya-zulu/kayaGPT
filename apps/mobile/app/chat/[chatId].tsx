@@ -79,7 +79,9 @@ export default function ChatIdPage() {
 
   const isMessageQueryEnabled = !isNewMessage && !params.message;
 
-  const KeyboardDismiss = isWeb ? WebKeyboardDismiss : MobileKeyboardDismiss;
+  const KeyboardDismiss: any = isWeb
+    ? WebKeyboardDismiss
+    : MobileKeyboardDismiss;
 
   const chatDeleteMutation = useChatDeleteMutation();
 
@@ -96,7 +98,6 @@ export default function ChatIdPage() {
       if (chatMessages) {
         setMessages(
           chatMessages.map((cm) => {
-            console.log("cm", cm);
             const toolParts: ToolInvocationUIPart[] = (cm.tools ?? [])?.map(
               (t) => {
                 return {

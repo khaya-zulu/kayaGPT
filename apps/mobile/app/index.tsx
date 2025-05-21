@@ -1,4 +1,4 @@
-import { Keyboard, View } from "react-native";
+import { Keyboard, ScrollView, View } from "react-native";
 import { Link, LinkProps, useRouter } from "expo-router";
 import { styled } from "styled-components/native";
 
@@ -170,20 +170,21 @@ export default function IndexPage() {
             overflow: "hidden",
           }}
         >
-          <BlurView
-            tint="regular"
-            style={{ flex: 1, padding: 15, flexDirection: "column", gap: 5 }}
-          >
-            {chatHistoryQuery.data?.chats.map((c, idx) => {
-              return (
-                <ChatSummary
-                  key={c.id}
-                  chatId={c.id}
-                  title={c.title}
-                  message={c.lastMessage}
-                />
-              );
-            })}
+          <BlurView tint="regular" style={{ flex: 1 }}>
+            <ScrollView>
+              <View style={{ flexDirection: "column", gap: 5, padding: 15 }}>
+                {chatHistoryQuery.data?.chats.map((c, idx) => {
+                  return (
+                    <ChatSummary
+                      key={c.id}
+                      chatId={c.id}
+                      title={c.title}
+                      message={c.lastMessage}
+                    />
+                  );
+                })}
+              </View>
+            </ScrollView>
           </BlurView>
         </Rounded>
       </Container>
