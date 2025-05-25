@@ -8,6 +8,8 @@ import {
   getUserSettingsById,
   updateSocialLinksById,
   updateUserById,
+  updateUserDescriptionById,
+  updateUsernameById,
   updateUserSettingsById,
 } from "@/queries/user";
 
@@ -91,6 +93,60 @@ export const userRoute = createApp()
       await updateUserSettingsById(c.env, {
         userId,
         colorSettings: getColorPalette(body.color),
+      });
+
+      return c.json({ success: true });
+    }
+  )
+  .post(
+    "/profile/username/exists",
+    privateAuth,
+    zValidator("json", z.object({ username: z.string() })),
+    async (c) => {
+      const body = c.req.valid("json");
+      const user = await getUserByUsername(c.env, { username: body.username });
+
+      return c.json({ exists: !!user && user.id !== c.get("userId") });
+    }
+  )
+  .post(
+    "/profile/username",
+    privateAuth,
+    zValidator("json", z.object({ username: z.string() })),
+    async (c) => {
+      const userId = c.get("userId");
+      const body = c.req.valid("json");
+
+      await updateUsernameById(c.env, {
+        userId,
+        username: body.username,
+      });
+
+      return c.json({ success: true });
+    }
+  )
+  .get("/profile/description", privateAuth, async (c) => {
+    const userId = c.get("userId");
+    const user = await getUserDescriptionById(c.env, { userId });
+
+    return c.json(user);
+  })
+  .post(
+    "/profile/description",
+    privateAuth,
+    zValidator(
+      "json",
+      z.object({
+        description: z.string(),
+      })
+    ),
+    async (c) => {
+      const userId = c.get("userId");
+      const body = c.req.valid("json");
+
+      await updateUserDescriptionById(c.env, {
+        decription: body.description,
+        userId,
       });
 
       return c.json({ success: true });

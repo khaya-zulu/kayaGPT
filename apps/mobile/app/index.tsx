@@ -76,7 +76,7 @@ const BottomHalf = () => {
       >
         <BlurView
           style={{
-            padding: 8,
+            padding: 15,
             flexDirection: "row-reverse",
             justifyContent: "space-between",
             gap: 5,
@@ -159,7 +159,8 @@ export default function IndexPage() {
         router.push(`/chat/${Crypto.randomUUID()}?message=${input}`);
         setInput("");
       }}
-      toolbar={<ChatBoxToolbar />}
+      bottomToolbar={<ChatBoxToolbar />}
+      toolbar={<Text fontSize="sm">12:00 AM Jun 12</Text>}
     >
       <Container onPress={() => Keyboard.dismiss()}>
         <BottomHalf />

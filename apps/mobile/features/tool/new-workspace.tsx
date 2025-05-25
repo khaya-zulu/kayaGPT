@@ -11,7 +11,7 @@ import { Text } from "@/components/text";
 import { zinc100, zinc200, zinc300 } from "@/constants/theme";
 import { ColorPalette } from "../color-palette";
 
-export const NewWorkspace = ({
+export const NewWorkspaceTool = ({
   workspaceKey,
   prompt,
 }: {

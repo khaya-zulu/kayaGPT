@@ -116,11 +116,13 @@ export const ChatBox = ({
   onChange,
   onSubmit,
   toolbar,
+  bottomToolbar,
 }: {
   value: string;
   onChange: TextInputProps["onChange"];
   onSubmit: PressableProps["onPress"];
   toolbar?: ReactNode;
+  bottomToolbar?: ReactNode;
 }) => {
   const arrowUpButtonRef = useRef<View>(null);
 
@@ -143,7 +145,7 @@ export const ChatBox = ({
                 borderColor: userSettings.colorSettings[100] + "80",
               }}
             >
-              <Text fontSize="sm">12:00 AM Jun 12</Text>
+              {toolbar}
             </View>
             <View style={{ paddingVertical: 15, paddingHorizontal: 20 }}>
               <TextInput
@@ -188,7 +190,7 @@ export const ChatBox = ({
                   alignItems: "center",
                 }}
               >
-                {isWeb ? toolbar : null}
+                {isWeb ? bottomToolbar : null}
                 <View
                   style={{
                     flexDirection: "row",

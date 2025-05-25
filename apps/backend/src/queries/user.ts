@@ -75,11 +75,7 @@ export const getUserByUsername = async (
       .from(schema.user)
       .where(eq(schema.user.username, props.username));
 
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    return user;
+    return user as typeof user | undefined;
   } catch (error) {
     console.error("Error fetching user by username:", error);
     throw new Error("Failed to fetch user");
@@ -158,6 +154,40 @@ export const getUserDescriptionById = async (
   }
 };
 
+export const updateUserDescriptionById = async (
+  env: Env,
+  props: { userId: string; decription: string }
+) => {
+  try {
+    await db(env.DB)
+      .update(schema.user)
+      .set({
+        description: props.decription,
+      })
+      .where(eq(schema.user.id, props.userId));
+  } catch (error: any) {
+    console.error("Error updating user description by ID:", error.message);
+    throw new Error("Failed to update user description");
+  }
+};
+
+export const updateUsernameById = async (
+  env: Env,
+  props: { userId: string; username: string }
+) => {
+  try {
+    await db(env.DB)
+      .update(schema.user)
+      .set({
+        username: props.username,
+      })
+      .where(eq(schema.user.id, props.userId));
+  } catch (error: any) {
+    console.error("Error updating username by ID:", error.message);
+    throw new Error("Failed to update username");
+  }
+};
+
 export const getUserSettingsById = async (
   env: Env,
   props: { userId: string }
@@ -220,5 +250,46 @@ export const getUserSocialLinksById = async (
   } catch (error: any) {
     console.error("Error fetching user social links by ID:", error.message);
     throw new Error("Failed to fetch user social links");
+  }
+};
+
+export const getUsernameById = async (env: Env, props: { userId: string }) => {
+  try {
+    const [user] = await db(env.DB)
+      .select({
+        id: schema.user.id,
+        username: schema.user.username,
+      })
+      .from(schema.user)
+      .where(eq(schema.user.id, props.userId));
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (err: any) {
+    console.error("Error fetching username by ID:", err.message);
+    throw new Error("Failed to fetch username");
+  }
+};
+
+export const searchUserByUsername = async (
+  env: Env,
+  props: { username: string }
+) => {
+  try {
+    const [users] = await db(env.DB)
+      .select({
+        id: schema.user.id,
+        username: schema.user.username,
+      })
+      .from(schema.user)
+      .where(eq(schema.user.username, props.username));
+
+    return users;
+  } catch (error: any) {
+    console.error("Error searching user by username:", error.message);
+    throw new Error("Failed to search user");
   }
 };

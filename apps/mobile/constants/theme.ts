@@ -17,6 +17,10 @@ export const zinc800 = "#27272a";
 export const zinc900 = "#18181b";
 
 export const rose200 = "#fecdd3";
+export const rose500 = "#ef4444";
+export const rose600 = "#dc2626";
+export const rose800 = "#991b1b";
+
 export const violet200 = "#ddd6fe";
 export const green200 = "#bbf7d0";
 export const amber200 = "#fde68a";

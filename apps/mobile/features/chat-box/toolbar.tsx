@@ -1,14 +1,6 @@
 import { Link, useLocalSearchParams } from "expo-router";
-import {
-  ArrowLeft,
-  ClockCounterClockwise,
-  LinkSimple,
-  Microphone,
-  Trash,
-} from "phosphor-react-native";
+import { ArrowLeft, Trash } from "phosphor-react-native";
 import { Pressable, View } from "react-native";
-import { ToggleActionsVisibility } from "./toggle-actions-visibility";
-import { zinc600 } from "@/constants/theme";
 
 import { MessageTags } from "../message-tags";
 import { useChatTitleQuery } from "@/queries/chat";
@@ -27,7 +19,7 @@ export const BackToolbar = ({
     <Link href="/">
       <View style={{ flexDirection: "row", gap: 15, alignItems: "center" }}>
         <ArrowLeft weight="bold" size={14} />
-        <Text>{titleQuery.data?.chat.title}</Text>
+        <Text fontSize="sm">{titleQuery.data?.chat.title}</Text>
       </View>
     </Link>
   );

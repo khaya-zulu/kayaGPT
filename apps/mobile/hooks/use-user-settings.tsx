@@ -21,12 +21,15 @@ type UserContextType = {
   colorSettings: NonNullable<UserSettingsQueryOutput["colorSettings"]>;
   isLoading: boolean;
   userId?: string;
+  setMs: React.Dispatch<React.SetStateAction<number | undefined>>;
+  ms?: number;
 };
 
 const UserSettingsContext = createContext<UserContextType>(null as any);
 
 export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   const { data, isLoading, isPending } = useUserSettingsQuery();
+  const [ms, setMs] = useState<number>();
 
   const colorSettings = data?.colorSettings;
 
@@ -51,6 +54,8 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
         },
         isLoading,
         userId: data?.id,
+        ms,
+        setMs,
       }}
     >
       {children}
@@ -61,7 +66,7 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
 export const useUserSettings = () => {
   const context = useContext(UserSettingsContext);
 
-  const [ms, setMs] = useState<number>();
+  const ms = context.ms;
 
   const query = useQueryClient();
 
@@ -71,7 +76,7 @@ export const useUserSettings = () => {
     invalidate: () =>
       query.invalidateQueries({ queryKey: userSettingsQueryKey }),
     invalidateWorkspaceUrl: () => {
-      setMs(Date.now());
+      context.setMs(Date.now());
     },
   };
 };

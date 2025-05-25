@@ -1,11 +1,13 @@
 import { ToolInvocation } from "@ai-sdk/ui-utils";
 
 import { SocialTool } from "./social";
-import { NewWorkspace } from "./new-workspace";
+import { NewWorkspaceTool } from "./new-workspace";
+import { UsernameTool } from "./username";
 
 const Components = {
   socialLinks: SocialTool,
-  generateWorkspace: NewWorkspace,
+  generateWorkspace: NewWorkspaceTool,
+  username: UsernameTool,
 };
 
 export const Tool = ({ invocation }: { invocation: ToolInvocation }) => {
@@ -13,7 +15,7 @@ export const Tool = ({ invocation }: { invocation: ToolInvocation }) => {
     const Component =
       Components[invocation.toolName as keyof typeof Components] ?? null;
 
-    return <Component {...invocation.result} />;
+    return Component ? <Component {...invocation.result} /> : null;
   }
 
   return null;

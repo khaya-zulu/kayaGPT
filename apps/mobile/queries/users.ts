@@ -53,3 +53,13 @@ export const useUserSettingsQuery = () => {
     },
   });
 };
+
+export const useUserDescriptionQuery = () => {
+  return useQuery({
+    queryKey: [client.api.user.profile.description.$url().pathname],
+    queryFn: async () => {
+      const response = await client.api.user.profile.description.$get();
+      return response.json();
+    },
+  });
+};

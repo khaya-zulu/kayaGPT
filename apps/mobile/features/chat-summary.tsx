@@ -23,6 +23,8 @@ export const ChatSummary = ({
 }) => {
   const { colorSettings } = useUserSettings();
 
+  const isTrailing = (title ?? "").length > 35;
+
   return (
     <Link href={`/chat/${chatId}`} style={style}>
       <Rounded
@@ -54,7 +56,10 @@ export const ChatSummary = ({
                 }}
               >
                 <ChatCircleDots size={18} weight="bold" />
-                <Text fontSize="sm">{title}</Text>
+                <Text fontSize="sm">
+                  {title?.slice(0, 35)}
+                  {isTrailing ? "..." : null}
+                </Text>
               </View>
 
               <Text fontSize="sm" style={{ color: colorSettings["900"] }}>

@@ -83,3 +83,70 @@ export const useUpdateSocialLinksMutation = (
     },
   });
 };
+
+type UpdateUserDescriptionMutationOptions = InferMutationsOptions<
+  (typeof client.api.user.profile)["description"]["$post"],
+  "json"
+>;
+
+export const useUpdateUserDescriptionMutation = (
+  opts?: UpdateUserDescriptionMutationOptions
+) => {
+  return useMutation({
+    ...opts,
+    mutationKey: [client.api.user.profile["description"].$url().pathname],
+    mutationFn: async (data) => {
+      const response = await client.api.user.profile["description"].$post({
+        json: data,
+      });
+
+      return response.json();
+    },
+  });
+};
+
+type UpdateUsernameMutationOptions = InferMutationsOptions<
+  (typeof client.api.user.profile)["username"]["$post"],
+  "json"
+>;
+
+export const useUpdateUsernameMutation = (
+  opts?: UpdateUsernameMutationOptions
+) => {
+  return useMutation({
+    ...opts,
+    mutationKey: [client.api.user.profile["username"].$url().pathname],
+    mutationFn: async (data) => {
+      const response = await client.api.user.profile["username"].$post({
+        json: data,
+      });
+
+      return response.json();
+    },
+  });
+};
+
+type UsernameExistsMutationOptions = InferMutationsOptions<
+  (typeof client.api.user.profile)["username"]["exists"]["$post"],
+  "json"
+>;
+
+export const useUsernameExistsMutation = (
+  opts?: UsernameExistsMutationOptions
+) => {
+  return useMutation({
+    ...opts,
+    mutationKey: [
+      client.api.user.profile["username"]["exists"].$url().pathname,
+    ],
+    mutationFn: async (data) => {
+      const response = await client.api.user.profile["username"][
+        "exists"
+      ].$post({
+        json: data,
+      });
+
+      return response.json();
+    },
+  });
+};

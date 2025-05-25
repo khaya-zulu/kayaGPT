@@ -13,13 +13,18 @@ import {
 import { Text } from "@/components/text";
 
 import { zinc200, zinc100 } from "@/constants/theme";
-import { ArrowDown, ArrowLeft, ChatCircleDots } from "phosphor-react-native";
+import {
+  AppWindow,
+  ArrowDown,
+  ArrowLeft,
+  ChatCircleDots,
+} from "phosphor-react-native";
 import { useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { isWeb } from "@/constants/platform";
 import { BlurView } from "expo-blur";
 import { useChat } from "@/hooks/use-chat";
-import { useChatMessagesQuery } from "@/queries/chat";
+import { chatHistoryQueryKey, useChatMessagesQuery } from "@/queries/chat";
 import { useWatch } from "@/hooks/use-watch";
 
 import { Rounded } from "@/components/rounded";
@@ -29,6 +34,9 @@ import { ChatMessage } from "@/features/chat-message";
 import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
 import { useChatDeleteMutation } from "@/mutations/chat";
 import { Tool } from "@/features/tool";
+import { UserDescriptionEditor } from "@/features/user-description-editor";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 const MobileKeyboardDismiss = styled.Pressable`
   max-width: 650px;
@@ -57,12 +65,16 @@ const ToolbarBox = styled.View`
 export default function ChatIdPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ message?: string; chatId: string }>();
+  const utils = useQueryClient();
+
+  const userSettings = useUserSettings();
 
   const scrollViewRef = useRef<ScrollView>(null);
 
   const [isNewMessage, setIsNewMessage] = useState(false);
   const [scrollViewHeight, setScrollViewHeight] = useState(0);
   const [scrollViewContentHeight, setScrollViewContentHeight] = useState(0);
+  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
 
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
 
@@ -75,6 +87,11 @@ export default function ChatIdPage() {
     setMessages,
   } = useChat({
     chatId: params.chatId,
+    onToolCall: (call) => {
+      if (call.toolCall.toolName === "description") {
+        setIsDescriptionOpen(true);
+      }
+    },
   });
 
   const isMessageQueryEnabled = !isNewMessage && !params.message;
@@ -83,7 +100,15 @@ export default function ChatIdPage() {
     ? WebKeyboardDismiss
     : MobileKeyboardDismiss;
 
-  const chatDeleteMutation = useChatDeleteMutation();
+  const chatDeleteMutation = useChatDeleteMutation({
+    onSuccess: async () => {
+      await utils.invalidateQueries({
+        queryKey: chatHistoryQueryKey,
+      });
+
+      router.navigate("/");
+    },
+  });
 
   const messagesQuery = useChatMessagesQuery({
     chatId: params.chatId,
@@ -117,6 +142,7 @@ export default function ChatIdPage() {
               id: cm.id,
               role: cm.role === "assistant" ? "assistant" : "user",
               content: cm.content,
+              createdAt: cm.createdAt ? new Date(cm.createdAt) : undefined,
               parts: [
                 {
                   type: "text",
@@ -169,13 +195,35 @@ export default function ChatIdPage() {
         handleSubmit();
       }}
       toolbar={
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text fontSize="sm">12:00 AM Jun 12</Text>
+
+          <Pressable
+            onPress={() => setIsDescriptionOpen((prevState) => !prevState)}
+          >
+            <AppWindow
+              size={20}
+              color={
+                isDescriptionOpen
+                  ? userSettings.colorSettings["base"]
+                  : undefined
+              }
+            />
+          </Pressable>
+        </View>
+      }
+      bottomToolbar={
         <ChatBoxToolbar
           isTitleEnabled={isMessageQueryEnabled}
-          onChatDelete={async () => {
-            await chatDeleteMutation.mutateAsync({ chatId: params.chatId });
-            router.navigate("/");
+          onChatDelete={() => {
+            chatDeleteMutation.mutate({ chatId: params.chatId });
           }}
         />
+      }
+      rightLayout={
+        isDescriptionOpen ? (
+          <UserDescriptionEditor onClose={() => setIsDescriptionOpen(false)} />
+        ) : null
       }
     >
       {!isWeb ? (
@@ -260,6 +308,7 @@ export default function ChatIdPage() {
                     role={m.role === "assistant" ? "Assistant" : "User"}
                     messageId={m.id}
                     parts={m.parts}
+                    createdAt={m.createdAt}
                   >
                     {tools.map((t, idx) => (
                       <Tool key={"tool" + idx} invocation={t.toolInvocation} />

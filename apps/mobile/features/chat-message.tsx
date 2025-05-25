@@ -1,22 +1,24 @@
 import { ReactNode } from "react";
 
 import { View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { Message } from "@ai-sdk/react";
 import { Cube } from "phosphor-react-native";
 
-import { Text, AnimatedText } from "@/components/text";
+import Markdown from "react-native-markdown-display";
+
+import { Text } from "@/components/text";
 import { Rounded } from "@/components/rounded";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { BlurView } from "expo-blur";
-import { FadeIn } from "react-native-reanimated";
+import { DateTime } from "luxon";
+import { fontSpaceGrotesk, textSm } from "@/constants/theme";
 
 export const ChatMessage = ({
   role,
   children,
   parts,
-  messageId,
   actions,
+  createdAt,
 }: {
   role: "Assistant" | "User";
   children?: ReactNode;
@@ -25,10 +27,16 @@ export const ChatMessage = ({
   messageId: string;
   actions?: ReactNode;
   hideCube?: boolean;
+  createdAt?: Date;
 }) => {
   const isAssistant = role === "Assistant";
 
   const { colorSettings } = useUserSettings();
+
+  const content = parts
+    ?.filter((p) => p.type === "text")
+    .map((p) => p.text)
+    .join("");
 
   return (
     <View style={{ flexDirection: "column", gap: 15 }}>
@@ -73,24 +81,20 @@ export const ChatMessage = ({
                 ) : null}
                 <Text>{role === "Assistant" ? "AI" : "User"}</Text>
               </View>
-              {role === "Assistant" ? null : <Text>20:00 PM</Text>}
+              {role === "Assistant" || !createdAt ? null : (
+                <Text>{DateTime.fromJSDate(createdAt).toFormat("T")}</Text>
+              )}
             </View>
             <View style={{ paddingVertical: 20, paddingHorizontal: 25 }}>
-              <Text>
-                {parts?.map((p, idx) => {
-                  switch (p.type) {
-                    case "text":
-                      return (
-                        <AnimatedText
-                          entering={FadeIn.delay(300 * idx)}
-                          key={messageId + idx}
-                        >
-                          {p.text}
-                        </AnimatedText>
-                      );
-                  }
-                })}
-              </Text>
+              {content ? (
+                <Markdown
+                  style={{
+                    body: { fontFamily: fontSpaceGrotesk, fontSize: 16 },
+                  }}
+                >
+                  {content}
+                </Markdown>
+              ) : null}
               {children}
             </View>
           </View>

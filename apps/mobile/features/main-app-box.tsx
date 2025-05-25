@@ -44,7 +44,7 @@ export const MainAppBox = ({
         color={userSettings.colorSettings[800]}
       />
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{ flex: 1, flexDirection: "row" }}
         behavior={isIOS ? "padding" : "position"}
       >
         {children}
@@ -70,6 +70,8 @@ export const ChatFrame = ({
   onChange,
   onSubmit,
   toolbar,
+  bottomToolbar,
+  rightLayout,
 }: {
   children: ReactNode;
   isSafeAreaDisabled?: boolean;
@@ -77,6 +79,8 @@ export const ChatFrame = ({
   onChange: TextInputProps["onChange"];
   onSubmit: PressableProps["onPress"];
   toolbar?: ReactNode;
+  bottomToolbar?: ReactNode;
+  rightLayout?: ReactNode;
 }) => {
   const Component = isSafeAreaDisabled ? Fragment : SafeAreaView;
   const props = isSafeAreaDisabled ? {} : { style: { flex: 1 } };
@@ -97,8 +101,10 @@ export const ChatFrame = ({
           onChange={onChange}
           onSubmit={onSubmit}
           toolbar={toolbar}
+          bottomToolbar={bottomToolbar}
         />
       </View>
+      {rightLayout}
     </MainAppBox>
   );
 };

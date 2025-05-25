@@ -11,6 +11,7 @@ import { useUpdateSocialLinksMutation } from "@/mutations/user";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { chatHistoryQueryKey } from "@/queries/chat";
+import { Card } from "../card";
 
 export const SocialTool = (props: {
   socialLinks: { github: string; linkedin: string; x: string; website: string };
@@ -42,141 +43,119 @@ export const SocialTool = (props: {
     updateSocialLinksMutation.isPending && !isLoadingAndDeleting;
 
   return (
-    <View style={{ flexDirection: "column", gap: 10 }}>
-      <Rounded
-        size={20}
-        style={{
-          padding: 5,
-          backgroundColor: "#fff",
-          width: "80%",
-          marginTop: 10,
-          transform: [{ translateX: -5 }],
-        }}
-      >
-        <Rounded
-          style={{
-            backgroundColor: "#ffffff",
-            borderWidth: 1,
-            borderColor: zinc200 + "cc",
-          }}
-        >
-          <View
-            style={{
-              paddingHorizontal: 10,
-              paddingVertical: 8,
-              borderBottomWidth: 1,
-              borderColor: zinc200 + "cc",
-            }}
-          >
-            <Text fontSize="sm">Social Links</Text>
+    <View
+      style={{
+        flexDirection: "column",
+        gap: 10,
+        transform: [{ translateX: -5 }],
+      }}
+    >
+      <Card header={<Text fontSize="sm">Social Links</Text>}>
+        <View style={{ flexDirection: "column", gap: 10 }}>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <Rounded
+              size="full"
+              style={{
+                padding: 5,
+                backgroundColor: "#ffffff",
+                borderColor: zinc200 + "cc",
+                borderWidth: 1,
+              }}
+            >
+              <GithubLogo size={14} />
+            </Rounded>
+
+            <form.Field
+              name="github"
+              children={(field) => (
+                <TextInput
+                  placeholder="Github"
+                  value={field.state.value}
+                  onChangeText={field.handleChange}
+                  style={{ flex: 1 }}
+                />
+              )}
+            />
           </View>
 
-          <View style={{ flexDirection: "column", gap: 5, padding: 10 }}>
-            <View style={{ flexDirection: "row", gap: 8 }}>
-              <Rounded
-                size="full"
-                style={{
-                  padding: 5,
-                  backgroundColor: "#ffffff",
-                  borderColor: zinc200 + "cc",
-                  borderWidth: 2,
-                }}
-              >
-                <GithubLogo size={14} />
-              </Rounded>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <Rounded
+              size="full"
+              style={{
+                padding: 5,
+                backgroundColor: "#ffffff",
+                borderColor: zinc200 + "cc",
+                borderWidth: 1,
+              }}
+            >
+              <XLogo size={14} />
+            </Rounded>
 
-              <form.Field
-                name="github"
-                children={(field) => (
-                  <TextInput
-                    placeholder="Github"
-                    value={field.state.value}
-                    onChangeText={field.handleChange}
-                    style={{ flex: 1 }}
-                  />
-                )}
-              />
-            </View>
-
-            <View style={{ flexDirection: "row", gap: 8 }}>
-              <Rounded
-                size="full"
-                style={{
-                  padding: 5,
-                  backgroundColor: "#ffffff",
-                  borderColor: zinc200 + "cc",
-                  borderWidth: 2,
-                }}
-              >
-                <XLogo size={14} />
-              </Rounded>
-
-              <form.Field
-                name="x"
-                children={(field) => (
-                  <TextInput
-                    placeholder="X"
-                    value={field.state.value}
-                    onChangeText={field.handleChange}
-                    style={{ flex: 1 }}
-                  />
-                )}
-              />
-            </View>
-
-            <View style={{ flexDirection: "row", gap: 8 }}>
-              <Rounded
-                size="full"
-                style={{
-                  padding: 5,
-                  backgroundColor: "#ffffff",
-                  borderColor: zinc200 + "cc",
-                  borderWidth: 2,
-                }}
-              >
-                <LinkedinLogo size={14} />
-              </Rounded>
-
-              <form.Field
-                name="linkedin"
-                children={(field) => (
-                  <TextInput
-                    placeholder="Linkedin"
-                    value={field.state.value}
-                    onChangeText={field.handleChange}
-                    style={{ flex: 1 }}
-                  />
-                )}
-              />
-            </View>
-            <View style={{ flexDirection: "row", gap: 8 }}>
-              <Rounded
-                size="full"
-                style={{
-                  padding: 5,
-                  backgroundColor: "#ffffff",
-                  borderColor: zinc200 + "cc",
-                  borderWidth: 2,
-                }}
-              >
-                <Globe size={14} />
-              </Rounded>
-
-              <form.Field
-                name="website"
-                children={(field) => (
-                  <TextInput
-                    placeholder="Personal Site"
-                    value={field.state.value}
-                    onChangeText={field.handleChange}
-                    style={{ flex: 1 }}
-                  />
-                )}
-              />
-            </View>
+            <form.Field
+              name="x"
+              children={(field) => (
+                <TextInput
+                  placeholder="X"
+                  value={field.state.value}
+                  onChangeText={field.handleChange}
+                  style={{ flex: 1 }}
+                />
+              )}
+            />
           </View>
-        </Rounded>
-      </Rounded>
+
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <Rounded
+              size="full"
+              style={{
+                padding: 5,
+                backgroundColor: "#ffffff",
+                borderColor: zinc200 + "cc",
+                borderWidth: 1,
+              }}
+            >
+              <LinkedinLogo size={14} />
+            </Rounded>
+
+            <form.Field
+              name="linkedin"
+              children={(field) => (
+                <TextInput
+                  placeholder="Linkedin"
+                  value={field.state.value}
+                  onChangeText={field.handleChange}
+                  style={{ flex: 1 }}
+                />
+              )}
+            />
+          </View>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <Rounded
+              size="full"
+              style={{
+                padding: 5,
+                backgroundColor: "#ffffff",
+                borderColor: zinc200 + "cc",
+                borderWidth: 1,
+              }}
+            >
+              <Globe size={14} />
+            </Rounded>
+
+            <form.Field
+              name="website"
+              children={(field) => (
+                <TextInput
+                  placeholder="Personal Site"
+                  value={field.state.value}
+                  onChangeText={field.handleChange}
+                  style={{ flex: 1 }}
+                />
+              )}
+            />
+          </View>
+        </View>
+      </Card>
 
       <form.Subscribe
         selector={(state) => state.values}
@@ -204,8 +183,7 @@ export const SocialTool = (props: {
                 </View>
               </Pill>
               <Pill
-                variant="filled"
-                noText
+                variant="primary"
                 onPress={() => {
                   updateSocialLinksMutation.mutate({
                     ...state,
@@ -221,7 +199,7 @@ export const SocialTool = (props: {
                     gap: 10,
                   }}
                 >
-                  <Text style={{ color: "#fff" }} fontSize="sm">
+                  <Text fontSize="sm">
                     {isLoadingAndDeleting
                       ? "Deleting..."
                       : "Save & Delete Message"}
