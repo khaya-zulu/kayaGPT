@@ -23,6 +23,7 @@ import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
 import { downloadImage } from "@/services/download-image";
 import { getColorPalette } from "@/utils/color";
 import { deleteChatById } from "@/queries/chat";
+import { createId } from "@paralleldrive/cuid2";
 
 export const userRoute = createApp()
   .get("/overview/:username", async (c) => {
@@ -181,6 +182,19 @@ export const userRoute = createApp()
       return c.json({ success: true });
     }
   )
+  .post("/profile/description/upload", privateAuth, async (c) => {
+    const userId = c.get("userId");
+    const body = await c.req.parseBody();
+
+    const id = createId();
+
+    const key = `description/${userId}/${id}`;
+    await c.env.R2_PROFILE.put(key, body["file"]);
+
+    console.log("Uploaded description image:", key);
+
+    return c.json({ key });
+  })
   .post("/profile/upload", privateAuth, async (c) => {
     const userId = c.get("userId");
     const body = await c.req.parseBody();
@@ -214,6 +228,14 @@ export const userRoute = createApp()
       return c.json({ success: true });
     }
   )
+  .get("/description/:username/:key", async (c) => {
+    const username = c.req.param("username");
+    const key = c.req.param("key");
+
+    return downloadImage(c, c.env.R2_PROFILE, {
+      key: `description/${username}/${key}`,
+    });
+  })
   .post("/workspace/generate", privateAuth, async (c) => {
     const userId = c.get("userId");
 

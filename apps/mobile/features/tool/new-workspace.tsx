@@ -88,12 +88,16 @@ export const NewWorkspaceTool = ({
             >
               {color ? (
                 <>
-                  <CursorClick size={14} color="#fff" />
-                  <Text style={{ color: "#fff" }} fontSize="sm">
-                    {useWorkspaceMutation.isPending
-                      ? "..."
-                      : "Use as workspace"}
-                  </Text>
+                  {useWorkspaceMutation.isPending ? (
+                    <Text style={{ color: "#fff" }}>...</Text>
+                  ) : (
+                    <>
+                      <CursorClick size={14} color="#fff" />
+                      <Text style={{ color: "#fff" }} fontSize="sm">
+                        Use as workspace
+                      </Text>
+                    </>
+                  )}
                 </>
               ) : null}
               {!color ? (
