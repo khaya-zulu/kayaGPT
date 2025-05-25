@@ -11,7 +11,7 @@ import { Rounded } from "@/components/rounded";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { BlurView } from "expo-blur";
 import { DateTime } from "luxon";
-import { fontSpaceGrotesk, textSm } from "@/constants/theme";
+import { fontSpaceGrotesk } from "@/constants/theme";
 
 export const ChatMessage = ({
   role,
@@ -82,7 +82,7 @@ export const ChatMessage = ({
                 <Text>{role === "Assistant" ? "AI" : "User"}</Text>
               </View>
               {role === "Assistant" || !createdAt ? null : (
-                <Text>{DateTime.fromJSDate(createdAt).toFormat("T")}</Text>
+                <Text>{DateTime.fromJSDate(createdAt).toFormat("t a")}</Text>
               )}
             </View>
             <View style={{ paddingVertical: 20, paddingHorizontal: 25 }}>

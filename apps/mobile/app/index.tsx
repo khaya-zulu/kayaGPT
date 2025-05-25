@@ -166,9 +166,10 @@ export default function IndexPage() {
         <BottomHalf />
         <Rounded
           style={{
-            height: 500,
+            flex: 1,
             width: "100%",
             overflow: "hidden",
+            marginBottom: 15,
           }}
         >
           <BlurView tint="regular" style={{ flex: 1 }}>

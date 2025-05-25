@@ -9,6 +9,7 @@ import { Rounded } from "@/components/rounded";
 import { Text } from "@/components/text";
 import { isWeb } from "@/constants/platform";
 import { roundedMd } from "@/constants/theme";
+import { Markdown } from "@/components/markdown";
 
 const MenuBox = styled(View)<{ borderColor?: string }>`
   border: 1px solid ${(props) => props.borderColor};
@@ -91,7 +92,7 @@ export const DescriptionPreview = ({
                 height: "100%",
               }}
             >
-              <Text>{description}</Text>
+              <Markdown>{description}</Markdown>
             </BlurView>
           </DescriptionBox>
         </View>
