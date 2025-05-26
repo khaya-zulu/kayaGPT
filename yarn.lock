@@ -9647,6 +9647,7 @@ __metadata:
     showdown: ^2.1.0
     styled-components: 6.1.18
     typescript: ^5.3.3
+    valibot: ^1.1.0
     yarn: ^1.22.22
   languageName: unknown
   linkType: soft
@@ -12917,6 +12918,18 @@ __metadata:
     "@types/istanbul-lib-coverage": ^2.0.1
     convert-source-map: ^2.0.0
   checksum: ded42cd535d92b7fd09a71c4c67fb067487ef5551cc227bfbf2a1f159a842e4e4acddaef20b955789b8d3b455b9779d036853f4a27ce15007f6364a4d30317ae
+  languageName: node
+  linkType: hard
+
+"valibot@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "valibot@npm:1.1.0"
+  peerDependencies:
+    typescript: ">=5"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: c1b95d4f783cd62713a1c32a7fd25eb42b588037135dbc2cf2b4788acc720306374f831576d29e91da42f716a497503842c457a3332a04dab92c00cb2fa3227a
   languageName: node
   linkType: hard
 

@@ -1,7 +1,8 @@
 import { type AppType } from "@kgpt/backend";
 import { hc } from "hono/client";
+import { processEnv } from "./env";
 
-export const client = hc<AppType>("http://localhost:8787/", {
+export const client = hc<AppType>(processEnv.EXPO_PUBLIC_API_URL, {
   headers: async () => {
     // todo: does this work on mobile?
     // @ts-expect-error:

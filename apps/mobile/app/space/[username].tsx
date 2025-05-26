@@ -11,6 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useUserOverviewQuery } from "@/queries/users";
 import { UserSummary } from "@/features/user-summary";
+import { processEnv } from "@/utils/env";
 
 export default function SpaceIdPage() {
   const { username } = useLocalSearchParams<{ username: string }>();
@@ -104,7 +105,7 @@ export default function SpaceIdPage() {
                       <Image
                         style={{ height: 45, width: 45 }}
                         source={{
-                          uri: `http://localhost:8787/api/user/profile/${userOverview?.id}`,
+                          uri: `${processEnv.EXPO_PUBLIC_API_URL}/api/user/profile/${userOverview?.id}`,
                         }}
                       />
                     </Rounded>

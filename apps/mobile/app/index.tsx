@@ -1,5 +1,5 @@
 import { Keyboard, ScrollView, View } from "react-native";
-import { Link, LinkProps, useRouter } from "expo-router";
+import { Link, LinkProps, Redirect, useRouter } from "expo-router";
 import { styled } from "styled-components/native";
 
 import * as Crypto from "expo-crypto";
@@ -18,6 +18,7 @@ import { useUserSettings } from "@/hooks/use-user-settings";
 import { Laptop, Television, User } from "phosphor-react-native";
 import { BlurView } from "expo-blur";
 import { ReactNode } from "react";
+import { useAuth } from "@clerk/clerk-expo";
 
 // todo: this should only be a button on mobile
 const Container = styled.Pressable`
@@ -139,9 +140,14 @@ const BottomHalf = () => {
 export default function IndexPage() {
   const router = useRouter();
 
+  const { isSignedIn } = useAuth();
   const { handleInputChange, input, setInput } = useChat({});
 
   const chatHistoryQuery = useChatHistoryQuery();
+
+  if (!isSignedIn) {
+    return <Redirect href="/signin" />;
+  }
 
   return (
     <ChatFrame

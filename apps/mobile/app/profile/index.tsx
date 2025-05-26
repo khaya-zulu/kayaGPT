@@ -13,6 +13,7 @@ import { ChatFrame, ChatMessageFrame } from "@/features/main-app-box";
 import { ProfileToolbar } from "@/features/chat-box/profile-toolbar";
 import { client } from "@/utils/client";
 import { useAuth } from "@clerk/clerk-expo";
+import { processEnv } from "@/utils/env";
 
 const PicturePrompt = ({
   content,
@@ -108,7 +109,7 @@ export default function ProfilePage() {
         <PicturePrompt
           id="first-image"
           content="Want to update your profile picture?"
-          image="http://localhost:8787/api/user/profile/sxrmqobrfiq2e76en6su4t49"
+          image={`${processEnv.EXPO_PUBLIC_API_URL}/api/user/profile/sxrmqobrfiq2e76en6su4t49`}
           onUpload={pickImage}
         />
 
@@ -127,7 +128,7 @@ export default function ProfilePage() {
               formData.append("file", image.file);
 
               await fetch(
-                `http://localhost:8787${client.api.user.profile.upload.$url().pathname}`,
+                `${processEnv.EXPO_PUBLIC_API_URL}${client.api.user.profile.upload.$url().pathname}`,
                 {
                   method: "POST",
                   body: formData,

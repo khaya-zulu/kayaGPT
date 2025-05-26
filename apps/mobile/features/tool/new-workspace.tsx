@@ -10,6 +10,7 @@ import { Circle, CursorClick } from "phosphor-react-native";
 import { Text } from "@/components/text";
 import { zinc100, zinc200, zinc300 } from "@/constants/theme";
 import { ColorPalette } from "../color-palette";
+import { processEnv } from "@/utils/env";
 
 export const NewWorkspaceTool = ({
   workspaceKey,
@@ -30,6 +31,8 @@ export const NewWorkspaceTool = ({
     },
   });
 
+  const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${workspaceKey}`;
+
   return (
     <Text style={{ marginTop: 10 }}>
       <View>
@@ -41,28 +44,26 @@ export const NewWorkspaceTool = ({
               backgroundColor: "#ffffff",
             }}
           >
-            <Image
-              source={{
-                uri: `http://localhost:8787/api/workspace/${workspaceKey}`,
-              }}
-              onLoad={() => {
-                setIsLoaded(true);
-              }}
-              style={{
-                borderRadius: "13px",
-                height: 125,
-                width: 125,
-                borderWidth: 1,
-                borderColor: zinc300,
-              }}
-            />
+            <Rounded size={13} style={{ overflow: "hidden" }}>
+              <Image
+                source={{
+                  uri: workspaceUrl,
+                }}
+                onLoad={() => {
+                  setIsLoaded(true);
+                }}
+                style={{
+                  height: 125,
+                  width: 125,
+                  borderWidth: 1,
+                  borderColor: zinc300,
+                }}
+              />
+            </Rounded>
           </Rounded>
         </Text>
         {isLoaded ? (
-          <ColorPalette
-            src={`http://localhost:8787/api/workspace/${workspaceKey}`}
-            onSelected={setColor}
-          />
+          <ColorPalette src={workspaceUrl} onSelected={setColor} />
         ) : null}
         <View style={{ flexDirection: "row", marginTop: 10 }}>
           <Pill

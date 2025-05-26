@@ -18,6 +18,7 @@ import { ColorPalette } from "@/features/color-palette";
 import { useState } from "react";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { zinc100, zinc200, zinc300 } from "@/constants/theme";
+import { processEnv } from "@/utils/env";
 
 const WorkspaceMessage = ({
   message,
@@ -129,7 +130,7 @@ const WorkspaceMessage = ({
           >
             <Image
               source={{
-                uri: `http://localhost:8787/api/workspace/${response.result.key}`,
+                uri: `${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${response.result.key}`,
               }}
               style={{
                 borderRadius: "13px",
@@ -143,7 +144,7 @@ const WorkspaceMessage = ({
 
       {response?.result.key ? (
         <ColorPalette
-          src={`http://localhost:8787/api/workspace/${response.result.key}`}
+          src={`${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${response.result.key}`}
           onSelected={setColor}
         />
       ) : null}
@@ -194,7 +195,6 @@ export default function WorkspacePage() {
                 <Image
                   source={{
                     uri: "http://localhost:8787/api/workspace/sxrmqobrfiq2e76en6su4t49",
-                    // uri: "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                   }}
                   style={{
                     borderRadius: "13px",

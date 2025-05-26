@@ -29,6 +29,7 @@ import { base46FontSpaceGrotesk } from "@/utils/font-base64";
 
 import showdown from "showdown";
 import { useWatch } from "@/hooks/use-watch";
+import { processEnv } from "@/utils/env";
 
 export const UserDescriptionEditor = ({ onClose }: { onClose: () => void }) => {
   const userSettings = useUserSettings();
@@ -173,7 +174,7 @@ export const UserDescriptionEditor = ({ onClose }: { onClose: () => void }) => {
                         formData.append("file", image.file);
 
                         const response = await fetch(
-                          `http://localhost:8787${client.api.user.profile.description.upload.$url().pathname}`,
+                          `${processEnv.EXPO_PUBLIC_API_URL}${client.api.user.profile.description.upload.$url().pathname}`,
                           {
                             method: "POST",
                             body: formData,
@@ -186,7 +187,7 @@ export const UserDescriptionEditor = ({ onClose }: { onClose: () => void }) => {
                         const data = await response.json();
 
                         editor.setImage(
-                          `http://localhost:8787/api/user/${data.key}`
+                          `${processEnv.EXPO_PUBLIC_API_URL}/api/user/${data.key}`
                         );
                       }
                     }}

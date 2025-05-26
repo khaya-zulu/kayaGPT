@@ -14,6 +14,7 @@ import {
   type UserSettingsQueryOutput,
   userSettingsQueryKey,
 } from "@/queries/users";
+import { processEnv } from "@/utils/env";
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, ReactNode, useContext, useState } from "react";
 
@@ -72,7 +73,7 @@ export const useUserSettings = () => {
 
   return {
     ...context,
-    workspaceUrl: `http://localhost:8787/api/workspace/${context.userId}${ms ? `?ms=${ms}` : ""}`,
+    workspaceUrl: `${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${context.userId}${ms ? `?ms=${ms}` : ""}`,
     invalidate: () =>
       query.invalidateQueries({ queryKey: userSettingsQueryKey }),
     invalidateWorkspaceUrl: () => {

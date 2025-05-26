@@ -1,4 +1,5 @@
 import { isWeb } from "@/constants/platform";
+import { processEnv } from "@/utils/env";
 import { useChat as useAIChat, UseChatOptions } from "@ai-sdk/react";
 import { useAuth } from "@clerk/clerk-expo";
 
@@ -10,7 +11,7 @@ export const useChat = ({ chatId = "", path, ...opts }: Props) => {
   const { getToken } = useAuth();
 
   return useAIChat({
-    api: `http://localhost:8787/api${path ?? `/chat/${chatId}`}`,
+    api: `${processEnv.EXPO_PUBLIC_API_URL}/api${path ?? `/chat/${chatId}`}`,
     // fetch: expoFetch as unknown as typeof fetch,
     fetch: async (url, opts) => {
       const token = await getToken();
