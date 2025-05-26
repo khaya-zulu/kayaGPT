@@ -16,6 +16,7 @@ import { ChatBox } from "@/features/chat-box";
 
 import { isIOS, isWeb } from "@/constants/platform";
 import { useUserSettings } from "@/hooks/use-user-settings";
+import { BlurView } from "expo-blur";
 
 export const MainAppBox = ({
   children,

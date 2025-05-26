@@ -1,4 +1,4 @@
-import { Rounded } from "./rounded";
+import { Rounded, RoundedSize } from "./rounded";
 import { Text } from "./text";
 import { ReactNode } from "react";
 import { Pressable, TextProps } from "react-native";
@@ -14,6 +14,7 @@ export const Pill = ({
   variant = "outline",
   onPress,
   borderColor,
+  rounded = "lg",
 }: {
   children: ReactNode;
   style?: TextProps["style"];
@@ -21,6 +22,7 @@ export const Pill = ({
   variant?: "filled" | "outline" | "white" | "primary";
   onPress?: () => void;
   borderColor?: string;
+  rounded?: RoundedSize;
 }) => {
   const { colorSettings } = useUserSettings();
 
@@ -55,7 +57,7 @@ export const Pill = ({
   return (
     <Pressable style={{ position: "relative" }} onPress={onPress}>
       <Rounded
-        size="lg"
+        size={rounded}
         style={{
           position: "absolute",
           top: 2,
@@ -74,7 +76,7 @@ export const Pill = ({
         />
       </Rounded>
       <Rounded
-        size="lg"
+        size={rounded}
         style={{
           borderWidth: 1,
           borderColor: borderColor ?? variantBorderColor[variant],
@@ -87,13 +89,14 @@ export const Pill = ({
             children
           ) : (
             <Text
+              fontSize="sm"
               style={[
-                style,
                 {
                   color: text[variant],
                   paddingHorizontal: 10,
                   backgroundColor: backgroundColor[variant],
                 },
+                style,
               ]}
             >
               {children}

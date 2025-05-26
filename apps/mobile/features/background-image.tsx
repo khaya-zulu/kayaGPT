@@ -2,6 +2,8 @@ import { ImageBackground } from "react-native";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { useUserSettings } from "@/hooks/use-user-settings";
+import { isWeb } from "@/constants/platform";
+import { usePathname } from "expo-router";
 
 export const BackgroundImageFeature = ({
   opacity,
@@ -12,6 +14,10 @@ export const BackgroundImageFeature = ({
   color?: string;
 }) => {
   const { colorSettings } = useUserSettings();
+
+  const url = usePathname();
+
+  const isIndex = url === "/";
 
   return (
     <>
@@ -36,19 +42,22 @@ export const BackgroundImageFeature = ({
           opacity,
         }}
       />
-      <ImageBackground
-        style={{
-          height: "100%",
-          width: "100%",
-          position: "absolute",
-          left: 0,
-          opacity: 0.55,
-        }}
-        source={{
-          uri: "https://www.transparenttextures.com/patterns/worn-dots.png",
-        }}
-        resizeMode="repeat"
-      />
+      <BlurView
+        style={{ height: "100%", width: "100%", position: "absolute", left: 0 }}
+        intensity={isWeb || isIndex ? 0 : undefined}
+      >
+        <ImageBackground
+          style={{
+            opacity: 0.55,
+            height: "100%",
+            width: "100%",
+          }}
+          source={{
+            uri: "https://www.transparenttextures.com/patterns/worn-dots.png",
+          }}
+          resizeMode="repeat"
+        />
+      </BlurView>
     </>
   );
 };

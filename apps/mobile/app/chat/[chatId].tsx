@@ -56,10 +56,14 @@ const WebKeyboardDismiss = styled.View`
   flex: 1;
 `;
 
-const ToolbarBox = styled.View`
+const ToolbarBox = styled.View<{ color: string; isShaded?: boolean }>`
   flex-direction: row;
-  border: 1px solid ${zinc200 + "80"};
+  border: 1px solid ${({ color }) => color + "80"};
   border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  background-color: ${(props) =>
+    props.isShaded ? props.color + "66" : "transparent"};
 `;
 
 export default function ChatIdPage() {
@@ -77,6 +81,7 @@ export default function ChatIdPage() {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
 
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
+  const [scrollY, setScrollY] = useState(0);
 
   const {
     handleInputChange,
@@ -227,46 +232,36 @@ export default function ChatIdPage() {
       }
     >
       {!isWeb ? (
-        <ToolbarBox>
-          <View
-            style={{
-              height: "100%",
-              width: "100%",
-              position: "absolute",
-              top: 0,
-              left: 0,
-              backgroundColor: "#fff",
-              opacity: 0.2,
-            }}
-          />
+        <ToolbarBox
+          color={userSettings.colorSettings[100]}
+          isShaded={scrollY > 20}
+        >
           <SafeAreaView>
-            <BlurView intensity={20}>
-              <Pressable
-                onPress={() => router.back()}
+            <Pressable
+              onPress={() => router.back()}
+              style={{
+                paddingHorizontal: 25,
+                paddingBottom: 20,
+                paddingTop: 10,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <View
                 style={{
-                  paddingHorizontal: 20,
-                  paddingBottom: 20,
-                  paddingTop: 10,
                   flexDirection: "row",
+                  gap: 10,
                   alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
                 }}
               >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    gap: 10,
-                    alignItems: "center",
-                  }}
-                >
-                  <ArrowLeft size={18} weight="bold" />
-                  <Text>Hello world</Text>
-                </View>
+                <ArrowLeft size={18} weight="bold" />
+                <Text>Hello world</Text>
+              </View>
 
-                <ChatCircleDots size={20} weight="bold" />
-              </Pressable>
-            </BlurView>
+              <ChatCircleDots size={20} weight="bold" />
+            </Pressable>
           </SafeAreaView>
         </ToolbarBox>
       ) : null}
@@ -278,6 +273,7 @@ export default function ChatIdPage() {
             const scrollY = ev.nativeEvent.contentOffset.y;
             const totalHeight = scrollViewContentHeight - scrollViewHeight;
 
+            setScrollY(scrollY);
             setIsScrollToBottomVisible(scrollY < totalHeight - 200);
           }}
           onLayout={(ev) => {

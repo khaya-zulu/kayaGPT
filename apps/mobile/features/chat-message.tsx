@@ -12,6 +12,7 @@ import { useUserSettings } from "@/hooks/use-user-settings";
 import { BlurView } from "expo-blur";
 import { DateTime } from "luxon";
 import { fontSpaceGrotesk } from "@/constants/theme";
+import { isWeb } from "@/constants/platform";
 
 export const ChatMessage = ({
   role,
@@ -85,7 +86,12 @@ export const ChatMessage = ({
                 <Text>{DateTime.fromJSDate(createdAt).toFormat("t a")}</Text>
               )}
             </View>
-            <View style={{ paddingVertical: 20, paddingHorizontal: 25 }}>
+            <View
+              style={{
+                paddingVertical: isWeb ? 20 : 10,
+                paddingHorizontal: isWeb ? 25 : 20,
+              }}
+            >
               {content ? (
                 <Markdown
                   style={{

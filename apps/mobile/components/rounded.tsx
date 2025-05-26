@@ -14,8 +14,10 @@ const ROUNDED = {
   none: 0,
 };
 
+export type RoundedSize = keyof typeof ROUNDED | number;
+
 export const Rounded = styled.View<{
-  size?: keyof typeof ROUNDED | number;
+  size?: RoundedSize;
 }>`
   border-radius: ${({ size = "2xl" }) =>
     typeof size === "number" ? `${size}px` : ROUNDED[size]};

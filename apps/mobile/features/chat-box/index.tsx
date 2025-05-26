@@ -190,7 +190,7 @@ export const ChatBox = ({
                   alignItems: "center",
                 }}
               >
-                {isWeb ? bottomToolbar : null}
+                {isWeb ? bottomToolbar : <View />}
                 <View
                   style={{
                     flexDirection: "row",
@@ -199,8 +199,7 @@ export const ChatBox = ({
                     alignItems: "center",
                   }}
                 >
-                  {!isWeb ? <Options /> : null}
-                  {isWeb ? <ColorPicker /> : null}
+                  <ColorPicker />
                   <View>
                     <RoundedText fontSize="sm">GPT‑4.1</RoundedText>
                   </View>

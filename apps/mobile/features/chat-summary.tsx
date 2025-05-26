@@ -9,6 +9,7 @@ import { Link } from "expo-router";
 import { ChatHistoryQueryOutput } from "@/queries/chat";
 import { formatRelative } from "@/utils/date";
 import { useUserSettings } from "@/hooks/use-user-settings";
+import { isWeb } from "@/constants/platform";
 
 export const ChatSummary = ({
   style,
@@ -23,7 +24,9 @@ export const ChatSummary = ({
 }) => {
   const { colorSettings } = useUserSettings();
 
-  const isTrailing = (title ?? "").length > 35;
+  const maxLength = isWeb ? 35 : 25;
+
+  const isTrailing = (title ?? "").length > maxLength;
 
   return (
     <Link href={`/chat/${chatId}`} style={style}>
@@ -57,7 +60,7 @@ export const ChatSummary = ({
               >
                 <ChatCircleDots size={18} weight="bold" />
                 <Text fontSize="sm">
-                  {title?.slice(0, 35)}
+                  {title?.slice(0, maxLength)}
                   {isTrailing ? "..." : null}
                 </Text>
               </View>
