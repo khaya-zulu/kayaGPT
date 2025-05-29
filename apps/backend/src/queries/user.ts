@@ -274,6 +274,91 @@ export const getUsernameById = async (env: Env, props: { userId: string }) => {
   }
 };
 
+export const getUserProfileById = async (
+  env: Env,
+  props: { userId: string }
+) => {
+  try {
+    const [user] = await db(env.DB)
+      .select({
+        id: schema.user.id,
+        username: schema.user.username,
+        displayName: schema.user.displayName,
+        region: schema.user.region,
+        social: schema.user.social,
+        description: schema.user.description,
+      })
+      .from(schema.user)
+      .where(eq(schema.user.id, props.userId));
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return {
+      ...user,
+      region: {
+        flag: user.region?.flag,
+        name: user.region?.name,
+      },
+    };
+  } catch (error: any) {
+    console.error("Error fetching user profile by ID:", error.message);
+    throw new Error("Failed to fetch user profile");
+  }
+};
+
+export const updateUserProfileById = async (
+  env: Env,
+  props: {
+    userId: string;
+    displayName: string;
+    description: string;
+    username: string;
+    region: { flag: string; name: string; lng: string; lat: string } | null;
+    social: {
+      github?: string;
+      linkedin?: string;
+      x?: string;
+      website?: string;
+    };
+  }
+) => {
+  try {
+    await db(env.DB)
+      .update(schema.user)
+      .set(props)
+      .where(eq(schema.user.id, props.userId));
+  } catch (error: any) {
+    console.error("Error updating user profile by ID:", error.message);
+    throw new Error("Failed to update user profile");
+  }
+};
+
+export const getUserRegionById = async (
+  env: Env,
+  props: { userId: string }
+) => {
+  try {
+    const [user] = await db(env.DB)
+      .select({
+        id: schema.user.id,
+        region: schema.user.region,
+      })
+      .from(schema.user)
+      .where(eq(schema.user.id, props.userId));
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user.region;
+  } catch (error: any) {
+    console.error("Error fetching user region by ID:", error.message);
+    throw new Error("Failed to fetch user region");
+  }
+};
+
 export const searchUserByUsername = async (
   env: Env,
   props: { username: string }

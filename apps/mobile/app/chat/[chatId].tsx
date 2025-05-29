@@ -34,7 +34,7 @@ import { ChatMessage } from "@/features/chat-message";
 import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
 import { useChatDeleteMutation } from "@/mutations/chat";
 import { Tool } from "@/features/tool";
-import { UserDescriptionEditor } from "@/features/user-description-editor";
+import { ProfileEditor } from "@/features/profile-editor";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUserSettings } from "@/hooks/use-user-settings";
 
@@ -227,7 +227,7 @@ export default function ChatIdPage() {
       }
       rightLayout={
         isDescriptionOpen ? (
-          <UserDescriptionEditor onClose={() => setIsDescriptionOpen(false)} />
+          <ProfileEditor onClose={() => setIsDescriptionOpen(false)} />
         ) : null
       }
     >

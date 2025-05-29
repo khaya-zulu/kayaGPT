@@ -8,6 +8,12 @@ export const user = sqliteTable("user", {
   displayName: text("name").notNull(),
   email: text("email").unique(),
   description: text("description").default(""),
+  region: text("region", { mode: "json" }).$type<{
+    lng: string;
+    lat: string;
+    flag: string;
+    name: string;
+  }>(),
   colorSettings: text("settings", { mode: "json" })
     .$type<{
       50: string;

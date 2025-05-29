@@ -113,6 +113,13 @@
       "when": 1747846528896,
       "tag": "0015_low_rumiko_fujikawa",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1748461219987,
+      "tag": "0016_pale_wind_dancer",
+      "breakpoints": true
     }
   ]
 }

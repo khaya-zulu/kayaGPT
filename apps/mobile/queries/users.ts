@@ -48,7 +48,6 @@ export const useUserSettingsQuery = () => {
     queryKey: userSettingsQueryKey,
     queryFn: async () => {
       const response = await client.api.user.settings.$get();
-      console.log("user settings");
       return response.json();
     },
   });
@@ -59,6 +58,20 @@ export const useUserDescriptionQuery = () => {
     queryKey: [client.api.user.profile.description.$url().pathname],
     queryFn: async () => {
       const response = await client.api.user.profile.description.$get();
+      return response.json();
+    },
+  });
+};
+
+export const userProfileSettingsQueryKey = [
+  client.api.user.profile.settings.$url().pathname,
+];
+
+export const useUserProfileSettingsQuery = () => {
+  return useQuery({
+    queryKey: userProfileSettingsQueryKey,
+    queryFn: async () => {
+      const response = await client.api.user.profile.settings.$get();
       return response.json();
     },
   });

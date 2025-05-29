@@ -150,3 +150,24 @@ export const useUsernameExistsMutation = (
     },
   });
 };
+
+type UserProfileSettingsMutationOptions = InferMutationsOptions<
+  typeof client.api.user.profile.settings.$post,
+  "json"
+>;
+
+export const useUserProfileSettingsMutation = (
+  opts?: UserProfileSettingsMutationOptions
+) => {
+  return useMutation({
+    ...opts,
+    mutationKey: [client.api.user.profile.settings.$url().pathname],
+    mutationFn: async (data) => {
+      const response = await client.api.user.profile.settings.$post({
+        json: data,
+      });
+
+      return response.json();
+    },
+  });
+};

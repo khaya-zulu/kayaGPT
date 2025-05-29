@@ -1,15 +1,17 @@
 import { z } from "zod";
-import { Message, streamText } from "ai";
 
 import {
   getUserById,
   getUserByUsername,
   getUserDescriptionById,
+  getUserProfileById,
+  getUserRegionById,
   getUserSettingsById,
   updateSocialLinksById,
   updateUserById,
   updateUserDescriptionById,
   updateUsernameById,
+  updateUserProfileById,
   updateUserSettingsById,
 } from "@/queries/user";
 
@@ -24,6 +26,7 @@ import { downloadImage } from "@/services/download-image";
 import { getColorPalette } from "@/utils/color";
 import { deleteChatById } from "@/queries/chat";
 import { createId } from "@paralleldrive/cuid2";
+import { generateObject } from "ai";
 
 export const userRoute = createApp()
   .get("/overview/:username", async (c) => {
@@ -182,6 +185,68 @@ export const userRoute = createApp()
       return c.json({ success: true });
     }
   )
+  .get("/profile/settings", privateAuth, async (c) => {
+    const userId = c.get("userId");
+
+    const user = await getUserProfileById(c.env, { userId });
+    return c.json(user);
+  })
+  .post(
+    "/profile/settings",
+    privateAuth,
+    zValidator(
+      "json",
+      z.object({
+        description: z.string(),
+        displayName: z.string(),
+        username: z.string(),
+        regionName: z.string(),
+        social: z.object({
+          github: z.string().optional(),
+          linkedin: z.string().optional(),
+          website: z.string().optional(),
+          x: z.string().optional(),
+        }),
+      })
+    ),
+    async (c) => {
+      const userId = c.get("userId");
+      const data = c.req.valid("json");
+
+      let region = await getUserRegionById(c.env, { userId });
+
+      const { regionName, ...rest } = data;
+
+      if (region?.name !== data.regionName) {
+        const model = await createOpenAIModel(c.env, ["gpt-4o"]);
+
+        const response = await generateObject({
+          model,
+          schema: z.object({
+            flag: z.string().describe("The emoji flag of the region"),
+            lng: z.string().describe("The longitude of the region"),
+            lat: z.string().describe("The latitude of the region"),
+          }),
+          prompt:
+            "Return the emoji flag, longitude, and latitude of the region with the name: " +
+            data.regionName,
+        });
+
+        region = {
+          ...response.object,
+          name: data.regionName,
+        };
+      }
+
+      await updateUserProfileById(c.env, {
+        userId,
+        region,
+        ...rest,
+      });
+
+      return c.json({ success: true });
+    }
+  )
   .post("/profile/description/upload", privateAuth, async (c) => {
     const userId = c.get("userId");
     const body = await c.req.parseBody();
@@ -235,30 +300,4 @@ export const userRoute = createApp()
     return downloadImage(c, c.env.R2_PROFILE, {
       key: `description/${username}/${key}`,
     });
-  })
-  .post("/workspace/generate", privateAuth, async (c) => {
-    const userId = c.get("userId");
-
-    const body = await c.req.json<{ messages: Message[] }>();
-
-    const openai = await createOpenAIModel(c.env, ["gpt-4o-mini"]);
-
-    const user = await getUserDescriptionById(c.env, { userId });
-
-    const result = await streamText({
-      system:
-        `You generate personalized workspace images using a reference and a short prompt. Keep the final prompt concise and focused (20 words max). Return only the prompt used.
-Here is information about the user:` +
-        "\n\n" +
-        user.description,
-      messages: body.messages,
-      model: openai,
-      maxSteps: 2,
-      tools: {
-        generateImage: generateWorkspaceTool(c.env, { userId }),
-      },
-      toolChoice: "required",
-    });
-
-    return result.toDataStreamResponse();
   });
