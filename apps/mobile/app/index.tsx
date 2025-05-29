@@ -17,8 +17,8 @@ import { BlurView } from "expo-blur";
 import { useAuth } from "@clerk/clerk-expo";
 import { isWeb } from "@/constants/platform";
 import { NavigationMenu } from "@/features/navigation-menu";
+import { DateNow } from "@/features/date-now";
 
-// todo: this should only be a button on mobile
 const Container = styled.Pressable`
   max-width: 512px;
   margin: 0 auto;
@@ -57,7 +57,7 @@ export default function IndexPage() {
         setInput("");
       }}
       bottomToolbar={<ChatBoxToolbar />}
-      toolbar={<Text fontSize="sm">12:00 AM Jun 12</Text>}
+      toolbar={<DateNow />}
     >
       <Container onPress={() => Keyboard.dismiss()}>
         <NavigationMenu />
@@ -75,7 +75,7 @@ export default function IndexPage() {
             style={{ flex: 1 }}
             intensity={isWeb ? undefined : 0}
           >
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
               <View
                 style={{
                   flexDirection: "column",

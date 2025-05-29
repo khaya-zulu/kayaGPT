@@ -38,7 +38,7 @@ export const ProfileEditor = ({ onClose }: { onClose: () => void }) => {
     },
   });
 
-  const [activeTab, setActiveTab] = useState<Tab>("description");
+  const [activeTab, setActiveTab] = useState<Tab>("general");
 
   const profileSettings = userProfileSettingsQuery.data;
 

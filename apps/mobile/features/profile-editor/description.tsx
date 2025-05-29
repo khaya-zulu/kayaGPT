@@ -81,6 +81,7 @@ export const ProfileDescription = ({
             ${base46FontSpaceGrotesk}
             * {
               font-family: "Space Grotesk", sans-serif;
+              font-size: 14px;
             }
     
             img {

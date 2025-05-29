@@ -12,7 +12,7 @@ import {
 
 import { Text } from "@/components/text";
 
-import { zinc200, zinc100 } from "@/constants/theme";
+import { zinc100 } from "@/constants/theme";
 import {
   AppWindow,
   ArrowDown,
@@ -22,7 +22,6 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { isWeb } from "@/constants/platform";
-import { BlurView } from "expo-blur";
 import { useChat } from "@/hooks/use-chat";
 import { chatHistoryQueryKey, useChatMessagesQuery } from "@/queries/chat";
 import { useWatch } from "@/hooks/use-watch";
@@ -37,6 +36,7 @@ import { Tool } from "@/features/tool";
 import { ProfileEditor } from "@/features/profile-editor";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUserSettings } from "@/hooks/use-user-settings";
+import { DateNow } from "@/features/date-now";
 
 const MobileKeyboardDismiss = styled.Pressable`
   max-width: 650px;
@@ -201,7 +201,7 @@ export default function ChatIdPage() {
       }}
       toolbar={
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text fontSize="sm">12:00 AM Jun 12</Text>
+          <DateNow />
 
           <Pressable
             onPress={() => setIsDescriptionOpen((prevState) => !prevState)}
@@ -279,6 +279,7 @@ export default function ChatIdPage() {
           onLayout={(ev) => {
             setScrollViewHeight(ev.nativeEvent.layout.height);
           }}
+          showsVerticalScrollIndicator={false}
         >
           <KeyboardDismiss onPress={() => Keyboard.dismiss()}>
             <View

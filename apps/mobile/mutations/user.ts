@@ -1,10 +1,6 @@
 import { client, InferRequestType } from "@/utils/client";
-import {
-  MutationOptions,
-  QueryOptions,
-  useMutation,
-} from "@tanstack/react-query";
-import { InferMutationsOptions, MutationOptionsHelper } from ".";
+import { useMutation } from "@tanstack/react-query";
+import { InferMutationsOptions } from ".";
 
 type UserBioMutationInput = InferRequestType<
   typeof client.api.user.bio.update.$post
@@ -56,27 +52,6 @@ export const useWorkspaceColorPaletteMutation = (
     mutationFn: async (props) => {
       const response = await client.api.user.workspace["color-palette"].$post({
         json: props,
-      });
-
-      return response.json();
-    },
-  });
-};
-
-type UpdateSocialLinksMutationOptions = InferMutationsOptions<
-  (typeof client.api.user.profile)["social-links"]["$post"],
-  "json"
->;
-
-export const useUpdateSocialLinksMutation = (
-  opts?: UpdateSocialLinksMutationOptions
-) => {
-  return useMutation({
-    ...opts,
-    mutationKey: [client.api.user.profile["social-links"].$url().pathname],
-    mutationFn: async (data) => {
-      const response = await client.api.user.profile["social-links"].$post({
-        json: data,
       });
 
       return response.json();

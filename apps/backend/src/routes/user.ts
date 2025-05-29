@@ -7,7 +7,6 @@ import {
   getUserProfileById,
   getUserRegionById,
   getUserSettingsById,
-  updateSocialLinksById,
   updateUserById,
   updateUserDescriptionById,
   updateUsernameById,
@@ -21,10 +20,8 @@ import { createOpenAIModel } from "@/utils/models";
 
 import { zValidator } from "@hono/zod-validator";
 
-import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
 import { downloadImage } from "@/services/download-image";
 import { getColorPalette } from "@/utils/color";
-import { deleteChatById } from "@/queries/chat";
 import { createId } from "@paralleldrive/cuid2";
 import { generateObject } from "ai";
 
@@ -152,35 +149,6 @@ export const userRoute = createApp()
         decription: body.description,
         userId,
       });
-
-      return c.json({ success: true });
-    }
-  )
-  .post(
-    "/profile/social-links",
-    privateAuth,
-    zValidator(
-      "json",
-      z.object({
-        github: z.string(),
-        linkedin: z.string(),
-        website: z.string(),
-        x: z.string(),
-        deleteChatMessageId: z.string().optional(),
-      })
-    ),
-    async (c) => {
-      const userId = c.get("userId");
-      const body = c.req.valid("json");
-
-      await updateSocialLinksById(c.env, {
-        socialLinks: body,
-        userId,
-      });
-
-      if (body.deleteChatMessageId) {
-        await deleteChatById(c.env, { chatId: body.deleteChatMessageId });
-      }
 
       return c.json({ success: true });
     }

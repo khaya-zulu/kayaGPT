@@ -1,4 +1,4 @@
-import { streamText, Message, generateObject, ToolInvocation, tool } from "ai";
+import { streamText, Message, generateObject, tool } from "ai";
 
 import {
   createChat,
@@ -15,9 +15,7 @@ import { createOpenAIModel } from "@/utils/models";
 import { createApp } from "@/utils/server";
 import { z } from "zod";
 import { privateAuth } from "@/utils/auth";
-import { socialLinksTool } from "@/services/tools/social-links";
 import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
-import { usernameTool } from "@/services/tools/username";
 
 export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
@@ -88,9 +86,7 @@ export const chatRoute = createApp()
       messages: body.messages,
       onError: console.error,
       tools: {
-        socialLinks: socialLinksTool(c.env, { userId }),
         generateWorkspace: generateWorkspaceTool(c.env, { userId }),
-        username: usernameTool(c.env, { userId }),
         description: tool({
           description: "open the user description editor",
           parameters: z.object({}),

@@ -27,7 +27,11 @@ export const profileFormOpts = formOptions({
 export const { fieldContext, formContext, useFieldContext } =
   createFormHookContexts();
 
-const Input = ({ icon, ...props }: { icon: ReactNode } & TextInputProps) => {
+const Input = ({
+  icon,
+  rightIcon,
+  ...props
+}: { icon: ReactNode; rightIcon?: ReactNode } & TextInputProps) => {
   const userSettings = useUserSettings();
 
   const field = useFieldContext<string>();
@@ -51,6 +55,7 @@ const Input = ({ icon, ...props }: { icon: ReactNode } & TextInputProps) => {
         onChangeText={field.handleChange}
         style={{ flex: 1 }}
       />
+      {rightIcon}
     </View>
   );
 };

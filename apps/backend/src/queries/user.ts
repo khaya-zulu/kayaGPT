@@ -106,31 +106,6 @@ export const updateUserById = async (
   }
 };
 
-export const updateSocialLinksById = async (
-  env: Env,
-  props: {
-    userId: string;
-    socialLinks: {
-      github: string;
-      linkedin: string;
-      x: string;
-      website: string;
-    };
-  }
-) => {
-  try {
-    await db(env.DB)
-      .update(schema.user)
-      .set({
-        social: props.socialLinks,
-      })
-      .where(eq(schema.user.id, props.userId));
-  } catch (error: any) {
-    console.error("Error updating social links by ID:", error.message);
-    throw new Error("Failed to update social links");
-  }
-};
-
 export const getUserDescriptionById = async (
   env: Env,
   props: { userId: string }
@@ -226,30 +201,6 @@ export const updateUserSettingsById = async (
   } catch (error: any) {
     console.error("Error updating user settings by ID:", error.message);
     throw new Error("Failed to update user settings");
-  }
-};
-
-export const getUserSocialLinksById = async (
-  env: Env,
-  props: { userId: string }
-) => {
-  try {
-    const [user] = await db(env.DB)
-      .select({
-        id: schema.user.id,
-        socialLinks: schema.user.social,
-      })
-      .from(schema.user)
-      .where(eq(schema.user.id, props.userId));
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    return user;
-  } catch (error: any) {
-    console.error("Error fetching user social links by ID:", error.message);
-    throw new Error("Failed to fetch user social links");
   }
 };
 
