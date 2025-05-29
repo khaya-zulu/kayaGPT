@@ -4,6 +4,7 @@ import {
   getUserById,
   getUserByUsername,
   getUserDescriptionById,
+  getUserDisplayNameById,
   getUserProfileById,
   getUserRegionById,
   getUserSettingsById,
@@ -23,7 +24,8 @@ import { zValidator } from "@hono/zod-validator";
 import { downloadImage } from "@/services/download-image";
 import { getColorPalette } from "@/utils/color";
 import { createId } from "@paralleldrive/cuid2";
-import { generateObject } from "ai";
+import { generateObject, generateText } from "ai";
+import { getCurrentWeather } from "@/utils/weather";
 
 export const userRoute = createApp()
   .get("/overview/:username", async (c) => {
@@ -99,6 +101,37 @@ export const userRoute = createApp()
       return c.json({ success: true });
     }
   )
+  .get("/weather", privateAuth, async (c) => {
+    const userId = c.get("userId");
+
+    const region = await getUserRegionById(c.env, { userId });
+    const user = await getUserDisplayNameById(c.env, { userId });
+
+    const lng = region?.lng ?? "0";
+    const lat = region?.lat ?? "0";
+
+    const weather = await getCurrentWeather(c.env, {
+      lat,
+      lng,
+    });
+
+    const temp = Math.round(weather.temp - 273.15);
+
+    const response = await generateText({
+      // todo: use worker ai service
+      model: await createOpenAIModel(c.env, ["gpt-4.1"]),
+      prompt: `The temperature in ${weather.name} is ${temp}°C with a humidity of ${weather.humidity}%.`,
+      system: `You are a helpful assistant that displays the current temperature and comments on the users current weather conditions in a friendly manner. Keep it very short and concise. Use emojis to make it more engaging. Use the user's first name.\n
+      The user's name: ${user.displayName}\n
+      Very important: The temperature (in celsius) must be in the response.`,
+    });
+
+    return c.json({
+      // degrees in celsius
+      temperature: temp,
+      comment: response.text,
+    });
+  })
   .post(
     "/profile/username/exists",
     privateAuth,

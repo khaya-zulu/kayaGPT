@@ -310,6 +310,30 @@ export const getUserRegionById = async (
   }
 };
 
+export const getUserDisplayNameById = async (
+  env: Env,
+  props: { userId: string }
+) => {
+  try {
+    const [user] = await db(env.DB)
+      .select({
+        id: schema.user.id,
+        displayName: schema.user.displayName,
+      })
+      .from(schema.user)
+      .where(eq(schema.user.id, props.userId));
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (error: any) {
+    console.error("Error fetching user display name by ID:", error.message);
+    throw new Error("Failed to fetch user display name");
+  }
+};
+
 export const searchUserByUsername = async (
   env: Env,
   props: { username: string }

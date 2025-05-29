@@ -76,3 +76,17 @@ export const useUserProfileSettingsQuery = () => {
     },
   });
 };
+
+export const userWeatherQueryKey = [client.api.user.weather.$url().pathname];
+
+export const useUserWeatherQuery = () => {
+  return useQuery({
+    queryKey: [userWeatherQueryKey],
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    queryFn: async () => {
+      const response = await client.api.user.weather.$get();
+      return response.json();
+    },
+  });
+};

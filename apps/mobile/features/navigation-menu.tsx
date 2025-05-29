@@ -12,6 +12,7 @@ import { BlurView } from "expo-blur";
 import { ReactNode } from "react";
 import { isWeb } from "@/constants/platform";
 import { Pill } from "@/components/pill";
+import { useUserWeatherQuery } from "@/queries/users";
 
 const NavigationMenuItem = ({
   icon,
@@ -47,57 +48,11 @@ const NavigationMenuItem = ({
   );
 };
 
-export const NavigationMenu = () => {
+const WebNavigationMenuItem = () => {
   const userSettings = useUserSettings();
+  const userWeatherQuery = useUserWeatherQuery();
 
-  const borderColor = userSettings.colorSettings[100] + "80";
-
-  if (!isWeb) {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          marginHorizontal: 15,
-          justifyContent: "center",
-        }}
-      >
-        <Pill style={{ padding: 0 }} rounded="2xl" variant="white">
-          <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
-            <View
-              style={{
-                paddingVertical: 8,
-                paddingHorizontal: 15,
-                borderRightColor: borderColor,
-                borderRightWidth: 1,
-              }}
-            >
-              <Text fontSize="sm">Hi 👋</Text>
-            </View>
-            <Pressable style={{ padding: 8 }}>
-              <UserCircle size={20} />
-            </Pressable>
-            <Pressable
-              style={{
-                padding: 8,
-                borderLeftColor: borderColor,
-                borderLeftWidth: 1,
-                borderRightColor: borderColor,
-                borderRightWidth: 1,
-                height: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Laptop size={18} />
-            </Pressable>
-            <Pressable style={{ padding: 8 }}>
-              <Television size={18} />
-            </Pressable>
-          </View>
-        </Pill>
-      </View>
-    );
-  }
+  const userWeather = userWeatherQuery.data;
 
   return (
     <View>
@@ -155,16 +110,69 @@ export const NavigationMenu = () => {
               flex: 1,
             }}
           >
-            <Text fontSize="sm">Hi Khaya 👋</Text>
-            <Text fontSize="sm">
-              It's a bit cloudy today, but the weather is nice.{" "}
-              <Text style={{ color: userSettings.colorSettings["base"] }}>
-                22°C
-              </Text>
-            </Text>
+            <Text fontSize="sm">{userWeather?.comment}</Text>
           </Rounded>
         </BlurView>
       </Rounded>
     </View>
   );
+};
+
+export const MobileNavigationMenuItem = () => {
+  const userSettings = useUserSettings();
+
+  const borderColor = userSettings.colorSettings[100] + "80";
+
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        marginHorizontal: 15,
+        justifyContent: "center",
+      }}
+    >
+      <Pill style={{ padding: 0 }} rounded="2xl" variant="white">
+        <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
+          <View
+            style={{
+              paddingVertical: 8,
+              paddingHorizontal: 15,
+              borderRightColor: borderColor,
+              borderRightWidth: 1,
+            }}
+          >
+            <Text fontSize="sm">Hi 👋</Text>
+          </View>
+          <Pressable style={{ padding: 8 }}>
+            <UserCircle size={20} />
+          </Pressable>
+          <Pressable
+            style={{
+              padding: 8,
+              borderLeftColor: borderColor,
+              borderLeftWidth: 1,
+              borderRightColor: borderColor,
+              borderRightWidth: 1,
+              height: "100%",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Laptop size={18} />
+          </Pressable>
+          <Pressable style={{ padding: 8 }}>
+            <Television size={18} />
+          </Pressable>
+        </View>
+      </Pill>
+    </View>
+  );
+};
+
+export const NavigationMenu = () => {
+  if (!isWeb) {
+    return <MobileNavigationMenuItem />;
+  }
+
+  return <WebNavigationMenuItem />;
 };
