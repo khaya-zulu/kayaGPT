@@ -36,6 +36,7 @@ import { isWeb } from "@/constants/platform";
 import { TextInput } from "@/components/text-input";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { Rounded } from "@/components/rounded";
+import { AutoResizingInput } from "@/features/auto-resizing-input";
 
 const InputContainer = styled.View`
   max-width: 750px;
@@ -148,7 +149,13 @@ export const ChatBox = ({
               {toolbar}
             </View>
             <View style={{ paddingVertical: 15, paddingHorizontal: 20 }}>
-              <TextInput
+              <AutoResizingInput
+                placeholder="Type something..."
+                value={value}
+                onChange={onChange}
+                onSend={() => onSubmit?.(undefined as any)}
+              />
+              {/* <TextInput
                 multiline
                 placeholder="Type something..."
                 style={{
@@ -181,13 +188,14 @@ export const ChatBox = ({
                   }
                 }}
                 value={value}
-              />
+              /> */}
 
               <View
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  marginTop: 20,
                 }}
               >
                 {isWeb ? bottomToolbar : <View />}

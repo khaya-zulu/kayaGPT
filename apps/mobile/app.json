@@ -42,9 +42,7 @@
       [
         "expo-font",
         {
-          "fonts": [
-            "./assets/fonts/SpaceGrotesk-Medium.ttf"
-          ]
+          "fonts": ["./assets/fonts/SpaceGrotesk-Medium.ttf"]
         }
       ],
       "expo-web-browser",
