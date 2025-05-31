@@ -24,7 +24,13 @@ import { useQueryClient } from "@tanstack/react-query";
 
 type Tab = "general" | "description" | "social";
 
-export const ProfileEditor = ({ onClose }: { onClose: () => void }) => {
+export const ProfileEditor = ({
+  tab,
+  onClose,
+}: {
+  tab: "general" | "description" | "social";
+  onClose: () => void;
+}) => {
   const userSettings = useUserSettings();
 
   const utils = useQueryClient();
@@ -38,7 +44,7 @@ export const ProfileEditor = ({ onClose }: { onClose: () => void }) => {
     },
   });
 
-  const [activeTab, setActiveTab] = useState<Tab>("general");
+  const [activeTab, setActiveTab] = useState<Tab>(tab);
 
   const profileSettings = userProfileSettingsQuery.data;
 

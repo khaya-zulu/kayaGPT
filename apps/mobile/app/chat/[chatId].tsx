@@ -78,7 +78,9 @@ export default function ChatIdPage() {
   const [isNewMessage, setIsNewMessage] = useState(false);
   const [scrollViewHeight, setScrollViewHeight] = useState(0);
   const [scrollViewContentHeight, setScrollViewContentHeight] = useState(0);
-  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
+  const [isProfileEditorOpen, setIsProfileEditorOpen] = useState<
+    "general" | "description" | "social" | undefined
+  >();
 
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
   const [scrollY, setScrollY] = useState(0);
@@ -93,8 +95,8 @@ export default function ChatIdPage() {
   } = useChat({
     chatId: params.chatId,
     onToolCall: (call) => {
-      if (call.toolCall.toolName === "description") {
-        setIsDescriptionOpen(true);
+      if (call.toolCall.toolName === "profileSettings") {
+        setIsProfileEditorOpen((call.toolCall.args as any).tab);
       }
     },
   });
@@ -117,8 +119,8 @@ export default function ChatIdPage() {
 
   const messagesQuery = useChatMessagesQuery({
     chatId: params.chatId,
-    // only fetch if the page navigation is not
-    // the result of a new message
+    // only fetch chat messages if nots a new
+    // chat result.
     isEnabled: isMessageQueryEnabled,
   });
 
@@ -204,12 +206,16 @@ export default function ChatIdPage() {
           <DateNow />
 
           <Pressable
-            onPress={() => setIsDescriptionOpen((prevState) => !prevState)}
+            onPress={() =>
+              setIsProfileEditorOpen((prevState) =>
+                prevState ? undefined : "general"
+              )
+            }
           >
             <AppWindow
               size={20}
               color={
-                isDescriptionOpen
+                isProfileEditorOpen
                   ? userSettings.colorSettings["base"]
                   : undefined
               }
@@ -226,8 +232,11 @@ export default function ChatIdPage() {
         />
       }
       rightLayout={
-        isDescriptionOpen ? (
-          <ProfileEditor onClose={() => setIsDescriptionOpen(false)} />
+        isProfileEditorOpen ? (
+          <ProfileEditor
+            onClose={() => setIsProfileEditorOpen(undefined)}
+            tab={isProfileEditorOpen}
+          />
         ) : null
       }
     >

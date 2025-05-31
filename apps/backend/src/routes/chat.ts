@@ -16,6 +16,7 @@ import { createApp } from "@/utils/server";
 import { z } from "zod";
 import { privateAuth } from "@/utils/auth";
 import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
+import { profileSettingsTool } from "@/services/tools/profile-settings";
 
 export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
@@ -87,13 +88,7 @@ export const chatRoute = createApp()
       onError: console.error,
       tools: {
         generateWorkspace: generateWorkspaceTool(c.env, { userId }),
-        description: tool({
-          description: "open the user description editor",
-          parameters: z.object({}),
-          execute: async () => {
-            return { isOpening: true };
-          },
-        }),
+        profileSettings: profileSettingsTool(),
       },
       maxSteps: 4,
       system:
