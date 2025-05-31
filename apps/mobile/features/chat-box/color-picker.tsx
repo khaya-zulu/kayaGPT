@@ -4,6 +4,7 @@ import { roundedFull } from "@/constants/theme";
 import { Circle } from "phosphor-react-native";
 import { useUserSettings } from "@/hooks/use-user-settings";
 
+// todo: use the scroll progress to show a scroll indicator.
 export const ColorPicker = () => {
   const { colorSettings } = useUserSettings();
 

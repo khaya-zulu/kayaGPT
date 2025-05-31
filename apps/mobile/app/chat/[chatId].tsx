@@ -37,6 +37,12 @@ import { ProfileEditor } from "@/features/profile-editor";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { DateNow } from "@/features/date-now";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
+import { ProfileEditorBottomSheet } from "@/features/profile-editor/bottom-sheet";
 
 const MobileKeyboardDismiss = styled.Pressable`
   max-width: 650px;
@@ -74,6 +80,7 @@ export default function ChatIdPage() {
   const userSettings = useUserSettings();
 
   const scrollViewRef = useRef<ScrollView>(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   const [isNewMessage, setIsNewMessage] = useState(false);
   const [scrollViewHeight, setScrollViewHeight] = useState(0);
@@ -183,175 +190,198 @@ export default function ChatIdPage() {
   }, [params.message]);
 
   return (
-    <ChatFrame
-      isSafeAreaDisabled
-      value={input}
-      onChange={(ev) => {
-        handleInputChange({
-          ...ev,
-          target: {
-            ...ev.target,
-            value: ev.nativeEvent.text,
-          },
-        } as unknown as React.ChangeEvent<HTMLInputElement>);
-      }}
-      onSubmit={() => {
-        scrollViewRef.current?.scrollToEnd({
-          animated: true,
-        });
-        handleSubmit();
-      }}
-      toolbar={
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <DateNow />
-
-          <Pressable
-            onPress={() =>
-              setIsProfileEditorOpen((prevState) =>
-                prevState ? undefined : "general"
-              )
-            }
-          >
-            <AppWindow
-              size={20}
-              color={
-                isProfileEditorOpen
-                  ? userSettings.colorSettings["base"]
-                  : undefined
-              }
-            />
-          </Pressable>
-        </View>
-      }
-      bottomToolbar={
-        <ChatBoxToolbar
-          isTitleEnabled={isMessageQueryEnabled}
-          onChatDelete={() => {
-            chatDeleteMutation.mutate({ chatId: params.chatId });
+    <GestureHandlerRootView>
+      <BottomSheetModalProvider>
+        <ChatFrame
+          isSafeAreaDisabled
+          value={input}
+          onChange={(ev) => {
+            handleInputChange({
+              ...ev,
+              target: {
+                ...ev.target,
+                value: ev.nativeEvent.text,
+              },
+            } as unknown as React.ChangeEvent<HTMLInputElement>);
           }}
-        />
-      }
-      rightLayout={
-        isProfileEditorOpen ? (
-          <ProfileEditor
-            onClose={() => setIsProfileEditorOpen(undefined)}
-            tab={isProfileEditorOpen}
-          />
-        ) : null
-      }
-    >
-      {!isWeb ? (
-        <ToolbarBox
-          color={userSettings.colorSettings[100]}
-          isShaded={scrollY > 20}
-        >
-          <SafeAreaView>
-            <Pressable
-              onPress={() => router.back()}
-              style={{
-                paddingHorizontal: 25,
-                paddingBottom: 20,
-                paddingTop: 10,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
+          onSubmit={() => {
+            scrollViewRef.current?.scrollToEnd({
+              animated: true,
+            });
+            handleSubmit();
+          }}
+          toolbar={
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
+              <DateNow />
+
+              <Pressable
+                onPress={() => {
+                  setIsProfileEditorOpen((prevState) => {
+                    if (prevState) {
+                      bottomSheetRef.current?.close();
+                    } else if (!isWeb) {
+                      bottomSheetRef.current?.present();
+                    }
+
+                    return prevState ? undefined : "general";
+                  });
+                }}
+              >
+                <AppWindow
+                  size={20}
+                  color={
+                    isProfileEditorOpen
+                      ? userSettings.colorSettings["base"]
+                      : undefined
+                  }
+                />
+              </Pressable>
+            </View>
+          }
+          bottomToolbar={
+            <ChatBoxToolbar
+              isTitleEnabled={isMessageQueryEnabled}
+              onChatDelete={() => {
+                chatDeleteMutation.mutate({ chatId: params.chatId });
+              }}
+            />
+          }
+          rightLayout={
+            isWeb && isProfileEditorOpen ? (
+              <ProfileEditor
+                onClose={() => setIsProfileEditorOpen(undefined)}
+                tab={isProfileEditorOpen}
+              />
+            ) : null
+          }
+        >
+          {!isWeb ? (
+            <ToolbarBox
+              color={userSettings.colorSettings[100]}
+              isShaded={scrollY > 20}
+            >
+              <SafeAreaView>
+                <Pressable
+                  onPress={() => router.back()}
+                  style={{
+                    paddingHorizontal: 25,
+                    paddingBottom: 20,
+                    paddingTop: 10,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      gap: 10,
+                      alignItems: "center",
+                    }}
+                  >
+                    <ArrowLeft size={18} weight="bold" />
+                    <Text>Hello world</Text>
+                  </View>
+
+                  <ChatCircleDots size={20} weight="bold" />
+                </Pressable>
+              </SafeAreaView>
+            </ToolbarBox>
+          ) : null}
+          <SafeAreaView style={{ flex: 1, position: "relative" }}>
+            <ScrollView
+              ref={scrollViewRef}
+              scrollEventThrottle={16}
+              onScroll={(ev) => {
+                const scrollY = ev.nativeEvent.contentOffset.y;
+                const totalHeight = scrollViewContentHeight - scrollViewHeight;
+
+                setScrollY(scrollY);
+                setIsScrollToBottomVisible(scrollY < totalHeight - 200);
+              }}
+              onLayout={(ev) => {
+                setScrollViewHeight(ev.nativeEvent.layout.height);
+              }}
+              showsVerticalScrollIndicator={false}
+            >
+              <KeyboardDismiss onPress={() => Keyboard.dismiss()}>
+                <View
+                  style={{
+                    paddingHorizontal: 20,
+                    paddingTop: 20,
+                    flexDirection: "column",
+                    gap: 18,
+                    paddingBottom: 200,
+                  }}
+                  onLayout={(ev) => {
+                    setScrollViewContentHeight(ev.nativeEvent.layout.height);
+                  }}
+                >
+                  {messages.map((m, idx) => {
+                    const tools = m.parts.filter(
+                      (p) => p.type === "tool-invocation"
+                    );
+
+                    return (
+                      <ChatMessage
+                        key={m.id}
+                        role={m.role === "assistant" ? "Assistant" : "User"}
+                        messageId={m.id}
+                        parts={m.parts}
+                        createdAt={m.createdAt}
+                      >
+                        {tools.map((t, idx) => (
+                          <Tool
+                            key={"tool" + idx}
+                            invocation={t.toolInvocation}
+                          />
+                        ))}
+                      </ChatMessage>
+                    );
+                  })}
+                </View>
+              </KeyboardDismiss>
+            </ScrollView>
+            {isScrollToBottomVisible ? (
               <View
                 style={{
                   flexDirection: "row",
-                  gap: 10,
-                  alignItems: "center",
+                  position: "absolute",
+                  bottom: 5,
+                  left: 0,
+                  width: "100%",
+                  justifyContent: "center",
                 }}
               >
-                <ArrowLeft size={18} weight="bold" />
-                <Text>Hello world</Text>
-              </View>
-
-              <ChatCircleDots size={20} weight="bold" />
-            </Pressable>
-          </SafeAreaView>
-        </ToolbarBox>
-      ) : null}
-      <SafeAreaView style={{ flex: 1, position: "relative" }}>
-        <ScrollView
-          ref={scrollViewRef}
-          scrollEventThrottle={16}
-          onScroll={(ev) => {
-            const scrollY = ev.nativeEvent.contentOffset.y;
-            const totalHeight = scrollViewContentHeight - scrollViewHeight;
-
-            setScrollY(scrollY);
-            setIsScrollToBottomVisible(scrollY < totalHeight - 200);
-          }}
-          onLayout={(ev) => {
-            setScrollViewHeight(ev.nativeEvent.layout.height);
-          }}
-          showsVerticalScrollIndicator={false}
-        >
-          <KeyboardDismiss onPress={() => Keyboard.dismiss()}>
-            <View
-              style={{
-                paddingHorizontal: 20,
-                paddingTop: 20,
-                flexDirection: "column",
-                gap: 18,
-                paddingBottom: 200,
-              }}
-              onLayout={(ev) => {
-                setScrollViewContentHeight(ev.nativeEvent.layout.height);
-              }}
-            >
-              {messages.map((m, idx) => {
-                const tools = m.parts.filter(
-                  (p) => p.type === "tool-invocation"
-                );
-
-                return (
-                  <ChatMessage
-                    key={m.id}
-                    role={m.role === "assistant" ? "Assistant" : "User"}
-                    messageId={m.id}
-                    parts={m.parts}
-                    createdAt={m.createdAt}
+                <Pressable onPress={() => scrollViewRef.current?.scrollToEnd()}>
+                  <Rounded
+                    size="full"
+                    style={{
+                      padding: 10,
+                      backgroundColor: "#fff",
+                      borderWidth: 1,
+                      borderColor: zinc100,
+                    }}
                   >
-                    {tools.map((t, idx) => (
-                      <Tool key={"tool" + idx} invocation={t.toolInvocation} />
-                    ))}
-                  </ChatMessage>
-                );
-              })}
-            </View>
-          </KeyboardDismiss>
-        </ScrollView>
-        {isScrollToBottomVisible ? (
-          <View
-            style={{
-              flexDirection: "row",
-              position: "absolute",
-              bottom: 5,
-              left: 0,
-              width: "100%",
-              justifyContent: "center",
+                    <ArrowDown size={15} />
+                  </Rounded>
+                </Pressable>
+              </View>
+            ) : null}
+          </SafeAreaView>
+        </ChatFrame>
+        {!isWeb ? (
+          <ProfileEditorBottomSheet
+            ref={bottomSheetRef}
+            onClose={() => {
+              bottomSheetRef.current?.close();
             }}
-          >
-            <Pressable onPress={() => scrollViewRef.current?.scrollToEnd()}>
-              <Rounded
-                size="full"
-                style={{
-                  padding: 10,
-                  backgroundColor: "#fff",
-                  borderWidth: 1,
-                  borderColor: zinc100,
-                }}
-              >
-                <ArrowDown size={15} />
-              </Rounded>
-            </Pressable>
-          </View>
+          />
         ) : null}
-      </SafeAreaView>
-    </ChatFrame>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }

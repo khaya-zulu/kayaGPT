@@ -10,7 +10,7 @@ import {
   useUserProfileSettingsQuery,
 } from "@/queries/users";
 import { BlurView } from "expo-blur";
-import { ArrowLeft } from "phosphor-react-native";
+import { ArrowDown, ArrowLeft } from "phosphor-react-native";
 import { Pressable, View } from "react-native";
 
 import showdown from "showdown";
@@ -21,6 +21,7 @@ import { ProfileSocial } from "./social";
 import { useAppForm, profileFormOpts } from "./form";
 import type { EditorBridge } from "@10play/tentap-editor";
 import { useQueryClient } from "@tanstack/react-query";
+import { isWeb } from "@/constants/platform";
 
 type Tab = "general" | "description" | "social";
 
@@ -98,8 +99,8 @@ export const ProfileEditor = ({
   }, [profileSettings?.description]);
 
   return (
-    <View style={{ flex: 0.5, width: 300 }}>
-      <BlurView style={{ flex: 1, padding: 10 }} tint="prominent">
+    <View style={isWeb ? { flex: 0.5, width: 300 } : { flex: 1 }}>
+      <BlurView style={{ flex: 1, padding: isWeb ? 10 : 0 }} tint="prominent">
         <Rounded style={{ flex: 1, backgroundColor: "#fff" }}>
           <View
             style={{
@@ -116,7 +117,11 @@ export const ProfileEditor = ({
               style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
             >
               <Pressable onPress={() => onClose()}>
-                <ArrowLeft size={14} weight="bold" />
+                {isWeb ? (
+                  <ArrowLeft size={14} weight="bold" />
+                ) : (
+                  <ArrowDown size={14} weight="bold" />
+                )}
               </Pressable>
               <Text fontSize="sm">Profile</Text>
             </View>

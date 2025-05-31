@@ -127,9 +127,6 @@ export const ChatBox = ({
 }) => {
   const arrowUpButtonRef = useRef<View>(null);
 
-  const [height, setHeight] = useState(20);
-  const [isShiftPressed, setIsShiftPressed] = useState(false);
-
   const userSettings = useUserSettings();
 
   return (
@@ -155,40 +152,6 @@ export const ChatBox = ({
                 onChange={onChange}
                 onSend={() => onSubmit?.(undefined as any)}
               />
-              {/* <TextInput
-                multiline
-                placeholder="Type something..."
-                style={{
-                  marginBottom: 20,
-                  minHeight: 20,
-                  height,
-                }}
-                onChange={(ev) => {
-                  onChange?.(ev);
-                }}
-                onContentSizeChange={(ev) => {
-                  setHeight(ev.nativeEvent.contentSize.height);
-                }}
-                onKeyPress={(ev) => {
-                  if (isWeb) {
-                    if (ev.nativeEvent.key === "Enter" && !isShiftPressed) {
-                      arrowUpButtonRef.current?.focus();
-                      onSubmit?.(undefined as any);
-                    }
-
-                    if (ev.nativeEvent.key === "Shift") {
-                      setIsShiftPressed(true);
-                    }
-                  }
-                }}
-                // @ts-ignore
-                onKeyUp={(ev) => {
-                  if (isWeb && ev.nativeEvent.key === "Shift") {
-                    setIsShiftPressed(false);
-                  }
-                }}
-                value={value}
-              /> */}
 
               <View
                 style={{

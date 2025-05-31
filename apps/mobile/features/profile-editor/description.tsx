@@ -24,6 +24,8 @@ import { useAuth } from "@clerk/clerk-expo";
 import { processEnv } from "@/utils/env";
 import { base46FontSpaceGrotesk } from "@/utils/font-base64";
 import { RefObject, useImperativeHandle } from "react";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { isWeb } from "@/constants/platform";
 
 export const ProfileDescription = ({
   ref,
@@ -112,7 +114,7 @@ export const ProfileDescription = ({
           position: "absolute",
           bottom: 0,
           left: 0,
-          width: "100%",
+          width: isWeb ? "100%" : "105%",
         }}
       >
         <View
@@ -125,15 +127,22 @@ export const ProfileDescription = ({
             alignItems: "center",
           }}
         >
-          <ScrollView
-            style={{ flex: 1 }}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          >
-            <View>
+          {isWeb ? (
+            <ScrollView
+              style={{ flex: 1 }}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              <View>
+                <Toolbar editor={editor} />
+              </View>
+            </ScrollView>
+          ) : null}
+          {!isWeb ? (
+            <View style={{ flex: 1 }}>
               <Toolbar editor={editor} />
             </View>
-          </ScrollView>
+          ) : null}
           <View style={{ paddingRight: 20 }}>
             <Pressable onPress={handleImageUpload}>
               <ImageSquare />
