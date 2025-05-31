@@ -18,6 +18,10 @@ import { processEnv } from "@/utils/env";
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, ReactNode, useContext, useState } from "react";
 
+import { View } from "react-native";
+
+import { Text } from "@/components/text";
+
 type UserContextType = {
   colorSettings: NonNullable<UserSettingsQueryOutput["colorSettings"]>;
   isLoading: boolean;
@@ -35,7 +39,11 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   const colorSettings = data?.colorSettings;
 
   if (isPending) {
-    return null;
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Booting workspace...</Text>
+      </View>
+    );
   }
 
   return (
