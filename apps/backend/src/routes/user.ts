@@ -269,9 +269,9 @@ export const userRoute = createApp()
 
     return c.json({ success: true });
   })
-  .get("/profile/:key", privateAuth, async (c) => {
-    const userId = c.get("userId");
-    return downloadImage(c, c.env.R2_PROFILE, { key: userId });
+  .get("/profile/avatar/:key", async (c) => {
+    const key = c.req.param("key");
+    return downloadImage(c, c.env.R2_PROFILE, { key });
   })
   .post(
     "/workspace/color-palette",

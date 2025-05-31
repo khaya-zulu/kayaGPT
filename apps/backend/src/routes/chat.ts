@@ -17,6 +17,7 @@ import { z } from "zod";
 import { privateAuth } from "@/utils/auth";
 import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
 import { profileSettingsTool } from "@/services/tools/profile-settings";
+import { userAvatarTool } from "@/services/tools/user-avatar";
 
 export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
@@ -89,6 +90,7 @@ export const chatRoute = createApp()
       tools: {
         generateWorkspace: generateWorkspaceTool(c.env, { userId }),
         profileSettings: profileSettingsTool(),
+        userAvatar: userAvatarTool(),
       },
       maxSteps: 4,
       system:

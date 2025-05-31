@@ -8,8 +8,6 @@ export const profileSettingsTool = () => {
     - Description: Edit your user description. This almost a bio, as it is publicly visible.
     - Social: Add your social links, Github, Twitter, Linkedin, and website.`,
     parameters: z.object({ tab: z.enum(["general", "description", "social"]) }),
-    execute: async ({ tab }) => {
-      return { tab };
-    },
+    execute: async (params) => params,
   });
 };

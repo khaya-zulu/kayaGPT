@@ -82,9 +82,10 @@ export const useUserSettings = () => {
   return {
     ...context,
     workspaceUrl: `${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${context.userId}${ms ? `?ms=${ms}` : ""}`,
+    avatarUrl: `${processEnv.EXPO_PUBLIC_API_URL}/api/user/profile/avatar/${context.userId}${ms ? `?ms=${ms}` : ""}`,
     invalidate: () =>
       query.invalidateQueries({ queryKey: userSettingsQueryKey }),
-    invalidateWorkspaceUrl: () => {
+    invalidateMs: () => {
       context.setMs(Date.now());
     },
   };
