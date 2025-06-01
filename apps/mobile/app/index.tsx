@@ -4,8 +4,6 @@ import { styled } from "styled-components/native";
 
 import * as Crypto from "expo-crypto";
 
-import { Text } from "@/components/text";
-
 import { ChatFrame } from "@/features/main-app-box";
 import { Rounded } from "@/components/rounded";
 

@@ -60,10 +60,31 @@ export const ColorPalette = ({
 
   useEffect(() => {
     const fetchColorPalette = async () => {
-      const colors = await getColors(src, { key: src });
+      try {
+        const colors = await getColors(src, {
+          key: src,
+          fallback: "#fff",
+          cache: true,
+        });
 
-      if (colors.platform === "web") {
-        setColorPalette(colors);
+        if (colors.platform === "web") {
+          setColorPalette(colors);
+        } else if (colors.platform === "ios") {
+          setColorPalette({
+            dominant: colors.detail,
+            darkVibrant: colors.primary,
+            vibrant: colors.background,
+            lightMuted: colors.background,
+            lightVibrant: colors.background,
+            darkMuted: colors.detail,
+            muted: colors.detail,
+            platform: "web",
+          });
+        }
+      } catch (err) {
+        // security error is thrown for http:// images
+        // which is only expected in development
+        console.error("Error fetching color palette:", err);
       }
     };
 

@@ -91,6 +91,7 @@ export default function ChatIdPage() {
 
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
   const [scrollY, setScrollY] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const {
     handleInputChange,
@@ -189,12 +190,15 @@ export default function ChatIdPage() {
     }
   }, [params.message]);
 
+  console.log("messages", scrollProgress);
+
   return (
     <GestureHandlerRootView>
       <BottomSheetModalProvider>
         <ChatFrame
           isSafeAreaDisabled
           value={input}
+          scrollProgress={scrollProgress}
           onChange={(ev) => {
             handleInputChange({
               ...ev,
@@ -298,6 +302,9 @@ export default function ChatIdPage() {
               onScroll={(ev) => {
                 const scrollY = ev.nativeEvent.contentOffset.y;
                 const totalHeight = scrollViewContentHeight - scrollViewHeight;
+
+                const progress = Math.min(1, scrollY / (totalHeight || 1));
+                setScrollProgress(progress * 100);
 
                 setScrollY(scrollY);
                 setIsScrollToBottomVisible(scrollY < totalHeight - 200);

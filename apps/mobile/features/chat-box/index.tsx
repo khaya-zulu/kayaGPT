@@ -30,7 +30,7 @@ import {
   zinc800,
   zinc700,
 } from "@/constants/theme";
-import { ColorPicker } from "@/features/chat-box/color-picker";
+import { ScrollProgress } from "@/features/chat-box/scroll-progress";
 import { Text } from "@/components/text";
 import { isWeb } from "@/constants/platform";
 import { TextInput } from "@/components/text-input";
@@ -118,12 +118,14 @@ export const ChatBox = ({
   onSubmit,
   toolbar,
   bottomToolbar,
+  scrollProgress = 0,
 }: {
   value: string;
   onChange: TextInputProps["onChange"];
   onSubmit: PressableProps["onPress"];
   toolbar?: ReactNode;
   bottomToolbar?: ReactNode;
+  scrollProgress?: number;
 }) => {
   const arrowUpButtonRef = useRef<View>(null);
 
@@ -170,7 +172,7 @@ export const ChatBox = ({
                     alignItems: "center",
                   }}
                 >
-                  <ColorPicker />
+                  <ScrollProgress progress={scrollProgress} />
                   <View>
                     <RoundedText fontSize="sm">GPT‑4.1</RoundedText>
                   </View>

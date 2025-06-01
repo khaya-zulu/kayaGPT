@@ -73,6 +73,7 @@ export const ChatFrame = ({
   toolbar,
   bottomToolbar,
   rightLayout,
+  scrollProgress,
 }: {
   children: ReactNode;
   isSafeAreaDisabled?: boolean;
@@ -82,6 +83,7 @@ export const ChatFrame = ({
   toolbar?: ReactNode;
   bottomToolbar?: ReactNode;
   rightLayout?: ReactNode;
+  scrollProgress?: number;
 }) => {
   const Component = isSafeAreaDisabled ? Fragment : SafeAreaView;
   const props = isSafeAreaDisabled ? {} : { style: { flex: 1 } };
@@ -103,6 +105,7 @@ export const ChatFrame = ({
           onSubmit={onSubmit}
           toolbar={toolbar}
           bottomToolbar={bottomToolbar}
+          scrollProgress={scrollProgress}
         />
       </View>
       {rightLayout}

@@ -9815,14 +9815,15 @@ __metadata:
     react: 19.0.0
     react-dom: 19.0.0
     react-native: 0.79.2
+    react-native-circular-progress: ^1.4.1
     react-native-gesture-handler: ^2.25.0
     react-native-image-colors: 2.4.0
     react-native-markdown-display: ^7.0.2
     react-native-reanimated: 3.17.0
     react-native-safe-area-context: 5.4.0
     react-native-screens: ~4.10.0
-    react-native-svg: 15.11.2
-    react-native-web: ^0.20.0
+    react-native-svg: ^15.12.0
+    react-native-web: 0.20.0
     react-native-webview: 13.13.5
     react-test-renderer: 18.3.1
     showdown: ^2.1.0
@@ -10674,7 +10675,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.10, prop-types@npm:^15.7.2":
+"prop-types@npm:^15.5.10, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -11062,6 +11063,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-circular-progress@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "react-native-circular-progress@npm:1.4.1"
+  dependencies:
+    prop-types: ^15.8.1
+  peerDependencies:
+    react: ">=16.0.0"
+    react-native: ">=0.50.0"
+    react-native-svg: ">=7.0.0"
+  checksum: bc25797a9b82c48452a22152883514080be091c68d635ac406a52b7fc39e2ab0497f1334e067b06e4b72ccff5941afbfc841b3d61164bc50a0d8b13507c27d18
+  languageName: node
+  linkType: hard
+
 "react-native-edge-to-edge@npm:1.6.0":
   version: 1.6.0
   resolution: "react-native-edge-to-edge@npm:1.6.0"
@@ -11190,9 +11204,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-svg@npm:15.11.2":
-  version: 15.11.2
-  resolution: "react-native-svg@npm:15.11.2"
+"react-native-svg@npm:^15.12.0":
+  version: 15.12.0
+  resolution: "react-native-svg@npm:15.12.0"
   dependencies:
     css-select: ^5.1.0
     css-tree: ^1.1.3
@@ -11200,7 +11214,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 7bc2d9a5b7ceb66905e358d995bf102d63ce017db40b024d31a6ada03c21733fd3620f9ad867d631b878e2380033ea8777e75c4f654bc5b420ea902695ed9ba8
+  checksum: 0a78333ab4fb1aae38f190a22a1afcbfa2ae9192ccd2ac7a989f3108bd32afe1b84800b4dce0f92c68ad4eca6809046b5f997fbfcb072b872dd34ea04c8f44aa
   languageName: node
   linkType: hard
 
@@ -11215,7 +11229,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-web@npm:^0.20.0":
+"react-native-web@npm:0.20.0":
   version: 0.20.0
   resolution: "react-native-web@npm:0.20.0"
   dependencies:
