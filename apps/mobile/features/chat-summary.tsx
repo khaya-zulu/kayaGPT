@@ -58,7 +58,12 @@ export const ChatSummary = ({
                   alignItems: "center",
                 }}
               >
-                <ChatCircleDots size={18} weight="bold" />
+                <ChatCircleDots
+                  size={18}
+                  weight="duotone"
+                  duotoneColor={colorSettings.base}
+                  color={colorSettings["900"]}
+                />
                 <Text fontSize="sm">
                   {title?.slice(0, maxLength)}
                   {isTrailing ? "..." : null}

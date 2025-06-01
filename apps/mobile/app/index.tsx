@@ -81,7 +81,7 @@ export default function IndexPage() {
                   padding: 15,
                 }}
               >
-                {chatHistoryQuery.data?.chats.map((c, idx) => {
+                {chatHistoryQuery.data?.chats.map((c) => {
                   return (
                     <ChatSummary
                       key={c.id}

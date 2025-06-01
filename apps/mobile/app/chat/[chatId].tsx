@@ -190,8 +190,6 @@ export default function ChatIdPage() {
     }
   }, [params.message]);
 
-  console.log("messages", scrollProgress);
-
   return (
     <GestureHandlerRootView>
       <BottomSheetModalProvider>

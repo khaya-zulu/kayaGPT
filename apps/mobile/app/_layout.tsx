@@ -1,3 +1,5 @@
+import "@/utils/polyfill";
+
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import "react-native-reanimated";

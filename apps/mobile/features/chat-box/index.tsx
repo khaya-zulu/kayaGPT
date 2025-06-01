@@ -1,4 +1,5 @@
 import {
+  Keyboard,
   Pressable,
   PressableProps,
   SafeAreaView,
@@ -60,7 +61,7 @@ const InputLinearBox = ({ children }: { children: ReactNode }) => {
 
   return (
     <RoundedBox style={{ position: "relative" }}>
-      <Rounded
+      <RoundedBox
         style={{
           height: "100%",
           width: "100%",
@@ -69,7 +70,7 @@ const InputLinearBox = ({ children }: { children: ReactNode }) => {
           position: "absolute",
         }}
       />
-      <Rounded
+      <RoundedBox
         style={{
           borderColor: userSettings.colorSettings[300] + "cc",
           borderWidth: 2,
@@ -77,7 +78,7 @@ const InputLinearBox = ({ children }: { children: ReactNode }) => {
         }}
       >
         {children}
-      </Rounded>
+      </RoundedBox>
     </RoundedBox>
   );
 };
@@ -184,7 +185,10 @@ export const ChatBox = ({
                       borderRadius: roundedFull,
                     }}
                     backgroundColor={userSettings.colorSettings[800]}
-                    onPress={onSubmit}
+                    onPress={() => {
+                      onSubmit?.(undefined as any);
+                      Keyboard.dismiss();
+                    }}
                   >
                     <ArrowUp size={14} color="#fff" weight="bold" />
                   </ArrowUpButton>
