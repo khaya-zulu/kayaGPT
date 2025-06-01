@@ -83,7 +83,7 @@ export const ChatMessage = ({
                 <Text>{role === "Assistant" ? "AI" : "User"}</Text>
               </View>
               {role === "Assistant" || !createdAt ? null : (
-                <Text>{DateTime.fromJSDate(createdAt).toFormat("t a")}</Text>
+                <Text>{DateTime.now().toFormat("t a")}</Text>
               )}
             </View>
             <View

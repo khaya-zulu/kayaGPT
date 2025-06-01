@@ -32,6 +32,10 @@ export const userRoute = createApp()
     const username = c.req.param("username");
     const user = await getUserByUsername(c.env, { username });
 
+    if (!user) {
+      return c.json({ error: "User not found" }, 404);
+    }
+
     return c.json(user);
   })
   .get("/settings", privateAuth, async (c) => {
@@ -120,7 +124,7 @@ export const userRoute = createApp()
     const response = await generateText({
       // todo: use worker ai service
       model: await createOpenAIModel(c.env, ["gpt-4.1"]),
-      prompt: `The temperature in ${weather.name} is ${temp}°C with a humidity of ${weather.humidity}%.`,
+      prompt: `The temperature in ${weather.regionName} is ${temp}°C with a humidity of ${weather.humidity}%.`,
       system: `You are a helpful assistant that displays the current temperature and comments on the users current weather conditions in a friendly manner. Keep it very short and concise. Use emojis to make it more engaging. Use the user's first name.\n
       The user's name: ${user.displayName}\n
       Very important: The temperature (in celsius) must be in the response.`,
@@ -130,6 +134,8 @@ export const userRoute = createApp()
       // degrees in celsius
       temperature: temp,
       comment: response.text,
+      regionName: weather.regionName,
+      icon: weather.icon,
     });
   })
   .post(

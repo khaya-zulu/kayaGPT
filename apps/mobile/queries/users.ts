@@ -28,13 +28,19 @@ export const useUserOverviewQuery = (username: string) => {
       const response = await client.api.user.overview[":username"].$get({
         param: { username },
       });
+
+      if (!response.ok) {
+        throw new Error("User not found");
+      }
+
       return response.json();
     },
   });
 };
 
 export type UserOverviewQueryOutput = InferResponseType<
-  (typeof client.api.user.overview)[":username"]["$get"]
+  (typeof client.api.user.overview)[":username"]["$get"],
+  200
 >;
 
 export const userSettingsQueryKey = [client.api.user.settings.$url().pathname];

@@ -9,8 +9,6 @@ export const getCurrentWeather = async (
 ) => {
   const { lat, lng } = props;
 
-  console.log(`Fetching weather data for coordinates: lat=${lat}, lng=${lng}`);
-
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${env.OPEN_WEATHER_API_KEY}`
   );
@@ -24,6 +22,7 @@ export const getCurrentWeather = async (
   return {
     temp: data.main.temp as number,
     humidity: data.main.humidity as number,
-    name: data.name as string,
+    regionName: data.name as string,
+    icon: data.weather[0].icon as string,
   };
 };

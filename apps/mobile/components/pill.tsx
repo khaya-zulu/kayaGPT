@@ -1,7 +1,7 @@
 import { Rounded, RoundedSize } from "./rounded";
 import { Text } from "./text";
 import { ReactNode } from "react";
-import { Pressable, TextProps } from "react-native";
+import { Pressable, TextProps, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { zinc100, zinc200, zinc300 } from "@/constants/theme";
@@ -55,7 +55,7 @@ export const Pill = ({
   };
 
   return (
-    <Pressable style={{ position: "relative" }} onPress={onPress}>
+    <TouchableOpacity style={{ position: "relative" }} onPress={onPress}>
       <Rounded
         size={rounded}
         style={{
@@ -104,6 +104,6 @@ export const Pill = ({
           )}
         </BlurView>
       </Rounded>
-    </Pressable>
+    </TouchableOpacity>
   );
 };

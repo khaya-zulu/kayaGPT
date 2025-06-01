@@ -1,25 +1,19 @@
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { BlurView } from "expo-blur";
 import { Circle, SunHorizon } from "phosphor-react-native";
-import { View } from "react-native";
+import {
+  Pressable,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import { styled } from "styled-components/native";
 
 import { Rounded } from "@/components/rounded";
-import { Text } from "@/components/text";
 import { isWeb } from "@/constants/platform";
 import { roundedMd } from "@/constants/theme";
 import { Markdown } from "@/components/markdown";
-
-const MenuBox = styled(View)<{ borderColor?: string }>`
-  border: 1px solid ${(props) => props.borderColor};
-  border-left-color: transparent;
-  border-right-color: transparent;
-  padding: 5px 22px;
-  flex-direction: row;
-  gap: 15px;
-  align-items: center;
-`;
 
 const DescriptionBox = styled(Rounded)<{ borderColor: string }>`
   border: 1px solid ${(props) => props.borderColor};
@@ -32,10 +26,12 @@ const DescriptionBox = styled(Rounded)<{ borderColor: string }>`
 
 export const DescriptionPreview = ({
   description,
-  height,
+  height = "100%",
+  onClose,
 }: {
   description?: string | null;
-  height?: number;
+  height?: string;
+  onClose?: () => void;
 }) => {
   const userSettings = useUserSettings();
 
@@ -46,7 +42,7 @@ export const DescriptionPreview = ({
         overflow: "hidden",
         borderWidth: 1,
         borderColor: userSettings.colorSettings[100] + "80",
-        height: "100%",
+        height: height as any,
       }}
     >
       <BlurView style={{ height: "100%", flexDirection: "column" }}>
@@ -63,11 +59,13 @@ export const DescriptionPreview = ({
         >
           <Circle size={18} weight="fill" color="#e7e5e4" />
           <Circle size={18} weight="fill" color="#e7e5e4" />
-          <Circle
-            size={18}
-            weight="fill"
-            color={userSettings.colorSettings.base}
-          />
+          <TouchableOpacity onPress={onClose}>
+            <Circle
+              size={18}
+              weight="fill"
+              color={userSettings.colorSettings.base}
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={{ padding: 5, flex: 1 }}>
