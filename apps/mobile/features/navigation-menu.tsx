@@ -1,4 +1,4 @@
-import { View, Image, Pressable } from "react-native";
+import { View, Image, Pressable, SafeAreaView } from "react-native";
 import { Link, LinkProps } from "expo-router";
 
 import { Text } from "@/components/text";
@@ -124,7 +124,7 @@ export const MobileNavigationMenuItem = () => {
   const borderColor = userSettings.colorSettings[100] + "80";
 
   return (
-    <View
+    <SafeAreaView
       style={{
         flexDirection: "row",
         marginHorizontal: 15,
@@ -165,7 +165,7 @@ export const MobileNavigationMenuItem = () => {
           </Pressable>
         </View>
       </Pill>
-    </View>
+    </SafeAreaView>
   );
 };
 

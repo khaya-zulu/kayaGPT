@@ -38,7 +38,7 @@ export const ChatSummary = ({
       >
         <View
           style={{
-            backgroundColor: "#ffffff" + "b3",
+            backgroundColor: "#ffffff" + "cc",
           }}
         >
           <View style={{ padding: 10 }}>

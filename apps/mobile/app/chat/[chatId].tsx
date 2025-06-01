@@ -310,10 +310,10 @@ export default function ChatIdPage() {
               <KeyboardDismiss onPress={() => Keyboard.dismiss()}>
                 <View
                   style={{
-                    paddingHorizontal: 20,
+                    paddingHorizontal: isWeb ? 20 : 15,
                     paddingTop: 20,
                     flexDirection: "column",
-                    gap: 18,
+                    gap: isWeb ? 18 : 10,
                     paddingBottom: 200,
                   }}
                   onLayout={(ev) => {
