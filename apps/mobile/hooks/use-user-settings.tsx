@@ -26,17 +26,44 @@ type UserContextType = {
   colorSettings: NonNullable<UserSettingsQueryOutput["colorSettings"]>;
   isLoading: boolean;
   userId?: string;
-  setMs: React.Dispatch<React.SetStateAction<number | undefined>>;
-  ms?: number;
+  invalidateImage: (type: "workspace" | "avatar") => void;
+  workspaceUrl: string;
+  avatarUrl: string;
 };
 
 const UserSettingsContext = createContext<UserContextType>(null as any);
 
 export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   const { data, isLoading, isPending } = useUserSettingsQuery();
-  const [ms, setMs] = useState<number>();
+  const [ms, setMs] = useState<{ workspace?: number; avatar?: number }>({});
 
+  //#region image URLs
+  const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${data?.id}${ms.workspace ? `?ms=${ms.workspace}` : ""}`;
+  const avatarUrl = `${processEnv.EXPO_PUBLIC_API_URL}/api/user/profile/avatar/${data?.id}${ms.avatar ? `?ms=${ms.avatar}` : ""}`;
+
+  const handleInvalidateImage = (type: "workspace" | "avatar") => {
+    setMs((prev) => ({ ...prev, [type]: Date.now() }));
+  };
+  //#endregion
+
+  //#region color settings
   const colorSettings = data?.colorSettings;
+
+  const getDefaultColors = () => {
+    return {
+      "50": zinc50,
+      "100": zinc100,
+      "200": zinc200,
+      "300": zinc300,
+      "400": zinc400,
+      base: zinc500,
+      "600": zinc500,
+      "700": zinc600,
+      "800": zinc800,
+      "900": zinc900,
+    };
+  };
+  //#endregion
 
   if (isPending) {
     return (
@@ -50,21 +77,14 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
     <UserSettingsContext.Provider
       value={{
         colorSettings: {
-          "50": colorSettings?.[50] ?? zinc50,
-          "100": colorSettings?.[100] ?? zinc100,
-          "200": colorSettings?.[200] ?? zinc200,
-          "300": colorSettings?.[300] ?? zinc300,
-          "400": colorSettings?.[400] ?? zinc400,
-          base: colorSettings?.["base"] ?? zinc500,
-          "600": colorSettings?.[600] ?? zinc500,
-          "700": colorSettings?.[700] ?? zinc600,
-          "800": colorSettings?.[800] ?? zinc800,
-          "900": colorSettings?.[900] ?? zinc900,
+          ...getDefaultColors(),
+          ...(colorSettings || {}),
         },
         isLoading,
         userId: data?.id,
-        ms,
-        setMs,
+        workspaceUrl,
+        avatarUrl,
+        invalidateImage: handleInvalidateImage,
       }}
     >
       {children}
@@ -75,18 +95,11 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
 export const useUserSettings = () => {
   const context = useContext(UserSettingsContext);
 
-  const ms = context.ms;
-
   const query = useQueryClient();
 
   return {
     ...context,
-    workspaceUrl: `${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${context.userId}${ms ? `?ms=${ms}` : ""}`,
-    avatarUrl: `${processEnv.EXPO_PUBLIC_API_URL}/api/user/profile/avatar/${context.userId}${ms ? `?ms=${ms}` : ""}`,
     invalidate: () =>
       query.invalidateQueries({ queryKey: userSettingsQueryKey }),
-    invalidateMs: () => {
-      context.setMs(Date.now());
-    },
   };
 };

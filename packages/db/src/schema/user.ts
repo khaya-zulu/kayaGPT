@@ -1,6 +1,6 @@
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-import { id } from "./utils";
+import { id, timeStamp } from "./utils";
 
 export const user = sqliteTable("user", {
   id,
@@ -8,6 +8,7 @@ export const user = sqliteTable("user", {
   displayName: text("name").notNull(),
   email: text("email").unique(),
   description: text("description").default(""),
+  onboardedAt: timeStamp("onboarded_at"),
   region: text("region", { mode: "json" }).$type<{
     lng: string;
     lat: string;

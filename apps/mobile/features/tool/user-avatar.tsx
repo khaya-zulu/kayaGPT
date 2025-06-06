@@ -38,7 +38,7 @@ const AvatarBox = ({ url, size = 125 }: { url: string; size?: number }) => {
 };
 
 export const UserAvatarTool = ({}) => {
-  const { avatarUrl, invalidateMs } = useUserSettings();
+  const { avatarUrl, invalidateImage } = useUserSettings();
 
   const [image, setImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -78,7 +78,7 @@ export const UserAvatarTool = ({}) => {
       );
 
       startTransition(async () => {
-        await invalidateMs();
+        await invalidateImage("avatar");
         setImage(null);
       });
     });

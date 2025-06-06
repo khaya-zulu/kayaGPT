@@ -12,13 +12,9 @@ import { styled } from "styled-components/native";
 import {
   ArrowUp,
   ClockCounterClockwise,
-  GithubLogo,
-  GlobeSimple,
-  LinkedinLogo,
   LinkSimple,
   Microphone,
   PlusCircle,
-  XLogo,
 } from "phosphor-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
