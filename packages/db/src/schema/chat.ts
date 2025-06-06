@@ -8,6 +8,7 @@ export const chat = sqliteTable("chat", {
   updatedAt: dateNow("updated_at"),
   createdAt: dateNow("created_at"),
   deletedAt: integer("deleted_at", { mode: "timestamp" }),
+  userId: text("user_id").notNull(),
 });
 
 type Tool = {

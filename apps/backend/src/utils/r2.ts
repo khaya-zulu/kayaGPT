@@ -3,12 +3,11 @@ import { Context } from "@/utils/env";
 
 export const downloadImage = async (
   c: HonoContext<Context>,
-  bucket: R2Bucket,
-  props: { key: string }
+  props: { key: string; bucket: R2Bucket }
 ) => {
   const { key } = props;
 
-  const object = await bucket.get(key);
+  const object = await props.bucket.get(key);
 
   if (!object) {
     return c.json({ error: "Object not found" }, 404);
@@ -20,4 +19,12 @@ export const downloadImage = async (
   headers.set("etag", object.httpEtag);
 
   return c.body(object.body, { headers });
+};
+
+export const isObjectExists = async (
+  bucket: R2Bucket,
+  key: string
+): Promise<boolean> => {
+  const object = await bucket.get(key);
+  return object !== null && object !== undefined;
 };

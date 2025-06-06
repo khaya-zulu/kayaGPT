@@ -354,3 +354,108 @@ export const searchUserByUsername = async (
     throw new Error("Failed to search user");
   }
 };
+
+export const updateUsernameAndDisplayNameById = async (
+  env: Env,
+  props: { userId: string; username: string; displayName: string }
+) => {
+  try {
+    await db(env.DB)
+      .update(schema.user)
+      .set({
+        username: props.username,
+        displayName: props.displayName,
+      })
+      .where(eq(schema.user.id, props.userId));
+  } catch (error: any) {
+    console.error(
+      "Error updating username and display name by ID:",
+      error.message
+    );
+    throw new Error("Failed to update username and display name");
+  }
+};
+
+export const updateRegionById = async (
+  env: Env,
+  props: {
+    userId: string;
+    region: { flag: string; name: string; lng: string; lat: string } | null;
+  }
+) => {
+  try {
+    await db(env.DB)
+      .update(schema.user)
+      .set(props)
+      .where(eq(schema.user.id, props.userId));
+  } catch (error: any) {
+    console.error("Error updating region by ID:", error.message);
+    throw new Error("Failed to update region");
+  }
+};
+
+export const updateSocialLinksById = async (
+  env: Env,
+  props: {
+    userId: string;
+    social: {
+      github?: string;
+      linkedin?: string;
+      x?: string;
+      website?: string;
+    };
+  }
+) => {
+  try {
+    await db(env.DB)
+      .update(schema.user)
+      .set({
+        social: props.social,
+      })
+      .where(eq(schema.user.id, props.userId));
+  } catch (error: any) {
+    console.error("Error updating social links by ID:", error.message);
+    throw new Error("Failed to update social links");
+  }
+};
+
+export const getUserOnboardedAtById = async (
+  env: Env,
+  props: { userId: string }
+) => {
+  try {
+    const [user] = await db(env.DB)
+      .select({
+        id: schema.user.id,
+        onboardedAt: schema.user.onboardedAt,
+      })
+      .from(schema.user)
+      .where(eq(schema.user.id, props.userId));
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (error: any) {
+    console.error("Error fetching user onboarded date by ID:", error.message);
+    throw new Error("Failed to fetch user onboarded date");
+  }
+};
+
+export const updateUserOnboardedAtById = async (
+  env: Env,
+  props: { userId: string; onboardedAt: Date }
+) => {
+  try {
+    await db(env.DB)
+      .update(schema.user)
+      .set({
+        onboardedAt: props.onboardedAt,
+      })
+      .where(eq(schema.user.id, props.userId));
+  } catch (error: any) {
+    console.error("Error updating user onboarded date by ID:", error.message);
+    throw new Error("Failed to update user onboarded date");
+  }
+};

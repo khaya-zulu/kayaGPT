@@ -21,11 +21,13 @@ import { createOpenAIModel } from "@/utils/models";
 
 import { zValidator } from "@hono/zod-validator";
 
-import { downloadImage } from "@/services/download-image";
+import { downloadImage } from "@/utils/r2";
 import { getColorPalette } from "@/utils/color";
 import { createId } from "@paralleldrive/cuid2";
-import { generateObject, generateText } from "ai";
+import { generateText } from "ai";
 import { getCurrentWeather } from "@/utils/weather";
+import { getFirstChatByUserId } from "@/queries/chat";
+import { generateRegionObjectService } from "@/services/generate-region-object";
 
 export const userRoute = createApp()
   .get("/overview/:username", async (c) => {
@@ -42,7 +44,15 @@ export const userRoute = createApp()
     const userId = c.get("userId");
     const user = await getUserSettingsById(c.env, { userId });
 
-    return c.json(user);
+    let firstChatId: string | undefined;
+
+    if (!user.onboardedAt) {
+      // If the user is not onboarded, we can assume they have no chats yet.
+      const firstChat = await getFirstChatByUserId(c.env, { userId });
+      firstChatId = firstChat?.id;
+    }
+
+    return c.json({ ...user, firstChatId });
   })
   .get("/bio", privateAuth, async (c) => {
     const userId = c.get("userId");
@@ -225,24 +235,7 @@ export const userRoute = createApp()
       const { regionName, ...rest } = data;
 
       if (region?.name !== data.regionName) {
-        const model = await createOpenAIModel(c.env, ["gpt-4o"]);
-
-        const response = await generateObject({
-          model,
-          schema: z.object({
-            flag: z.string().describe("The emoji flag of the region"),
-            lng: z.string().describe("The longitude of the region"),
-            lat: z.string().describe("The latitude of the region"),
-          }),
-          prompt:
-            "Return the emoji flag, longitude, and latitude of the region with the name: " +
-            data.regionName,
-        });
-
-        region = {
-          ...response.object,
-          name: data.regionName,
-        };
+        region = await generateRegionObjectService(c.env, { regionName });
       }
 
       await updateUserProfileById(c.env, {
@@ -277,7 +270,7 @@ export const userRoute = createApp()
   })
   .get("/profile/avatar/:key", async (c) => {
     const key = c.req.param("key");
-    return downloadImage(c, c.env.R2_PROFILE, { key });
+    return downloadImage(c, { key, bucket: c.env.R2_PROFILE });
   })
   .post(
     "/workspace/color-palette",
@@ -304,7 +297,8 @@ export const userRoute = createApp()
     const username = c.req.param("username");
     const key = c.req.param("key");
 
-    return downloadImage(c, c.env.R2_PROFILE, {
+    return downloadImage(c, {
       key: `description/${username}/${key}`,
+      bucket: c.env.R2_PROFILE,
     });
   });

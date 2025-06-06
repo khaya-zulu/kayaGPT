@@ -1,3 +1,4 @@
+import { zinc100, zinc400, zinc500, zinc600, zinc800 } from "@/constants/theme";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useWatch } from "@/hooks/use-watch";
 import { useWorkspaceColorPaletteMutation } from "@/mutations/user";
@@ -82,6 +83,17 @@ export const ColorPalette = ({
           });
         }
       } catch (err) {
+        setColorPalette({
+          dominant: zinc400,
+          darkVibrant: zinc800,
+          vibrant: zinc500,
+          lightMuted: zinc100,
+          lightVibrant: zinc100,
+          darkMuted: zinc400,
+          muted: zinc600,
+          platform: "web",
+        });
+
         // security error is thrown for http:// images
         // which is only expected in development
         console.error("Error fetching color palette:", err);

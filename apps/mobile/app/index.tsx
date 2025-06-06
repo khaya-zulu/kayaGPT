@@ -1,4 +1,10 @@
-import { Keyboard, ScrollView, View } from "react-native";
+import {
+  Keyboard,
+  NativeSyntheticEvent,
+  ScrollView,
+  TextInputChangeEventData,
+  View,
+} from "react-native";
 import { Redirect, useRouter } from "expo-router";
 import { styled } from "styled-components/native";
 
@@ -34,26 +40,35 @@ export default function IndexPage() {
 
   const chatHistoryQuery = useChatHistoryQuery();
 
+  //#region chat form
+  const handleChatFormSubmit = () => {
+    if (input.trim() === "") return;
+    router.push(`/chat/${Crypto.randomUUID()}?message=${input}`);
+    setInput("");
+  };
+
+  const handleChatFormChange = (
+    ev: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    handleInputChange({
+      ...ev,
+      target: {
+        ...ev.target,
+        value: ev.nativeEvent.text,
+      },
+    } as unknown as React.ChangeEvent<HTMLInputElement>);
+  };
+  //#endregion
+
   if (!isSignedIn) {
     return <Redirect href="/signin" />;
   }
 
   return (
     <ChatFrame
-      onChange={(ev) => {
-        handleInputChange({
-          ...ev,
-          target: {
-            ...ev.target,
-            value: ev.nativeEvent.text,
-          },
-        } as unknown as React.ChangeEvent<HTMLInputElement>);
-      }}
+      onChange={handleChatFormChange}
       value={input}
-      onSubmit={() => {
-        router.push(`/chat/${Crypto.randomUUID()}?message=${input}`);
-        setInput("");
-      }}
+      onSubmit={handleChatFormSubmit}
       bottomToolbar={<ChatBoxToolbar />}
       toolbar={<DateNow />}
     >

@@ -63,7 +63,6 @@ export const UserAvatarTool = ({}) => {
       if (!image || !image.file) return;
 
       const formData = new FormData();
-
       formData.append("file", image.file);
 
       await fetch(

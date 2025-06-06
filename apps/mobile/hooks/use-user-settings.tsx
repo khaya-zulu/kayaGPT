@@ -21,6 +21,9 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import { View } from "react-native";
 
 import { Text } from "@/components/text";
+import { Redirect } from "expo-router";
+
+import * as Crypto from "expo-crypto";
 
 type UserContextType = {
   colorSettings: NonNullable<UserSettingsQueryOutput["colorSettings"]>;
@@ -29,6 +32,7 @@ type UserContextType = {
   invalidateImage: (type: "workspace" | "avatar") => void;
   workspaceUrl: string;
   avatarUrl: string;
+  isOnboardingComplete: boolean;
 };
 
 const UserSettingsContext = createContext<UserContextType>(null as any);
@@ -36,6 +40,8 @@ const UserSettingsContext = createContext<UserContextType>(null as any);
 export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   const { data, isLoading, isPending } = useUserSettingsQuery();
   const [ms, setMs] = useState<{ workspace?: number; avatar?: number }>({});
+
+  const isOnboardingComplete = !!data?.onboardedAt;
 
   //#region image URLs
   const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${data?.id}${ms.workspace ? `?ms=${ms.workspace}` : ""}`;
@@ -73,6 +79,9 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
     );
   }
 
+  // there is an existing chat, returned by the server
+  const isOnboardingInProgress = !!data?.firstChatId;
+
   return (
     <UserSettingsContext.Provider
       value={{
@@ -85,9 +94,15 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
         workspaceUrl,
         avatarUrl,
         invalidateImage: handleInvalidateImage,
+        isOnboardingComplete,
       }}
     >
       {children}
+      {!isOnboardingComplete ? (
+        <Redirect
+          href={`/chat/${isOnboardingInProgress ? data.firstChatId : Crypto.randomUUID()}${isOnboardingInProgress ? "" : "?isOnboarding=true"}`}
+        />
+      ) : null}
     </UserSettingsContext.Provider>
   );
 };

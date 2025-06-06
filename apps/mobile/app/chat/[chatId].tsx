@@ -74,7 +74,11 @@ const ToolbarBox = styled.View<{ color: string; isShaded?: boolean }>`
 
 export default function ChatIdPage() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ message?: string; chatId: string }>();
+  const params = useLocalSearchParams<{
+    message?: string;
+    chatId: string;
+    isOnboarding?: "true";
+  }>();
   const utils = useQueryClient();
 
   const userSettings = useUserSettings();
@@ -109,7 +113,8 @@ export default function ChatIdPage() {
     },
   });
 
-  const isMessageQueryEnabled = !isNewMessage && !params.message;
+  const isMessageQueryEnabled =
+    !isNewMessage && !params.message && !params.isOnboarding;
 
   const KeyboardDismiss: any = isWeb
     ? WebKeyboardDismiss
@@ -186,6 +191,14 @@ export default function ChatIdPage() {
       });
 
       router.setParams({ message: undefined });
+      setIsNewMessage(true);
+    } else if (params.isOnboarding === "true") {
+      append({
+        role: "user",
+        content: "Hi",
+      });
+
+      router.setParams({ isOnboarding: undefined });
       setIsNewMessage(true);
     }
   }, [params.message]);

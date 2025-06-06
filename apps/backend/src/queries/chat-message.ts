@@ -1,5 +1,5 @@
 import { Env } from "@/utils/env";
-import { schema, db, InferSelectModel, eq } from "@kgpt/db";
+import { schema, db, InferSelectModel, eq, asc } from "@kgpt/db";
 import { createId } from "@paralleldrive/cuid2";
 
 type ChatMessageSelect = InferSelectModel<typeof schema.chatMessage>;

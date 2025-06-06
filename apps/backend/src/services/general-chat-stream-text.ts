@@ -1,0 +1,62 @@
+import { LanguageModelV1, Message, streamText } from "ai";
+
+import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
+import { profileSettingsTool } from "@/services/tools/profile-settings";
+import { userAvatarTool } from "@/services/tools/user-avatar";
+import { Env } from "@/utils/env";
+import { createChatMessage } from "@/queries/chat-message";
+
+const GENERAL_CHAT_SYSTEM_PROMPT =
+  "You are a helpful personal assitant, for my personal website. You are meant to help the user be more productive. Be friendly and concise. For tools where an image key is returned, the image will be displayed in the chat, please don't give the key in your message.";
+
+const ONBOARDING_CHAT_SYSTEM_PROMPT = `You are a helpful personal assistant, for my personal website. You are meant to help the user onboard to the website.
+
+There are two parts to the onboarding process:
+
+
+`;
+
+/**
+ * Streams text responses for the general chat. (Post onboarding)
+ * will save the response to the chat.
+ */
+export const generalChatStreamText = async (
+  env: Env,
+  props: {
+    model: LanguageModelV1;
+    messages: Message[];
+    userId: string;
+    chatId: string;
+  }
+) => {
+  const result = streamText({
+    model: props.model,
+    messages: props.messages,
+    onError: console.error,
+    tools: {
+      generateWorkspace: generateWorkspaceTool(env, { userId: props.userId }),
+      profileSettings: profileSettingsTool(),
+      userAvatar: userAvatarTool(),
+    },
+    maxSteps: 4,
+    system: GENERAL_CHAT_SYSTEM_PROMPT,
+    onFinish: async (message) => {
+      const toolResults = message.steps.map((step) => step.toolResults).flat();
+
+      await createChatMessage(env, {
+        chatId: props.chatId,
+        content: message.text,
+        role: "assistant",
+        tools: toolResults.map((t) => {
+          return {
+            toolId: t.toolCallId,
+            toolName: t.toolName,
+            result: t.result,
+          };
+        }),
+      });
+    },
+  });
+
+  return result.toDataStreamResponse();
+};

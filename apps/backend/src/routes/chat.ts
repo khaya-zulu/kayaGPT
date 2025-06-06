@@ -1,23 +1,21 @@
-import { streamText, Message, generateObject, tool } from "ai";
+import { Message } from "ai";
 
 import {
-  createChat,
   deleteChatById,
   getChatHistory,
   getChatTitleById,
 } from "@/queries/chat";
-import {
-  createChatMessage,
-  getChatMessagesByChatId,
-} from "@/queries/chat-message";
+import { getChatMessagesByChatId } from "@/queries/chat-message";
 
 import { createOpenAIModel } from "@/utils/models";
 import { createApp } from "@/utils/server";
-import { z } from "zod";
 import { privateAuth } from "@/utils/auth";
-import { generateWorkspaceTool } from "@/services/tools/generate-workspace";
-import { profileSettingsTool } from "@/services/tools/profile-settings";
-import { userAvatarTool } from "@/services/tools/user-avatar";
+import { generateChatTitleService } from "@/services/generate-chat-title";
+import { saveLastMessageService } from "@/services/save-last-message";
+import { getUserOnboardedAtById } from "@/queries/user";
+import { generalChatStreamText } from "@/services/general-chat-stream-text";
+import { onboardingChatStreamText } from "@/services/onboarding-chat-stream-text";
+import { isObjectExists } from "@/utils/r2";
 
 export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
@@ -54,66 +52,40 @@ export const chatRoute = createApp()
     const isNewMessage = body.messages.length === 1;
 
     if (isNewMessage) {
-      const startingPrompt = body.messages[0].content;
-
-      const { object } = await generateObject({
-        model: await createOpenAIModel(c.env, ["gpt-4o-mini"]),
-        schema: z.object({
-          title: z.string(),
-        }),
-        system:
-          "Generate a short title that summarizes a prompt. The title should be short and concise.",
-        prompt: startingPrompt,
-      });
-
-      await createChat(c.env, {
-        prompt: startingPrompt,
-        id: chatId,
-        title: object.title,
-      });
-    }
-
-    const lastMessage = body.messages.at(-1);
-
-    if (lastMessage) {
-      await createChatMessage(c.env, {
+      await generateChatTitleService(c.env, {
+        prompt: body.messages[0].content,
         chatId,
-        content: lastMessage.content,
-        role: "user",
+        userId,
+        model: openai,
       });
     }
 
-    const result = streamText({
+    const user = await getUserOnboardedAtById(c.env, { userId });
+    const isOnboardingComplete = !!user.onboardedAt;
+
+    const isTheFirstMessage = body.messages.length === 1;
+
+    // do not save the first message for onboarding chats
+    if (!isTheFirstMessage && !isOnboardingComplete) {
+      await saveLastMessageService(c.env, { chatId, messages: body.messages });
+    }
+
+    if (!isOnboardingComplete) {
+      const isAvatarUploaded = isObjectExists(c.env.R2_PROFILE, userId);
+      const isWorkspaceUploaded = isObjectExists(c.env.R2_WORKSPACE, userId);
+
+      return onboardingChatStreamText(c.env, {
+        model: openai,
+        messages: body.messages,
+        userId,
+        chatId,
+      });
+    }
+
+    return generalChatStreamText(c.env, {
       model: openai,
       messages: body.messages,
-      onError: console.error,
-      tools: {
-        generateWorkspace: generateWorkspaceTool(c.env, { userId }),
-        profileSettings: profileSettingsTool(),
-        userAvatar: userAvatarTool(),
-      },
-      maxSteps: 4,
-      system:
-        "You are a helpful personal assitant, for my personal website. You are meant to help the user be more productive. Be friendly and concise. For tools where an image key is returned, the image will be displayed in the chat, please don't give the key in your message.",
-      onFinish: async (message) => {
-        const toolResults = message.steps
-          .map((step) => step.toolResults)
-          .flat();
-
-        await createChatMessage(c.env, {
-          chatId,
-          content: message.text,
-          role: "assistant",
-          tools: toolResults.map((t) => {
-            return {
-              toolId: t.toolCallId,
-              toolName: t.toolName,
-              result: t.result,
-            };
-          }),
-        });
-      },
+      userId,
+      chatId,
     });
-
-    return result.toDataStreamResponse();
   });

@@ -1,25 +1,43 @@
-import { schema, db, desc, eq, isNull } from "@kgpt/db";
+import { schema, db, desc, eq, isNull, asc } from "@kgpt/db";
 
 import { Env } from "@/utils/env";
 
 export const createChat = async (
   env: Env,
-  {
-    id,
-    title,
-  }: {
-    prompt: string;
+  props: {
     id: string;
     title: string;
+    userId: string;
   }
 ) => {
   try {
-    await db(env.DB).insert(schema.chat).values({
-      id,
-      title,
-    });
+    await db(env.DB).insert(schema.chat).values(props);
   } catch (error) {
     console.error("Error creating chat:", error);
+    throw error;
+  }
+};
+
+/**
+ * Used for onboarding, to get the first chat for a user.
+ */
+export const getFirstChatByUserId = async (
+  env: Env,
+  props: { userId: string }
+) => {
+  try {
+    const [firstChat] = await db(env.DB)
+      .select({
+        id: schema.chat.id,
+      })
+      .from(schema.chat)
+      .where(eq(schema.chat.userId, props.userId))
+      .orderBy(asc(schema.chat.createdAt))
+      .limit(1);
+
+    return firstChat as { id: string } | undefined;
+  } catch (error) {
+    console.error("Error getting first chat by user ID:", error);
     throw error;
   }
 };
