@@ -256,12 +256,16 @@ export default function ChatIdPage() {
             </View>
           }
           bottomToolbar={
-            <ChatBoxToolbar
-              isTitleEnabled={isMessageQueryEnabled}
-              onChatDelete={() => {
-                chatDeleteMutation.mutate({ chatId: params.chatId });
-              }}
-            />
+            userSettings.isOnboardingComplete ? (
+              <ChatBoxToolbar
+                isTitleEnabled={isMessageQueryEnabled}
+                onChatDelete={() => {
+                  chatDeleteMutation.mutate({ chatId: params.chatId });
+                }}
+              />
+            ) : (
+              <View />
+            )
           }
           rightLayout={
             isWeb && isProfileEditorOpen ? (

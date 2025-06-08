@@ -50,7 +50,7 @@ export const ChatBoxToolbar = ({
         <View style={{ flexDirection: "row", gap: 15, alignItems: "center" }}>
           {chatId ? (
             <Pressable onPress={onChatDelete}>
-              <Trash size={18} weight="bold" color={"#e11d48"} />
+              <Trash size={16} weight="bold" color={"#e11d48"} />
             </Pressable>
           ) : null}
 

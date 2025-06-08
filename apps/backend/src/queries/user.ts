@@ -173,6 +173,7 @@ export const getUserSettingsById = async (
         id: schema.user.id,
         colorSettings: schema.user.colorSettings,
         onboardedAt: schema.user.onboardedAt,
+        username: schema.user.username,
       })
       .from(schema.user)
       .where(eq(schema.user.id, props.userId));

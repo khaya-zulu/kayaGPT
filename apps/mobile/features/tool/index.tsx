@@ -2,11 +2,12 @@ import { ToolInvocation } from "@ai-sdk/ui-utils";
 
 import { NewWorkspaceTool } from "./new-workspace";
 import { UserAvatarTool } from "./user-avatar";
+import { CompleteOnboardingTool } from "./complete-onboarding";
 
 const Components = {
-  // todo: rename this to newWorkspace
-  generateWorkspace: NewWorkspaceTool,
+  newWorkspace: NewWorkspaceTool,
   userAvatar: UserAvatarTool,
+  completeOnboarding: CompleteOnboardingTool,
 };
 
 export const Tool = ({ invocation }: { invocation: ToolInvocation }) => {

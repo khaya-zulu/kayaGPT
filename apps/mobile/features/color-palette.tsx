@@ -13,9 +13,13 @@ export type WebImageColors = Extract<ImageColorsResult, { platform: "web" }>;
 
 const ColorButton = styled.TouchableOpacity<{ borderColor: string }>`
   border-radius: 100px;
-  padding: 0.5px;
   border-color: ${(props) => props.borderColor};
   border-width: 2px;
+  width: 22px;
+  height: 22px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const ColorPalette = ({

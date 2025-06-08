@@ -1,4 +1,8 @@
-import { updateUserOnboardedAtById } from "@/queries/user";
+import {
+  getUserById,
+  getUsernameById,
+  updateUserOnboardedAtById,
+} from "@/queries/user";
 import { Env } from "@/utils/env";
 import { tool } from "ai";
 import { z } from "zod";
@@ -13,7 +17,9 @@ export const completeOnboardingTool = (env: Env, props: { userId: string }) => {
         onboardedAt: new Date(),
       });
 
-      return { isOnboardingComplete: true };
+      const user = await getUsernameById(env, { userId: props.userId });
+
+      return { isOnboardingComplete: true, username: user.username };
     },
   });
 };

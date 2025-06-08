@@ -27,7 +27,6 @@ export const NewWorkspaceTool = ({
   const useWorkspaceMutation = useUseWorkspaceMutation({
     onSuccess: async () => {
       userSettings.invalidateImage("workspace");
-      await userSettings.invalidate();
     },
   });
 

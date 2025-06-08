@@ -21,9 +21,10 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import { View } from "react-native";
 
 import { Text } from "@/components/text";
-import { Redirect } from "expo-router";
+import { Redirect, usePathname } from "expo-router";
 
 import * as Crypto from "expo-crypto";
+import { useAuth } from "@clerk/clerk-expo";
 
 type UserContextType = {
   colorSettings: NonNullable<UserSettingsQueryOutput["colorSettings"]>;
@@ -33,6 +34,7 @@ type UserContextType = {
   workspaceUrl: string;
   avatarUrl: string;
   isOnboardingComplete: boolean;
+  username?: string;
 };
 
 const UserSettingsContext = createContext<UserContextType>(null as any);
@@ -41,7 +43,11 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   const { data, isLoading, isPending } = useUserSettingsQuery();
   const [ms, setMs] = useState<{ workspace?: number; avatar?: number }>({});
 
+  const { isSignedIn } = useAuth();
+
   const isOnboardingComplete = !!data?.onboardedAt;
+
+  const pathname = usePathname();
 
   //#region image URLs
   const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${data?.id}${ms.workspace ? `?ms=${ms.workspace}` : ""}`;
@@ -91,6 +97,7 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
         },
         isLoading,
         userId: data?.id,
+        username: data?.username,
         workspaceUrl,
         avatarUrl,
         invalidateImage: handleInvalidateImage,
@@ -98,7 +105,7 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
-      {!isOnboardingComplete ? (
+      {!isOnboardingComplete && !pathname.startsWith("/chat") && isSignedIn ? (
         <Redirect
           href={`/chat/${isOnboardingInProgress ? data.firstChatId : Crypto.randomUUID()}${isOnboardingInProgress ? "" : "?isOnboarding=true"}`}
         />

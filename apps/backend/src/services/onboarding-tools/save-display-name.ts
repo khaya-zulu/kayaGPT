@@ -21,6 +21,8 @@ export const saveDisplayNameTool = (env: Env, props: { userId: string }) => {
         displayName,
         username,
       });
+
+      return { displayName, username };
     },
   });
 };

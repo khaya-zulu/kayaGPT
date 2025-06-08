@@ -15,6 +15,7 @@ export const saveRegionTool = (env: Env, props: { userId: string }) => {
         ),
     }),
     execute: async ({ regionName }) => {
+      console.log("Saving region for user:", props.userId, regionName);
       const region = await generateRegionObjectService(env, { regionName });
       await updateRegionById(env, { region, userId: props.userId });
 

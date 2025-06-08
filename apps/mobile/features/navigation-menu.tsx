@@ -97,7 +97,7 @@ const WebNavigationMenuItem = () => {
 
             <NavigationMenuItem
               icon={<Television size={16} weight="bold" />}
-              to="/space/kaya-was-taken"
+              to={`/space/${userSettings.username}`}
             />
           </Rounded>
           <Rounded

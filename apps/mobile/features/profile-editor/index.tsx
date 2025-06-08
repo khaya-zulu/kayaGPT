@@ -154,7 +154,10 @@ export const ProfileEditor = ({
               gap: 10,
             }}
           >
-            {["General", "Description", "Social"].map((t) => (
+            {(userSettings.isOnboardingComplete
+              ? ["General", "Description", "Social"]
+              : ["Description"]
+            ).map((t) => (
               <Pill
                 variant={activeTab === t.toLowerCase() ? "primary" : "white"}
                 onPress={() => setActiveTab(t.toLowerCase() as Tab)}

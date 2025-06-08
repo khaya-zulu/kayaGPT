@@ -34,7 +34,7 @@ export const generalChatStreamText = async (
     messages: props.messages,
     onError: console.error,
     tools: {
-      generateWorkspace: generateWorkspaceTool(env, { userId: props.userId }),
+      newWorkspace: generateWorkspaceTool(env, { userId: props.userId }),
       profileSettings: profileSettingsTool(),
       userAvatar: userAvatarTool(),
     },

@@ -66,7 +66,7 @@ export const chatRoute = createApp()
     const isTheFirstMessage = body.messages.length === 1;
 
     // do not save the first message for onboarding chats
-    if (!isTheFirstMessage && !isOnboardingComplete) {
+    if (isOnboardingComplete || !isTheFirstMessage) {
       await saveLastMessageService(c.env, { chatId, messages: body.messages });
     }
 
