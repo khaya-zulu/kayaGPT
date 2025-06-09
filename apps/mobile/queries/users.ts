@@ -96,3 +96,15 @@ export const useUserWeatherQuery = () => {
     },
   });
 };
+
+export const userRandomQueryKey = [client.api.user.random.$url().pathname];
+
+export const useUserRandomQuery = () => {
+  return useQuery({
+    queryKey: userRandomQueryKey,
+    queryFn: async () => {
+      const response = await client.api.user.random.$get();
+      return response.json();
+    },
+  });
+};

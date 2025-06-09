@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import {
+  getUserRandom,
   getUserById,
   getUserByUsername,
   getUserDescriptionById,
@@ -268,10 +269,6 @@ export const userRoute = createApp()
 
     return c.json({ success: true });
   })
-  .get("/profile/avatar/:key", async (c) => {
-    const key = c.req.param("key");
-    return downloadImage(c, { key, bucket: c.env.R2_PROFILE });
-  })
   .post(
     "/workspace/color-palette",
     privateAuth,
@@ -293,12 +290,10 @@ export const userRoute = createApp()
       return c.json({ success: true });
     }
   )
-  .get("/description/:username/:key", async (c) => {
-    const username = c.req.param("username");
-    const key = c.req.param("key");
+  .get("/random", async (c) => {
+    const user = await getUserRandom(c.env);
 
-    return downloadImage(c, {
-      key: `description/${username}/${key}`,
-      bucket: c.env.R2_PROFILE,
+    return c.json({
+      username: user.username,
     });
   });

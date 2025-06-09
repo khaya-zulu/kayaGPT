@@ -30,7 +30,7 @@ export const NewWorkspaceTool = ({
     },
   });
 
-  const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${workspaceKey}`;
+  const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/img/workspace/${workspaceKey}`;
 
   return (
     <Text style={{ marginTop: 10 }}>

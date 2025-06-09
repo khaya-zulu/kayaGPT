@@ -4,6 +4,9 @@ import { processEnv } from "./env";
 
 export const client = hc<AppType>(processEnv.EXPO_PUBLIC_API_URL, {
   headers: async () => {
+    // @ts-ignore
+    if (!Clerk.session) return;
+
     // @ts-expect-error: this is added globally by Clerk
     const token = await Clerk.session.getToken();
 

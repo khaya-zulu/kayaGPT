@@ -43,15 +43,15 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   const { data, isLoading, isPending } = useUserSettingsQuery();
   const [ms, setMs] = useState<{ workspace?: number; avatar?: number }>({});
 
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
 
   const isOnboardingComplete = !!data?.onboardedAt;
 
   const pathname = usePathname();
 
   //#region image URLs
-  const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/api/workspace/${data?.id}${ms.workspace ? `?ms=${ms.workspace}` : ""}`;
-  const avatarUrl = `${processEnv.EXPO_PUBLIC_API_URL}/api/user/profile/avatar/${data?.id}${ms.avatar ? `?ms=${ms.avatar}` : ""}`;
+  const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/img/workspace/${data?.id}${ms.workspace ? `?ms=${ms.workspace}` : ""}`;
+  const avatarUrl = `${processEnv.EXPO_PUBLIC_API_URL}/img/avatar/${data?.id}${ms.avatar ? `?ms=${ms.avatar}` : ""}`;
 
   const handleInvalidateImage = (type: "workspace" | "avatar") => {
     setMs((prev) => ({ ...prev, [type]: Date.now() }));
@@ -77,7 +77,7 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   };
   //#endregion
 
-  if (isPending) {
+  if (!isLoaded || (isSignedIn && isPending)) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>Booting workspace...</Text>

@@ -1,18 +1,19 @@
-import { View, Image, Pressable, SafeAreaView } from "react-native";
-import { Link, LinkProps } from "expo-router";
+import { View, Pressable, SafeAreaView } from "react-native";
+import { Link, LinkProps, useRouter } from "expo-router";
 
 import { Text } from "@/components/text";
 
-import { zinc200, zinc300 } from "@/constants/theme";
+import { rose600, zinc200, zinc300 } from "@/constants/theme";
 import { Rounded } from "@/components/rounded";
 
 import { useUserSettings } from "@/hooks/use-user-settings";
-import { Laptop, Television, User, UserCircle } from "phosphor-react-native";
+import { Laptop, SignOut, Television, UserCircle } from "phosphor-react-native";
 import { BlurView } from "expo-blur";
 import { ReactNode } from "react";
 import { isWeb } from "@/constants/platform";
 import { Button } from "@/components/button";
 import { useUserWeatherQuery } from "@/queries/users";
+import { useAuth } from "@clerk/clerk-expo";
 
 const NavigationMenuItem = ({
   icon,
@@ -38,7 +39,7 @@ const NavigationMenuItem = ({
             backgroundColor: "#ffffff",
             padding: 5,
             borderColor: zinc200 + "cc",
-            borderWidth: 2,
+            borderWidth: 1,
           }}
         >
           {icon}
@@ -52,7 +53,15 @@ const WebNavigationMenuItem = () => {
   const userSettings = useUserSettings();
   const userWeatherQuery = useUserWeatherQuery();
 
+  const { navigate } = useRouter();
+  const { signOut } = useAuth();
+
   const userWeather = userWeatherQuery.data;
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/signin");
+  };
 
   return (
     <View>
@@ -82,13 +91,6 @@ const WebNavigationMenuItem = () => {
             }}
           >
             <NavigationMenuItem
-              icon={<User size={16} weight="bold" />}
-              to="/profile"
-            />
-
-            <View style={{ width: 1, backgroundColor: zinc200 + "cc" }} />
-
-            <NavigationMenuItem
               icon={<Laptop size={16} weight="bold" />}
               to="/profile/workspace"
             />
@@ -99,6 +101,31 @@ const WebNavigationMenuItem = () => {
               icon={<Television size={16} weight="bold" />}
               to={`/space/${userSettings.username}`}
             />
+
+            <View style={{ width: 1, backgroundColor: zinc200 + "cc" }} />
+
+            <Pressable
+              style={{
+                paddingVertical: 10,
+                paddingHorizontal: 5,
+                height: "100%",
+                position: "relative",
+                flexDirection: "row",
+                alignItems: "flex-end",
+              }}
+              onPress={handleSignOut}
+            >
+              <Rounded
+                style={{
+                  backgroundColor: "#ffffff",
+                  padding: 5,
+                  borderColor: zinc200 + "cc",
+                  borderWidth: 1,
+                }}
+              >
+                <SignOut size={16} weight="bold" color={rose600} />
+              </Rounded>
+            </Pressable>
           </Rounded>
           <Rounded
             style={{

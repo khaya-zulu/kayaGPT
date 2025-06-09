@@ -101,7 +101,10 @@ export const ProfileEditor = ({
   return (
     <View style={isWeb ? { flex: 0.5, width: 300 } : { flex: 1 }}>
       <BlurView style={{ flex: 1, padding: isWeb ? 10 : 0 }} tint="prominent">
-        <Rounded style={{ flex: 1, backgroundColor: "#fff" }}>
+        <Rounded
+          size={isWeb ? undefined : 0}
+          style={{ flex: 1, backgroundColor: "#fff" }}
+        >
           <View
             style={{
               paddingHorizontal: 20,

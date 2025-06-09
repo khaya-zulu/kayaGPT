@@ -1,13 +1,18 @@
 import { GoogleLogo } from "phosphor-react-native";
-import { SafeAreaView, View } from "react-native";
+import { Image, SafeAreaView, View } from "react-native";
 
 import { MainAppBox } from "@/features/main-app-box";
 import { ChatMessage } from "@/features/chat-message";
 
 import { Button } from "@/components/button";
 import { Text } from "@/components/text";
-import { useAuth, useSSO } from "@clerk/clerk-expo";
-import { Redirect, useRouter } from "expo-router";
+import { useSSO } from "@clerk/clerk-expo";
+import { Link, useRouter } from "expo-router";
+import { Rounded } from "@/components/rounded";
+import { zinc300 } from "@/constants/theme";
+import { useUserRandomQuery } from "@/queries/users";
+import { processEnv } from "@/utils/env";
+import { isWeb } from "@/constants/platform";
 
 const SignInAction = () => {
   const { startSSOFlow } = useSSO();
@@ -24,7 +29,7 @@ const SignInAction = () => {
             strategy: "oauth_google",
           });
 
-          router.push("/");
+          router.navigate("/");
         }}
       >
         <View
@@ -45,12 +50,16 @@ const SignInAction = () => {
 };
 
 export default function SignInPage() {
+  const userRandomQuery = useUserRandomQuery();
+
+  const userRandom = userRandomQuery.data;
+
   return (
     <MainAppBox>
       <SafeAreaView style={{ flex: 1 }}>
         <View
           style={{
-            maxWidth: 400,
+            maxWidth: 500,
             margin: "auto",
             padding: 20,
             flexDirection: "row",
@@ -59,12 +68,54 @@ export default function SignInPage() {
             width: "100%",
           }}
         >
-          <ChatMessage
-            actions={<SignInAction />}
-            role="Assistant"
-            messageId="Login"
-            parts={[{ text: "Hello Human 👋, booting up...", type: "text" }]}
-          />
+          <View style={{ flex: 1 }}>
+            <ChatMessage
+              actions={<SignInAction />}
+              role="Assistant"
+              messageId="Login"
+              parts={[
+                {
+                  text: "Hello Human 👋, booting up...\n\nI'm Khaya, as I explore LLMs and building universal apps with Expo. Here is a workspace:",
+                  type: "text",
+                },
+              ]}
+            >
+              {userRandom && isWeb ? (
+                <View
+                  style={{
+                    alignItems: "flex-end",
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <Link href={`/space/${userRandom.username}`}>
+                    <Rounded
+                      size="2xl"
+                      style={{
+                        padding: 5,
+                        backgroundColor: "#ffffff",
+                        transform: [{ rotate: "5deg" }],
+                      }}
+                    >
+                      <Rounded size={13} style={{ overflow: "hidden" }}>
+                        <Image
+                          source={{
+                            uri: `${processEnv.EXPO_PUBLIC_API_URL}/img/wrkspace/${userRandom.username}`,
+                          }}
+                          style={{
+                            height: 125,
+                            width: 125,
+                            borderWidth: 1,
+                            borderColor: zinc300,
+                          }}
+                        />
+                      </Rounded>
+                    </Rounded>
+                  </Link>
+                </View>
+              ) : null}
+            </ChatMessage>
+          </View>
         </View>
       </SafeAreaView>
     </MainAppBox>

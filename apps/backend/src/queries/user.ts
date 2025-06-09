@@ -1,5 +1,5 @@
 import { Env } from "@/utils/env";
-import { db, eq, schema, InferSelectModel } from "@kgpt/db";
+import { db, eq, schema, InferSelectModel, sql } from "@kgpt/db";
 import { createId } from "@paralleldrive/cuid2";
 
 type UserSelect = InferSelectModel<typeof schema.user>;
@@ -458,5 +458,23 @@ export const updateUserOnboardedAtById = async (
   } catch (error: any) {
     console.error("Error updating user onboarded date by ID:", error.message);
     throw new Error("Failed to update user onboarded date");
+  }
+};
+
+export const getUserRandom = async (env: Env) => {
+  try {
+    const [user] = await db(env.DB)
+      .select({
+        id: schema.user.id,
+        username: schema.user.username,
+      })
+      .from(schema.user)
+      .orderBy(sql`RANDOM()`)
+      .limit(1);
+
+    return user;
+  } catch (error: any) {
+    console.error("Error fetching random user:", error.message);
+    throw new Error("Failed to fetch random user");
   }
 };
