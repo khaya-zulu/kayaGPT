@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Image, View } from "react-native";
 
 import { Rounded } from "@/components/rounded";
-import { Pill } from "@/components/pill";
+import { Pill } from "@/components/button";
 
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useUseWorkspaceMutation } from "@/mutations/user";

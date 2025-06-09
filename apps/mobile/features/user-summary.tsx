@@ -6,7 +6,7 @@ import { useUserSettings } from "@/hooks/use-user-settings";
 import { BlurView } from "expo-blur";
 
 import { Text } from "@/components/text";
-import { Pill } from "@/components/pill";
+import { Pill } from "@/components/button";
 import {
   Cloud,
   CloudFog,

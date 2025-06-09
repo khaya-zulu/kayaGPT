@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import { Image, View } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
-import { Pill } from "@/components/pill";
+import { Pill } from "@/components/button";
 import { processEnv } from "@/utils/env";
 import { client } from "@/utils/client";
 import { useAuth } from "@clerk/clerk-expo";

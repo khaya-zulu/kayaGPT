@@ -11,7 +11,7 @@ import { Laptop, Television, User, UserCircle } from "phosphor-react-native";
 import { BlurView } from "expo-blur";
 import { ReactNode } from "react";
 import { isWeb } from "@/constants/platform";
-import { Pill } from "@/components/pill";
+import { Pill } from "@/components/button";
 import { useUserWeatherQuery } from "@/queries/users";
 
 const NavigationMenuItem = ({

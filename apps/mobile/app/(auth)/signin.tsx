@@ -4,7 +4,7 @@ import { SafeAreaView, View } from "react-native";
 import { MainAppBox } from "@/features/main-app-box";
 import { ChatMessage } from "@/features/chat-message";
 
-import { Pill } from "@/components/pill";
+import { Pill } from "@/components/button";
 import { Text } from "@/components/text";
 import { useAuth, useSSO } from "@clerk/clerk-expo";
 import { Redirect, useRouter } from "expo-router";

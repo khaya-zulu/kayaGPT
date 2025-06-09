@@ -1,4 +1,4 @@
-import { Pill } from "@/components/pill";
+import { Pill } from "@/components/button";
 import { Text } from "@/components/text";
 import { rose600 } from "@/constants/theme";
 import { useChatDeleteMutation } from "@/mutations/chat";

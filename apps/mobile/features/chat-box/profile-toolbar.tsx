@@ -1,6 +1,6 @@
 import { View } from "react-native";
 
-import { Pill } from "@/components/pill";
+import { Pill } from "@/components/button";
 import { Link, usePathname } from "expo-router";
 
 import { ArrowLeft } from "phosphor-react-native";

@@ -6,7 +6,7 @@ import { zinc300, zinc400, zinc700, zinc800, zinc500 } from "@/constants/theme";
 import { Text } from "@/components/text";
 import { Circle, House } from "phosphor-react-native";
 import { MainAppBox } from "@/features/main-app-box";
-import { Pill } from "@/components/pill";
+import { Pill } from "@/components/button";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useUserOverviewQuery } from "@/queries/users";

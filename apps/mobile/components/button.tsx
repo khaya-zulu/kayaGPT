@@ -1,13 +1,13 @@
 import { Rounded, RoundedSize } from "./rounded";
 import { Text } from "./text";
 import { ReactNode } from "react";
-import { Pressable, TextProps, TouchableOpacity } from "react-native";
+import { TextProps, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { zinc100, zinc200, zinc300 } from "@/constants/theme";
 import { useUserSettings } from "@/hooks/use-user-settings";
 
-export const Pill = ({
+export const Button = ({
   children,
   style,
   noText,
@@ -85,23 +85,19 @@ export const Pill = ({
         }}
       >
         <BlurView intensity={50}>
-          {noText ? (
-            children
-          ) : (
-            <Text
-              fontSize="sm"
-              style={[
-                {
-                  color: text[variant],
-                  paddingHorizontal: 10,
-                  backgroundColor: backgroundColor[variant],
-                },
-                style,
-              ]}
-            >
-              {children}
-            </Text>
-          )}
+          <Text
+            fontSize="sm"
+            style={[
+              {
+                color: text[variant],
+                paddingHorizontal: 10,
+                backgroundColor: backgroundColor[variant],
+              },
+              style,
+            ]}
+          >
+            {children}
+          </Text>
         </BlurView>
       </Rounded>
     </TouchableOpacity>

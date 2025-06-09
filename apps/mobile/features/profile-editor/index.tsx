@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 
-import { Pill } from "@/components/pill";
+import { Pill } from "@/components/button";
 import { Rounded } from "@/components/rounded";
 import { Text } from "@/components/text";
 import { useUserSettings } from "@/hooks/use-user-settings";

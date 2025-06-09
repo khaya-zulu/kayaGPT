@@ -1,4 +1,4 @@
-import { Pill } from "@/components/pill";
+import { Pill } from "@/components/button";
 import { Text } from "@/components/text";
 import { isWeb } from "@/constants/platform";
 import { MagnifyingGlass } from "phosphor-react-native";
