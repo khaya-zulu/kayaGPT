@@ -1,4 +1,4 @@
-import { Pill } from "@/components/button";
+import { Button } from "@/components/button";
 import { Text } from "@/components/text";
 import { rose600 } from "@/constants/theme";
 import { useChatDeleteMutation } from "@/mutations/chat";
@@ -30,15 +30,13 @@ export const CompleteOnboardingTool = ({ username }: { username: string }) => {
     <View style={{ flexDirection: "column", gap: 10 }}>
       <View style={{ flexDirection: "row", gap: 10 }}>
         <Link href={`/space/${username}`}>
-          <Pill variant="filled" noText>
-            <Text style={{ paddingHorizontal: 10, color: "#fff" }}>
-              View space ({username})
-            </Text>
-          </Pill>
+          <Button variant="filled" padding={{ horizontal: 10 }}>
+            <Text style={{ color: "#fff" }}>View space ({username})</Text>
+          </Button>
         </Link>
       </View>
       <View style={{ flexDirection: "row", gap: 10 }}>
-        <Pill onPress={handleDeleteChat}>
+        <Button onPress={handleDeleteChat}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             {!deleteChatMutation.isPending ? (
               <>
@@ -49,7 +47,7 @@ export const CompleteOnboardingTool = ({ username }: { username: string }) => {
               <Text>...</Text>
             )}
           </View>
-        </Pill>
+        </Button>
       </View>
     </View>
   );

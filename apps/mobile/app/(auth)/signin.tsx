@@ -4,7 +4,7 @@ import { SafeAreaView, View } from "react-native";
 import { MainAppBox } from "@/features/main-app-box";
 import { ChatMessage } from "@/features/chat-message";
 
-import { Pill } from "@/components/button";
+import { Button } from "@/components/button";
 import { Text } from "@/components/text";
 import { useAuth, useSSO } from "@clerk/clerk-expo";
 import { Redirect, useRouter } from "expo-router";
@@ -16,8 +16,8 @@ const SignInAction = () => {
 
   return (
     <View style={{ flexDirection: "row" }}>
-      <Pill
-        noText
+      <Button
+        padding={{ horizontal: 0 }}
         variant="filled"
         onPress={async () => {
           await startSSOFlow({
@@ -39,18 +39,12 @@ const SignInAction = () => {
           <GoogleLogo color="#fff" size={18} />
           <Text style={{ color: "#fff" }}>Login with Google</Text>
         </View>
-      </Pill>
+      </Button>
     </View>
   );
 };
 
 export default function SignInPage() {
-  const { isSignedIn } = useAuth();
-
-  if (isSignedIn) {
-    return <Redirect href="/" />;
-  }
-
   return (
     <MainAppBox>
       <SafeAreaView style={{ flex: 1 }}>

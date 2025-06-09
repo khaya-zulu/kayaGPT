@@ -1,6 +1,6 @@
 import { View } from "react-native";
 
-import { Pill } from "@/components/button";
+import { Button } from "@/components/button";
 import { Link, usePathname } from "expo-router";
 
 import { ArrowLeft } from "phosphor-react-native";
@@ -20,19 +20,19 @@ export const ProfileToolbar = () => {
         <ArrowLeft size={14} weight="bold" />
       </Link>
       <Link href="/profile">
-        <Pill variant={pathname === "/profile" ? "primary" : "white"}>
+        <Button variant={pathname === "/profile" ? "primary" : "white"}>
           Profile
-        </Pill>
+        </Button>
       </Link>
       <Link href="/profile/workspace">
-        <Pill variant={pathname.includes("/workspace") ? "primary" : "white"}>
+        <Button variant={pathname.includes("/workspace") ? "primary" : "white"}>
           Workspace
-        </Pill>
+        </Button>
       </Link>
       <Link href="/profile/bio">
-        <Pill variant={pathname.includes("/bio") ? "primary" : "white"}>
+        <Button variant={pathname.includes("/bio") ? "primary" : "white"}>
           Bio
-        </Pill>
+        </Button>
       </Link>
     </View>
   );

@@ -6,7 +6,7 @@ import { useUserSettings } from "@/hooks/use-user-settings";
 import { BlurView } from "expo-blur";
 
 import { Text } from "@/components/text";
-import { Pill } from "@/components/button";
+import { Button } from "@/components/button";
 import {
   Cloud,
   CloudFog,
@@ -133,87 +133,72 @@ export const UserSummary = ({
           >
             <View style={{ flexDirection: "row", gap: 5 }}>
               {summary?.social?.x ? (
-                <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
-                  <Text
-                    style={{
-                      paddingHorizontal: 12,
-                      paddingVertical: 8,
-                    }}
-                  >
-                    <XLogo
-                      size={18}
-                      color="#fff"
-                      style={{ transform: [{ translateY: 2 }] }}
-                    />
-                  </Text>
-                </Pill>
+                <Button
+                  variant="filled"
+                  borderColor={"#5b5b5b" + "cc"}
+                  padding={{ horizontal: 12, vertical: 8 }}
+                >
+                  <XLogo
+                    size={18}
+                    color="#fff"
+                    style={{ transform: [{ translateY: 2 }] }}
+                  />
+                </Button>
               ) : null}
 
               {summary?.social?.github ? (
-                <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
-                  <Text
-                    style={{
-                      paddingHorizontal: 12,
-                      paddingVertical: 8,
-                    }}
-                  >
-                    <GithubLogo
-                      size={18}
-                      color="#fff"
-                      style={{ transform: [{ translateY: 2 }] }}
-                    />
-                  </Text>
-                </Pill>
+                <Button
+                  variant="filled"
+                  borderColor={"#5b5b5b" + "cc"}
+                  padding={{ horizontal: 12, vertical: 8 }}
+                >
+                  <GithubLogo
+                    size={18}
+                    color="#fff"
+                    style={{ transform: [{ translateY: 2 }] }}
+                  />
+                </Button>
               ) : null}
 
               {summary?.social?.linkedin ? (
-                <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
-                  <Text
-                    style={{
-                      paddingHorizontal: 12,
-                      paddingVertical: 8,
-                    }}
-                  >
-                    <LinkedinLogo
-                      size={18}
-                      color="#fff"
-                      style={{ transform: [{ translateY: 2 }] }}
-                    />
-                  </Text>
-                </Pill>
+                <Button
+                  variant="filled"
+                  borderColor={"#5b5b5b" + "cc"}
+                  padding={{ horizontal: 12, vertical: 8 }}
+                >
+                  <LinkedinLogo
+                    size={18}
+                    color="#fff"
+                    style={{ transform: [{ translateY: 2 }] }}
+                  />
+                </Button>
               ) : null}
 
               {summary?.social?.website ? (
-                <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
-                  <Text
-                    style={{
-                      paddingHorizontal: 12,
-                      paddingVertical: 8,
-                    }}
-                  >
-                    <Globe
-                      size={18}
-                      color="#fff"
-                      style={{ transform: [{ translateY: 2 }] }}
-                    />
-                  </Text>
-                </Pill>
+                <Button
+                  variant="filled"
+                  borderColor={"#5b5b5b" + "cc"}
+                  padding={{ horizontal: 12, vertical: 8 }}
+                >
+                  <Globe
+                    size={18}
+                    color="#fff"
+                    style={{ transform: [{ translateY: 2 }] }}
+                  />
+                </Button>
               ) : null}
             </View>
-            <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
-              <Text
-                style={{
-                  paddingHorizontal: 12,
-                  paddingVertical: 8,
-                }}
-              >
-                <LinkSimple
-                  size={18}
-                  color="#fff"
-                  style={{ transform: [{ translateY: 2 }] }}
-                />
-              </Text>
-            </Pill>
+            <Button
+              variant="filled"
+              borderColor={"#5b5b5b" + "cc"}
+              padding={{ horizontal: 12, vertical: 8 }}
+            >
+              <LinkSimple
+                size={18}
+                color="#fff"
+                style={{ transform: [{ translateY: 2 }] }}
+              />
+            </Button>
           </BlurView>
         </Rounded>
       </View>

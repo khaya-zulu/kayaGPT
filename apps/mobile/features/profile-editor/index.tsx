@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 
-import { Pill } from "@/components/button";
+import { Button } from "@/components/button";
 import { Rounded } from "@/components/rounded";
 import { Text } from "@/components/text";
 import { useUserSettings } from "@/hooks/use-user-settings";
@@ -128,17 +128,15 @@ export const ProfileEditor = ({
             <form.Subscribe
               selector={(state) => state.values}
               children={() => (
-                <Pill
+                <Button
                   variant="filled"
-                  noText
+                  padding={{ horizontal: 10, vertical: 2.5 }}
                   onPress={() => form.handleSubmit()}
                 >
-                  <View style={{ paddingHorizontal: 10, paddingVertical: 2.5 }}>
-                    <Text fontSize="sm" style={{ color: "#fff" }}>
-                      {userProfileSettingsMutation.isPending ? "..." : "Save"}
-                    </Text>
-                  </View>
-                </Pill>
+                  <Text fontSize="sm" style={{ color: "#fff" }}>
+                    {userProfileSettingsMutation.isPending ? "..." : "Save"}
+                  </Text>
+                </Button>
               )}
             />
           </View>
@@ -158,15 +156,14 @@ export const ProfileEditor = ({
               ? ["General", "Description", "Social"]
               : ["Description"]
             ).map((t) => (
-              <Pill
+              <Button
                 variant={activeTab === t.toLowerCase() ? "primary" : "white"}
                 onPress={() => setActiveTab(t.toLowerCase() as Tab)}
                 key={t}
+                padding={{ horizontal: 10, vertical: 2.5 }}
               >
-                <View style={{ paddingHorizontal: 10, paddingVertical: 2.5 }}>
-                  <Text fontSize="sm">{t}</Text>
-                </View>
-              </Pill>
+                <Text fontSize="sm">{t}</Text>
+              </Button>
             ))}
           </View>
 

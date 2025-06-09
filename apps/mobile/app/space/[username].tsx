@@ -6,7 +6,7 @@ import { zinc300, zinc400, zinc700, zinc800, zinc500 } from "@/constants/theme";
 import { Text } from "@/components/text";
 import { Circle, House } from "phosphor-react-native";
 import { MainAppBox } from "@/features/main-app-box";
-import { Pill } from "@/components/button";
+import { Button } from "@/components/button";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useUserOverviewQuery } from "@/queries/users";
@@ -111,20 +111,17 @@ const BottomBar = ({ userOverview }: { userOverview: any }) => {
               </Text>
 
               <Link href="/">
-                <Pill variant="filled" borderColor={"#5b5b5b" + "cc"} noText>
-                  <Text
-                    style={{
-                      paddingHorizontal: 15,
-                      paddingVertical: 10,
-                    }}
-                  >
-                    <House
-                      size={20}
-                      color="#fff"
-                      style={{ transform: [{ translateY: 2 }] }}
-                    />
-                  </Text>
-                </Pill>
+                <Button
+                  variant="filled"
+                  borderColor={"#5b5b5b" + "cc"}
+                  padding={{ horizontal: 15, vertical: 10 }}
+                >
+                  <House
+                    size={20}
+                    color="#fff"
+                    style={{ transform: [{ translateY: 2 }] }}
+                  />
+                </Button>
               </Link>
             </View>
           </View>

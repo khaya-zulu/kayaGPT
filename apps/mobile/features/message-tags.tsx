@@ -1,4 +1,4 @@
-import { Pill } from "@/components/button";
+import { Button } from "@/components/button";
 import { Text } from "@/components/text";
 import { isWeb } from "@/constants/platform";
 import { MagnifyingGlass } from "phosphor-react-native";
@@ -19,12 +19,12 @@ export const MessageTags = () => {
         </Pressable>
       ) : null}
 
-      <Pill variant="primary">All</Pill>
-      <Pill>
+      <Button variant="primary">All</Button>
+      <Button>
         <Text>Scheduled</Text>
         <Text style={{ marginLeft: 10 }}>10</Text>
-      </Pill>
-      <Pill>Pinned</Pill>
+      </Button>
+      <Button>Pinned</Button>
 
       {!isWeb ? (
         <Pressable style={{ marginLeft: "auto" }}>

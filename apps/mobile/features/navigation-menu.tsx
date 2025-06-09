@@ -11,7 +11,7 @@ import { Laptop, Television, User, UserCircle } from "phosphor-react-native";
 import { BlurView } from "expo-blur";
 import { ReactNode } from "react";
 import { isWeb } from "@/constants/platform";
-import { Pill } from "@/components/button";
+import { Button } from "@/components/button";
 import { useUserWeatherQuery } from "@/queries/users";
 
 const NavigationMenuItem = ({
@@ -131,7 +131,7 @@ export const MobileNavigationMenuItem = () => {
         justifyContent: "center",
       }}
     >
-      <Pill style={{ padding: 0 }} rounded="2xl" variant="white">
+      <Button style={{ padding: 0 }} rounded="2xl" variant="white">
         <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
           <View
             style={{
@@ -164,7 +164,7 @@ export const MobileNavigationMenuItem = () => {
             <Television size={18} />
           </Pressable>
         </View>
-      </Pill>
+      </Button>
     </SafeAreaView>
   );
 };

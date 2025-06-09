@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Image, View } from "react-native";
 
 import { Rounded } from "@/components/rounded";
-import { Pill } from "@/components/button";
+import { Button } from "@/components/button";
 
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useUseWorkspaceMutation } from "@/mutations/user";
@@ -65,9 +65,8 @@ export const NewWorkspaceTool = ({
           <ColorPalette src={workspaceUrl} onSelected={setColor} />
         ) : null}
         <View style={{ flexDirection: "row", marginTop: 10 }}>
-          <Pill
+          <Button
             variant="filled"
-            noText
             onPress={() => {
               if (!color) return;
 
@@ -76,14 +75,13 @@ export const NewWorkspaceTool = ({
                 color,
               });
             }}
+            padding={{ horizontal: 10, vertical: 2.5 }}
           >
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 10,
-                paddingVertical: 2.5,
-                paddingHorizontal: 10,
               }}
             >
               {color ? (
@@ -121,7 +119,7 @@ export const NewWorkspaceTool = ({
                 </>
               ) : null}
             </View>
-          </Pill>
+          </Button>
         </View>
       </View>
     </Text>

@@ -10,19 +10,19 @@ import { useUserSettings } from "@/hooks/use-user-settings";
 export const Button = ({
   children,
   style,
-  noText,
   variant = "outline",
   onPress,
   borderColor,
   rounded = "lg",
+  padding = { horizontal: 10, vertical: 0 },
 }: {
   children: ReactNode;
   style?: TextProps["style"];
-  noText?: boolean;
   variant?: "filled" | "outline" | "white" | "primary";
   onPress?: () => void;
   borderColor?: string;
   rounded?: RoundedSize;
+  padding?: { horizontal?: number; vertical?: number };
 }) => {
   const { colorSettings } = useUserSettings();
 
@@ -48,7 +48,7 @@ export const Button = ({
   };
 
   const backgroundColor = {
-    filled: "#fff",
+    filled: "#ffffff00",
     outline: "#fff",
     white: "#fff",
     primary: colorSettings[50],
@@ -90,7 +90,8 @@ export const Button = ({
             style={[
               {
                 color: text[variant],
-                paddingHorizontal: 10,
+                paddingHorizontal: padding.horizontal,
+                paddingVertical: padding.vertical,
                 backgroundColor: backgroundColor[variant],
               },
               style,

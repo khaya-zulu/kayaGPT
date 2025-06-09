@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import { Image, View } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
-import { Pill } from "@/components/button";
+import { Button } from "@/components/button";
 import { processEnv } from "@/utils/env";
 import { client } from "@/utils/client";
 import { useAuth } from "@clerk/clerk-expo";
@@ -100,14 +100,16 @@ export const UserAvatarTool = ({}) => {
       </View>
 
       <View style={{ marginTop: 10, flexDirection: "row", gap: 10 }}>
-        <Pill noText variant="filled" onPress={pickImage}>
-          <View style={{ paddingHorizontal: 10 }}>
-            <Text style={{ color: "#fff" }}>Upload</Text>
-          </View>
-        </Pill>
-        <Pill variant="primary" onPress={onSave}>
+        <Button
+          variant="filled"
+          onPress={pickImage}
+          padding={{ horizontal: 10 }}
+        >
+          <Text style={{ color: "#fff" }}>Upload</Text>
+        </Button>
+        <Button variant="primary" onPress={onSave}>
           <Text>{isPending ? "..." : "Save"}</Text>
-        </Pill>
+        </Button>
       </View>
     </View>
   );
