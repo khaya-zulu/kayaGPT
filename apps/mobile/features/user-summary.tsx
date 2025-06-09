@@ -108,7 +108,7 @@ export const UserSummary = ({
               tint="dark"
             >
               <Text style={{ color: "#fff" }}>
-                {date.toFormat("LL LLLL")}
+                {date.toFormat("dd LLLL")}
                 {"\n"}
                 {date.toFormat("cccc")}
               </Text>

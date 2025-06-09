@@ -43,6 +43,7 @@ import {
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import { ProfileEditorBottomSheet } from "@/features/profile-editor/bottom-sheet";
+import { MessagesLayout } from "@/features/messages-layout";
 
 const MobileKeyboardDismiss = styled.Pressable`
   max-width: 650px;
@@ -342,28 +343,7 @@ export default function ChatIdPage() {
                     setScrollViewContentHeight(ev.nativeEvent.layout.height);
                   }}
                 >
-                  {messages.map((m, idx) => {
-                    const tools = m.parts.filter(
-                      (p) => p.type === "tool-invocation"
-                    );
-
-                    return (
-                      <ChatMessage
-                        key={m.id}
-                        role={m.role === "assistant" ? "Assistant" : "User"}
-                        messageId={m.id}
-                        parts={m.parts}
-                        createdAt={m.createdAt}
-                      >
-                        {tools.map((t, idx) => (
-                          <Tool
-                            key={"tool" + idx}
-                            invocation={t.toolInvocation}
-                          />
-                        ))}
-                      </ChatMessage>
-                    );
-                  })}
+                  <MessagesLayout messages={messages} />
                 </View>
               </KeyboardDismiss>
             </ScrollView>

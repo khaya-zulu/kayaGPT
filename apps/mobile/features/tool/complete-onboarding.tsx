@@ -29,6 +29,15 @@ export const CompleteOnboardingTool = ({ username }: { username: string }) => {
   return (
     <View style={{ flexDirection: "column", gap: 10 }}>
       <View style={{ flexDirection: "row", gap: 10 }}>
+        <Link href={`/space/${username}`}>
+          <Pill variant="filled" noText>
+            <Text style={{ paddingHorizontal: 10, color: "#fff" }}>
+              View space ({username})
+            </Text>
+          </Pill>
+        </Link>
+      </View>
+      <View style={{ flexDirection: "row", gap: 10 }}>
         <Pill onPress={handleDeleteChat}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             {!deleteChatMutation.isPending ? (
@@ -41,15 +50,6 @@ export const CompleteOnboardingTool = ({ username }: { username: string }) => {
             )}
           </View>
         </Pill>
-      </View>
-      <View style={{ flexDirection: "row", gap: 10 }}>
-        <Link href={`/space/${username}`}>
-          <Pill variant="filled" noText>
-            <Text style={{ paddingHorizontal: 10, color: "#fff" }}>
-              Goto {username}
-            </Text>
-          </Pill>
-        </Link>
       </View>
     </View>
   );
