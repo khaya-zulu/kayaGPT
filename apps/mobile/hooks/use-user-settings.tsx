@@ -21,7 +21,7 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import { View } from "react-native";
 
 import { Text } from "@/components/text";
-import { Redirect, usePathname } from "expo-router";
+import { Redirect, usePathname, useLocalSearchParams } from "expo-router";
 
 import * as Crypto from "expo-crypto";
 import { useAuth } from "@clerk/clerk-expo";
@@ -31,28 +31,27 @@ type UserContextType = {
   isLoading: boolean;
   userId?: string;
   invalidateImage: (type: "workspace" | "avatar") => void;
-  workspaceUrl: string;
-  avatarUrl: string;
   isOnboardingComplete: boolean;
   username?: string;
+  ms: { workspace?: number; avatar?: number };
 };
 
 const UserSettingsContext = createContext<UserContextType>(null as any);
 
 export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
-  const { data, isLoading, isPending } = useUserSettingsQuery();
-  const [ms, setMs] = useState<{ workspace?: number; avatar?: number }>({});
-
   const { isSignedIn, isLoaded } = useAuth();
+
+  const { data, isLoading, isPending } = useUserSettingsQuery({
+    enabled: isSignedIn,
+  });
+
+  const [ms, setMs] = useState<{ workspace?: number; avatar?: number }>({});
 
   const isOnboardingComplete = !!data?.onboardedAt;
 
   const pathname = usePathname();
 
   //#region image URLs
-  const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/img/workspace/${data?.id}${ms.workspace ? `?ms=${ms.workspace}` : ""}`;
-  const avatarUrl = `${processEnv.EXPO_PUBLIC_API_URL}/img/avatar/${data?.id}${ms.avatar ? `?ms=${ms.avatar}` : ""}`;
-
   const handleInvalidateImage = (type: "workspace" | "avatar") => {
     setMs((prev) => ({ ...prev, [type]: Date.now() }));
   };
@@ -96,10 +95,9 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
           ...(colorSettings || {}),
         },
         isLoading,
+        ms,
         userId: data?.id,
         username: data?.username,
-        workspaceUrl,
-        avatarUrl,
         invalidateImage: handleInvalidateImage,
         isOnboardingComplete,
       }}
@@ -116,11 +114,21 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
 
 export const useUserSettings = () => {
   const context = useContext(UserSettingsContext);
+  const params = useLocalSearchParams<{ username: string }>();
 
   const query = useQueryClient();
 
+  const username = params.username || context.username;
+
+  const ms = context.ms;
+
+  const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/img/workspace/${username}${ms.workspace ? `?ms=${ms.workspace}` : ""}`;
+  const avatarUrl = `${processEnv.EXPO_PUBLIC_API_URL}/img/avatar/${username}${ms.avatar ? `?ms=${ms.avatar}` : ""}`;
+
   return {
     ...context,
+    workspaceUrl,
+    avatarUrl,
     invalidate: () =>
       query.invalidateQueries({ queryKey: userSettingsQueryKey }),
   };

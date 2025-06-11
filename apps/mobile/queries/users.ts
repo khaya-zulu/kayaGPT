@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { client, InferResponseType } from "@/utils/client";
+import { InferQueryOptions } from ".";
 
 export const userBioQueryKey = [client.api.user.bio.$url().pathname];
 
@@ -49,8 +50,13 @@ export type UserSettingsQueryOutput = InferResponseType<
   typeof client.api.user.settings.$get
 >;
 
-export const useUserSettingsQuery = () => {
+export type UserSettingsQueryOptions = InferQueryOptions<
+  typeof client.api.user.settings.$get
+>;
+
+export const useUserSettingsQuery = (opts: UserSettingsQueryOptions) => {
   return useQuery({
+    ...opts,
     queryKey: userSettingsQueryKey,
     queryFn: async () => {
       const response = await client.api.user.settings.$get();
@@ -85,11 +91,17 @@ export const useUserProfileSettingsQuery = () => {
 
 export const userWeatherQueryKey = [client.api.user.weather.$url().pathname];
 
-export const useUserWeatherQuery = () => {
+export type UserWeatherQueryOptions = InferQueryOptions<
+  typeof client.api.user.weather.$get
+>;
+
+export const useUserWeatherQuery = (
+  _inputs?: undefined,
+  opts?: UserWeatherQueryOptions
+) => {
   return useQuery({
+    ...opts,
     queryKey: [userWeatherQueryKey],
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
     queryFn: async () => {
       const response = await client.api.user.weather.$get();
       return response.json();
@@ -104,6 +116,31 @@ export const useUserRandomQuery = () => {
     queryKey: userRandomQueryKey,
     queryFn: async () => {
       const response = await client.api.user.random.$get();
+      return response.json();
+    },
+  });
+};
+
+export type UserWeatherPublicQueryOptions = InferQueryOptions<
+  (typeof client.api.user.weather)[":username"]["$get"]
+>;
+
+export const useUserWeatherPublicQuery = (
+  inputs: { username: string },
+  opts?: UserWeatherPublicQueryOptions
+) => {
+  return useQuery({
+    ...opts,
+    queryKey: [client.api.user.weather[":username"].$url().pathname],
+    queryFn: async () => {
+      const response = await client.api.user.weather[":username"].$get({
+        param: { username: inputs.username },
+      });
+
+      if (!response.ok) {
+        throw new Error("User not found");
+      }
+
       return response.json();
     },
   });

@@ -51,7 +51,10 @@ const NavigationMenuItem = ({
 
 const WebNavigationMenuItem = () => {
   const userSettings = useUserSettings();
-  const userWeatherQuery = useUserWeatherQuery();
+  const userWeatherQuery = useUserWeatherQuery(undefined, {
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 
   const { navigate } = useRouter();
   const { signOut } = useAuth();

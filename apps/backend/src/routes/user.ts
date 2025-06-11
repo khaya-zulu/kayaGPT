@@ -22,13 +22,12 @@ import { createOpenAIModel } from "@/utils/models";
 
 import { zValidator } from "@hono/zod-validator";
 
-import { downloadImage } from "@/utils/r2";
 import { getColorPalette } from "@/utils/color";
 import { createId } from "@paralleldrive/cuid2";
 import { generateText } from "ai";
-import { getCurrentWeather } from "@/utils/weather";
 import { getFirstChatByUserId } from "@/queries/chat";
 import { generateRegionObjectService } from "@/services/generate-region-object";
+import { getUserWeatherService } from "@/services/get-user-weather";
 
 export const userRoute = createApp()
   .get("/overview/:username", async (c) => {
@@ -53,7 +52,7 @@ export const userRoute = createApp()
       firstChatId = firstChat?.id;
     }
 
-    return c.json({ ...user, firstChatId });
+    return c.json({ ...user, firstChatId, userId: user.id });
   })
   .get("/bio", privateAuth, async (c) => {
     const userId = c.get("userId");
@@ -116,21 +115,32 @@ export const userRoute = createApp()
       return c.json({ success: true });
     }
   )
+  .get("/weather/:username", async (c) => {
+    const username = c.req.param("username");
+    const user = await getUserByUsername(c.env, { username });
+
+    if (!user) {
+      return c.json({ error: "User not found" }, 404);
+    }
+
+    const { weather, temp } = await getUserWeatherService(c.env, {
+      userId: user.id,
+    });
+
+    return c.json(
+      {
+        temperature: temp,
+        icon: weather.icon,
+      },
+      200
+    );
+  })
   .get("/weather", privateAuth, async (c) => {
     const userId = c.get("userId");
 
-    const region = await getUserRegionById(c.env, { userId });
     const user = await getUserDisplayNameById(c.env, { userId });
 
-    const lng = region?.lng ?? "0";
-    const lat = region?.lat ?? "0";
-
-    const weather = await getCurrentWeather(c.env, {
-      lat,
-      lng,
-    });
-
-    const temp = Math.round(weather.temp - 273.15);
+    const { weather, temp } = await getUserWeatherService(c.env, { userId });
 
     const response = await generateText({
       // todo: use worker ai service

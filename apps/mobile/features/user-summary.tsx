@@ -21,9 +21,15 @@ import {
   Sun,
   XLogo,
 } from "phosphor-react-native";
-import { UserOverviewQueryOutput, useUserWeatherQuery } from "@/queries/users";
+import {
+  UserOverviewQueryOutput,
+  useUserWeatherPublicQuery,
+  useUserWeatherQuery,
+} from "@/queries/users";
 import { useState } from "react";
 import { DateTime } from "luxon";
+import { useAuth } from "@clerk/clerk-expo";
+import { useLocalSearchParams } from "expo-router";
 
 const WeatherIcon = ({ code, color }: { code: string; color: string }) => {
   const Component = {
@@ -51,9 +57,26 @@ export const UserSummary = ({
   onDescriptionPress?: () => void;
 }) => {
   const userSettings = useUserSettings();
-  const userWeatherQuery = useUserWeatherQuery();
 
+  const params = useLocalSearchParams<{ username: string }>();
+
+  const { isSignedIn } = useAuth();
+
+  //#region weather
+  const userWeatherPublicQuery = useUserWeatherPublicQuery(
+    {
+      username: params.username!,
+    },
+    { enabled: !isSignedIn && !!params.username }
+  );
+
+  const userWeatherQuery = useUserWeatherQuery(undefined, {
+    enabled: isSignedIn,
+  });
+
+  const userWeatherPublic = userWeatherPublicQuery.data;
   const userWeather = userWeatherQuery.data;
+  //#endregion
 
   const [date] = useState(() => DateTime.now());
 
@@ -73,14 +96,14 @@ export const UserSummary = ({
           }}
         >
           <View>
-            <Text>{userWeather?.regionName}</Text>
+            <Text>{userWeather?.regionName ?? "Somewhere"}</Text>
             <Text fontSize="2xl" style={{ marginTop: 10 }}>
-              {userWeather?.temperature}°C
+              {userWeather?.temperature ?? userWeatherPublic?.temperature}°C
             </Text>
           </View>
 
           <WeatherIcon
-            code={userWeather?.icon ?? "01d"}
+            code={userWeather?.icon ?? userWeatherPublic?.icon ?? "01d"}
             color={userSettings.colorSettings["base"]}
           />
         </Rounded>

@@ -70,7 +70,6 @@ export default function SignInPage() {
         >
           <View style={{ flex: 1 }}>
             <ChatMessage
-              actions={<SignInAction />}
               role="Assistant"
               messageId="Login"
               parts={[
@@ -80,14 +79,18 @@ export default function SignInPage() {
                 },
               ]}
             >
-              {userRandom && isWeb ? (
-                <View
-                  style={{
-                    alignItems: "flex-end",
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                  }}
-                >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "flex-end",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={{ transform: [{ translateY: -10 }] }}>
+                  <SignInAction />
+                </View>
+
+                {userRandom && isWeb ? (
                   <Link href={`/space/${userRandom.username}`}>
                     <Rounded
                       size="2xl"
@@ -100,7 +103,7 @@ export default function SignInPage() {
                       <Rounded size={13} style={{ overflow: "hidden" }}>
                         <Image
                           source={{
-                            uri: `${processEnv.EXPO_PUBLIC_API_URL}/img/wrkspace/${userRandom.username}`,
+                            uri: `${processEnv.EXPO_PUBLIC_API_URL}/img/workspace/${userRandom.username}`,
                           }}
                           style={{
                             height: 125,
@@ -112,8 +115,8 @@ export default function SignInPage() {
                       </Rounded>
                     </Rounded>
                   </Link>
-                </View>
-              ) : null}
+                ) : null}
+              </View>
             </ChatMessage>
           </View>
         </View>
