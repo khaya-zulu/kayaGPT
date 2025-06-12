@@ -102,7 +102,7 @@ const WebNavigationMenuItem = () => {
 
             <NavigationMenuItem
               icon={<Television size={16} weight="bold" />}
-              to={`/space/${userSettings.username}`}
+              to={`/${userSettings.username}`}
             />
 
             <View style={{ width: 1, backgroundColor: zinc200 + "cc" }} />

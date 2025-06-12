@@ -93,7 +93,7 @@ export default function SignInPage() {
                 </View>
 
                 {userRandom && !isMobile ? (
-                  <Link href={`/space/${userRandom.username}`}>
+                  <Link href={`/${userRandom.username}`}>
                     <Rounded
                       size="2xl"
                       style={{

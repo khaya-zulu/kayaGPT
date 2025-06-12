@@ -29,7 +29,7 @@ export const CompleteOnboardingTool = ({ username }: { username: string }) => {
   return (
     <View style={{ flexDirection: "column", gap: 10 }}>
       <View style={{ flexDirection: "row", gap: 10 }}>
-        <Link href={`/space/${username}`}>
+        <Link href={`/${username}`}>
           <Button variant="filled" padding={{ horizontal: 10 }}>
             <Text style={{ color: "#fff" }}>View space ({username})</Text>
           </Button>
