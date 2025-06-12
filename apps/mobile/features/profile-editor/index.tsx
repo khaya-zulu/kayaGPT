@@ -21,7 +21,7 @@ import { ProfileSocial } from "./social";
 import { useAppForm, profileFormOpts } from "./form";
 import type { EditorBridge } from "@10play/tentap-editor";
 import { useQueryClient } from "@tanstack/react-query";
-import { isWeb } from "@/constants/platform";
+import { useMobile } from "@/hooks/use-mobile";
 
 type Tab = "general" | "description" | "social";
 
@@ -33,6 +33,8 @@ export const ProfileEditor = ({
   onClose: () => void;
 }) => {
   const userSettings = useUserSettings();
+
+  const { isMobile } = useMobile();
 
   const utils = useQueryClient();
 
@@ -99,10 +101,13 @@ export const ProfileEditor = ({
   }, [profileSettings?.description]);
 
   return (
-    <View style={isWeb ? { flex: 0.5, width: 300 } : { flex: 1 }}>
-      <BlurView style={{ flex: 1, padding: isWeb ? 10 : 0 }} tint="prominent">
+    <View style={isMobile ? { flex: 1 } : { flex: 0.5, width: 300 }}>
+      <BlurView
+        style={{ flex: 1, padding: isMobile ? 0 : 10 }}
+        tint="prominent"
+      >
         <Rounded
-          size={isWeb ? undefined : 0}
+          size={isMobile ? 0 : undefined}
           style={{ flex: 1, backgroundColor: "#fff" }}
         >
           <View
@@ -120,10 +125,10 @@ export const ProfileEditor = ({
               style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
             >
               <Pressable onPress={() => onClose()}>
-                {isWeb ? (
-                  <ArrowLeft size={14} weight="bold" />
-                ) : (
+                {isMobile ? (
                   <ArrowDown size={14} weight="bold" />
+                ) : (
+                  <ArrowLeft size={14} weight="bold" />
                 )}
               </Pressable>
               <Text fontSize="sm">Profile</Text>

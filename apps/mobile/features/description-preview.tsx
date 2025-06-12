@@ -11,9 +11,9 @@ import {
 import { styled } from "styled-components/native";
 
 import { Rounded } from "@/components/rounded";
-import { isWeb } from "@/constants/platform";
 import { roundedMd } from "@/constants/theme";
 import { Markdown } from "@/components/markdown";
+import { useMobile } from "@/hooks/use-mobile";
 
 const DescriptionBox = styled(Rounded)<{ borderColor: string }>`
   border: 1px solid ${(props) => props.borderColor};
@@ -34,6 +34,7 @@ export const DescriptionPreview = ({
   onClose?: () => void;
 }) => {
   const userSettings = useUserSettings();
+  const { isMobile } = useMobile();
 
   return (
     <Rounded
@@ -78,7 +79,7 @@ export const DescriptionPreview = ({
                 top: 0,
                 left: 0,
                 backgroundColor: userSettings.colorSettings[50],
-                opacity: isWeb ? 0.5 : 0.2,
+                opacity: isMobile ? 0.2 : 0.5,
               }}
             />
 

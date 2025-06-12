@@ -2,8 +2,8 @@ import { ImageBackground } from "react-native";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { useUserSettings } from "@/hooks/use-user-settings";
-import { isWeb } from "@/constants/platform";
 import { usePathname } from "expo-router";
+import { useMobile } from "@/hooks/use-mobile";
 
 export const BackgroundImageFeature = ({
   opacity,
@@ -14,6 +14,7 @@ export const BackgroundImageFeature = ({
   color?: string;
 }) => {
   const { colorSettings } = useUserSettings();
+  const { isMobile } = useMobile();
 
   const url = usePathname();
 
@@ -44,7 +45,7 @@ export const BackgroundImageFeature = ({
       />
       <BlurView
         style={{ height: "100%", width: "100%", position: "absolute", left: 0 }}
-        intensity={isWeb || isIndex ? 0 : undefined}
+        intensity={!isMobile || isIndex ? 0 : undefined}
       >
         <ImageBackground
           style={{

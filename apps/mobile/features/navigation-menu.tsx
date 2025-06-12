@@ -10,10 +10,10 @@ import { useUserSettings } from "@/hooks/use-user-settings";
 import { Laptop, SignOut, Television, UserCircle } from "phosphor-react-native";
 import { BlurView } from "expo-blur";
 import { ReactNode } from "react";
-import { isWeb } from "@/constants/platform";
 import { Button } from "@/components/button";
 import { useUserWeatherQuery } from "@/queries/users";
 import { useAuth } from "@clerk/clerk-expo";
+import { useMobile } from "@/hooks/use-mobile";
 
 const NavigationMenuItem = ({
   icon,
@@ -200,7 +200,9 @@ export const MobileNavigationMenuItem = () => {
 };
 
 export const NavigationMenu = () => {
-  if (!isWeb) {
+  const { isMobile } = useMobile();
+
+  if (isMobile) {
     return <MobileNavigationMenuItem />;
   }
 

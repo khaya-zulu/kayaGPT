@@ -19,16 +19,16 @@ import { useChatHistoryQuery } from "@/queries/chat";
 import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
 import { BlurView } from "expo-blur";
 import { useAuth } from "@clerk/clerk-expo";
-import { isWeb } from "@/constants/platform";
 import { NavigationMenu } from "@/features/navigation-menu";
 import { DateNow } from "@/features/date-now";
+import { useMobile } from "@/hooks/use-mobile";
 
-const Container = styled.Pressable`
+const Container = styled.Pressable<{ isMobile?: boolean }>`
   max-width: 512px;
   margin: 0 auto;
   width: 100%;
   flex-direction: column;
-  gap: ${isWeb ? "10px" : "0px"};
+  gap: ${(props) => (props.isMobile ? "0px" : "10px")};
   flex: 1;
 `;
 
@@ -37,6 +37,8 @@ export default function IndexPage() {
 
   const { isSignedIn } = useAuth();
   const { handleInputChange, input, setInput } = useChat({});
+
+  const { isMobile } = useMobile();
 
   const chatHistoryQuery = useChatHistoryQuery();
 
@@ -72,21 +74,21 @@ export default function IndexPage() {
       bottomToolbar={<ChatBoxToolbar />}
       toolbar={<DateNow />}
     >
-      <Container onPress={() => Keyboard.dismiss()}>
+      <Container onPress={() => Keyboard.dismiss()} isMobile={isMobile}>
         <NavigationMenu />
         <Rounded
-          size={isWeb ? "2xl" : 0}
+          size={isMobile ? 0 : "2xl"}
           style={{
             flex: 1,
             width: "100%",
             overflow: "hidden",
-            marginBottom: isWeb ? 15 : 0,
+            marginBottom: isMobile ? 0 : 15,
           }}
         >
           <BlurView
             tint="regular"
             style={{ flex: 1 }}
-            intensity={isWeb ? undefined : 0}
+            intensity={isMobile ? 0 : undefined}
           >
             <ScrollView showsVerticalScrollIndicator={false}>
               <View

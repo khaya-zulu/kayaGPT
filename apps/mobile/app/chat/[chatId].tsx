@@ -8,20 +8,14 @@ import {
   View,
   SafeAreaView,
   ScrollView,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
 } from "react-native";
 
-import { Text } from "@/components/text";
-
 import { zinc100 } from "@/constants/theme";
-import {
-  AppWindow,
-  ArrowDown,
-  ArrowLeft,
-  ChatCircleDots,
-} from "phosphor-react-native";
+import { AppWindow, ArrowDown, ChatCircleDots } from "phosphor-react-native";
 import { useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { isWeb } from "@/constants/platform";
 import { useChat } from "@/hooks/use-chat";
 import { chatHistoryQueryKey, useChatMessagesQuery } from "@/queries/chat";
 import { useWatch } from "@/hooks/use-watch";
@@ -29,10 +23,8 @@ import { useWatch } from "@/hooks/use-watch";
 import { Rounded } from "@/components/rounded";
 
 import { ChatFrame } from "@/features/main-app-box";
-import { ChatMessage } from "@/features/chat-message";
-import { ChatBoxToolbar } from "@/features/chat-box/toolbar";
+import { BackToolbar, ChatBoxToolbar } from "@/features/chat-box/toolbar";
 import { useChatDeleteMutation } from "@/mutations/chat";
-import { Tool } from "@/features/tool";
 import { ProfileEditor } from "@/features/profile-editor";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUserSettings } from "@/hooks/use-user-settings";
@@ -44,6 +36,7 @@ import {
 } from "@gorhom/bottom-sheet";
 import { ProfileEditorBottomSheet } from "@/features/profile-editor/bottom-sheet";
 import { MessagesLayout } from "@/features/messages-layout";
+import { useMobile } from "@/hooks/use-mobile";
 
 const MobileKeyboardDismiss = styled.Pressable`
   max-width: 650px;
@@ -98,6 +91,8 @@ export default function ChatIdPage() {
   const [scrollY, setScrollY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  const { isMobile } = useMobile();
+
   const {
     handleInputChange,
     input,
@@ -108,7 +103,9 @@ export default function ChatIdPage() {
   } = useChat({
     chatId: params.chatId,
     onToolCall: (call) => {
-      if (call.toolCall.toolName === "profileSettings") {
+      const toolName = call.toolCall.toolName;
+
+      if (toolName === "profileSettings") {
         setIsProfileEditorOpen((call.toolCall.args as any).tab);
       }
     },
@@ -117,9 +114,9 @@ export default function ChatIdPage() {
   const isMessageQueryEnabled =
     !isNewMessage && !params.message && !params.isOnboarding;
 
-  const KeyboardDismiss: any = isWeb
-    ? WebKeyboardDismiss
-    : MobileKeyboardDismiss;
+  const KeyboardDismiss: any = isMobile
+    ? MobileKeyboardDismiss
+    : WebKeyboardDismiss;
 
   const chatDeleteMutation = useChatDeleteMutation({
     onSuccess: async () => {
@@ -137,6 +134,54 @@ export default function ChatIdPage() {
     // chat result.
     isEnabled: isMessageQueryEnabled,
   });
+
+  //#region chat message handling
+  const handleChatInputChange = (
+    ev: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    handleInputChange({
+      ...ev,
+      target: {
+        ...ev.target,
+        value: ev.nativeEvent.text,
+      },
+    } as unknown as React.ChangeEvent<HTMLInputElement>);
+  };
+
+  const handleChatInputSubmit = () => {
+    scrollViewRef.current?.scrollToEnd({
+      animated: true,
+    });
+    handleSubmit();
+  };
+  //#endregion
+
+  //#region bottom sheet handling
+  const handleBottomSheetToggle = () => {
+    setIsProfileEditorOpen((prevState) => {
+      if (prevState) {
+        bottomSheetRef.current?.close();
+      } else if (isMobile) {
+        bottomSheetRef.current?.present();
+      }
+
+      return prevState ? undefined : "general";
+    });
+  };
+  //#endregion
+
+  //#region scroll handling
+  const handleOnScroll = (ev: NativeSyntheticEvent<any>) => {
+    const scrollY = ev.nativeEvent.contentOffset.y;
+    const totalHeight = scrollViewContentHeight - scrollViewHeight;
+
+    const progress = Math.min(1, scrollY / (totalHeight || 1));
+    setScrollProgress(progress * 100);
+
+    setScrollY(scrollY);
+    setIsScrollToBottomVisible(scrollY < totalHeight - 200);
+  };
+  //#endregion
 
   useWatch(messagesQuery.isSuccess, (prev, curr) => {
     if (curr) {
@@ -211,40 +256,15 @@ export default function ChatIdPage() {
           isSafeAreaDisabled
           value={input}
           scrollProgress={scrollProgress}
-          onChange={(ev) => {
-            handleInputChange({
-              ...ev,
-              target: {
-                ...ev.target,
-                value: ev.nativeEvent.text,
-              },
-            } as unknown as React.ChangeEvent<HTMLInputElement>);
-          }}
-          onSubmit={() => {
-            scrollViewRef.current?.scrollToEnd({
-              animated: true,
-            });
-            handleSubmit();
-          }}
+          onChange={handleChatInputChange}
+          onSubmit={handleChatInputSubmit}
           toolbar={
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
               <DateNow />
 
-              <Pressable
-                onPress={() => {
-                  setIsProfileEditorOpen((prevState) => {
-                    if (prevState) {
-                      bottomSheetRef.current?.close();
-                    } else if (!isWeb) {
-                      bottomSheetRef.current?.present();
-                    }
-
-                    return prevState ? undefined : "general";
-                  });
-                }}
-              >
+              <Pressable onPress={handleBottomSheetToggle}>
                 <AppWindow
                   size={20}
                   color={
@@ -269,7 +289,7 @@ export default function ChatIdPage() {
             )
           }
           rightLayout={
-            isWeb && isProfileEditorOpen ? (
+            !isMobile && isProfileEditorOpen ? (
               <ProfileEditor
                 onClose={() => setIsProfileEditorOpen(undefined)}
                 tab={isProfileEditorOpen}
@@ -277,7 +297,7 @@ export default function ChatIdPage() {
             ) : null
           }
         >
-          {!isWeb ? (
+          {isMobile ? (
             <ToolbarBox
               color={userSettings.colorSettings[100]}
               isShaded={scrollY > 20}
@@ -295,16 +315,7 @@ export default function ChatIdPage() {
                     width: "100%",
                   }}
                 >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      gap: 10,
-                      alignItems: "center",
-                    }}
-                  >
-                    <ArrowLeft size={18} weight="bold" />
-                    <Text>Hello world</Text>
-                  </View>
+                  <BackToolbar />
 
                   <ChatCircleDots size={20} weight="bold" />
                 </Pressable>
@@ -315,16 +326,7 @@ export default function ChatIdPage() {
             <ScrollView
               ref={scrollViewRef}
               scrollEventThrottle={16}
-              onScroll={(ev) => {
-                const scrollY = ev.nativeEvent.contentOffset.y;
-                const totalHeight = scrollViewContentHeight - scrollViewHeight;
-
-                const progress = Math.min(1, scrollY / (totalHeight || 1));
-                setScrollProgress(progress * 100);
-
-                setScrollY(scrollY);
-                setIsScrollToBottomVisible(scrollY < totalHeight - 200);
-              }}
+              onScroll={handleOnScroll}
               onLayout={(ev) => {
                 setScrollViewHeight(ev.nativeEvent.layout.height);
               }}
@@ -333,10 +335,10 @@ export default function ChatIdPage() {
               <KeyboardDismiss onPress={() => Keyboard.dismiss()}>
                 <View
                   style={{
-                    paddingHorizontal: isWeb ? 20 : 15,
+                    paddingHorizontal: isMobile ? 15 : 20,
                     paddingTop: 20,
                     flexDirection: "column",
-                    gap: isWeb ? 18 : 10,
+                    gap: isMobile ? 10 : 18,
                     paddingBottom: 200,
                   }}
                   onLayout={(ev) => {
@@ -375,7 +377,7 @@ export default function ChatIdPage() {
             ) : null}
           </SafeAreaView>
         </ChatFrame>
-        {!isWeb ? (
+        {isMobile ? (
           <ProfileEditorBottomSheet
             ref={bottomSheetRef}
             onClose={() => {

@@ -12,7 +12,7 @@ import { Rounded } from "@/components/rounded";
 import { zinc300 } from "@/constants/theme";
 import { useUserRandomQuery } from "@/queries/users";
 import { processEnv } from "@/utils/env";
-import { isWeb } from "@/constants/platform";
+import { useMobile } from "@/hooks/use-mobile";
 
 const SignInAction = () => {
   const { startSSOFlow } = useSSO();
@@ -54,6 +54,8 @@ export default function SignInPage() {
 
   const userRandom = userRandomQuery.data;
 
+  const { isMobile } = useMobile();
+
   return (
     <MainAppBox>
       <SafeAreaView style={{ flex: 1 }}>
@@ -90,7 +92,7 @@ export default function SignInPage() {
                   <SignInAction />
                 </View>
 
-                {userRandom && isWeb ? (
+                {userRandom && !isMobile ? (
                   <Link href={`/space/${userRandom.username}`}>
                     <Rounded
                       size="2xl"

@@ -6,7 +6,7 @@ import {
   TextInputProps,
   View,
 } from "react-native";
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useRef } from "react";
 
 import { styled } from "styled-components/native";
 import {
@@ -16,48 +16,46 @@ import {
   Microphone,
   PlusCircle,
 } from "phosphor-react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
 import {
   zinc200,
-  rounded2xl,
   zinc600,
   roundedLg,
   roundedFull,
   zinc800,
-  zinc700,
 } from "@/constants/theme";
 import { ScrollProgress } from "@/features/chat-box/scroll-progress";
 import { Text } from "@/components/text";
-import { isWeb } from "@/constants/platform";
-import { TextInput } from "@/components/text-input";
 import { useUserSettings } from "@/hooks/use-user-settings";
-import { Rounded } from "@/components/rounded";
 import { AutoResizingInput } from "@/features/auto-resizing-input";
+import { useMobile } from "@/hooks/use-mobile";
 
-const InputContainer = styled.View`
+const InputContainer = styled.View<{ isMobile: boolean }>`
   max-width: 750px;
   margin: 0 auto;
   width: 100%;
   flex-direction: row;
   align-items: end;
   gap: 15px;
-  padding: ${isWeb ? 0 : 2}px;
+  padding: ${(props) => (props.isMobile ? 2 : 0)}px;
   padding-bottom: 0;
 `;
 
-const RoundedBox = styled.View`
+const RoundedBox = styled.View<{ isMobile: boolean }>`
   border-radius: 20px;
-  border-bottom-right-radius: ${isWeb ? "20px" : 0};
-  border-bottom-left-radius: ${isWeb ? "20px" : 0};
+  border-bottom-right-radius: ${(props) => (props.isMobile ? 0 : "20px")};
+  border-bottom-left-radius: ${(props) => (props.isMobile ? 0 : "20px")};
 `;
 
 const InputLinearBox = ({ children }: { children: ReactNode }) => {
   const userSettings = useUserSettings();
 
+  const { isMobile } = useMobile();
+
   return (
-    <RoundedBox style={{ position: "relative" }}>
+    <RoundedBox isMobile={isMobile} style={{ position: "relative" }}>
       <RoundedBox
+        isMobile={isMobile}
         style={{
           height: "100%",
           width: "100%",
@@ -67,6 +65,7 @@ const InputLinearBox = ({ children }: { children: ReactNode }) => {
         }}
       />
       <RoundedBox
+        isMobile={isMobile}
         style={{
           borderColor: userSettings.colorSettings[300] + "cc",
           borderWidth: 2,
@@ -92,22 +91,22 @@ const RoundedText = styled(Text)`
   border-color: ${zinc200};
 `;
 
-const Options = () => {
-  return (
-    <View
-      style={{
-        flexDirection: isWeb ? "row" : "row-reverse",
-        gap: 15,
-        marginRight: isWeb ? 0 : "auto",
-      }}
-    >
-      <LinkSimple size={17} weight="bold" color={zinc600} />
-      <ClockCounterClockwise size={17} weight="bold" color={zinc600} />
-      <PlusCircle size={17} weight="bold" color={zinc600} />
-      <Microphone size={19} weight="fill" />
-    </View>
-  );
-};
+// const Options = () => {
+//   return (
+//     <View
+//       style={{
+//         flexDirection: isWeb ? "row" : "row-reverse",
+//         gap: 15,
+//         marginRight: isWeb ? 0 : "auto",
+//       }}
+//     >
+//       <LinkSimple size={17} weight="bold" color={zinc600} />
+//       <ClockCounterClockwise size={17} weight="bold" color={zinc600} />
+//       <PlusCircle size={17} weight="bold" color={zinc600} />
+//       <Microphone size={19} weight="fill" />
+//     </View>
+//   );
+// };
 
 export const ChatBox = ({
   value,
@@ -128,8 +127,10 @@ export const ChatBox = ({
 
   const userSettings = useUserSettings();
 
+  const { isMobile } = useMobile();
+
   return (
-    <InputContainer>
+    <InputContainer isMobile={isMobile}>
       <View style={{ flex: 1, position: "relative" }}>
         <InputLinearBox>
           <SafeAreaView>
@@ -160,7 +161,7 @@ export const ChatBox = ({
                   marginTop: 20,
                 }}
               >
-                {isWeb ? bottomToolbar : <View />}
+                {isMobile ? <View /> : bottomToolbar}
                 <View
                   style={{
                     flexDirection: "row",

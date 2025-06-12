@@ -24,8 +24,7 @@ import { useAuth } from "@clerk/clerk-expo";
 import { processEnv } from "@/utils/env";
 import { base46FontSpaceGrotesk } from "@/utils/font-base64";
 import { RefObject, useImperativeHandle } from "react";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { isWeb } from "@/constants/platform";
+import { useMobile } from "@/hooks/use-mobile";
 
 export const ProfileDescription = ({
   ref,
@@ -35,6 +34,8 @@ export const ProfileDescription = ({
   defaultHtml: string;
 }) => {
   const userSettings = useUserSettings();
+
+  const { isMobile } = useMobile();
 
   const { getToken } = useAuth();
 
@@ -114,7 +115,7 @@ export const ProfileDescription = ({
           position: "absolute",
           bottom: 0,
           left: 0,
-          width: isWeb ? "100%" : "105%",
+          width: isMobile ? "105%" : "100%",
         }}
       >
         <View
@@ -127,7 +128,7 @@ export const ProfileDescription = ({
             alignItems: "center",
           }}
         >
-          {isWeb ? (
+          {!isMobile ? (
             <ScrollView
               style={{ flex: 1 }}
               horizontal
@@ -138,7 +139,7 @@ export const ProfileDescription = ({
               </View>
             </ScrollView>
           ) : null}
-          {!isWeb ? (
+          {isMobile ? (
             <View style={{ flex: 1 }}>
               <Toolbar editor={editor} />
             </View>

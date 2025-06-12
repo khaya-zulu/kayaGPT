@@ -12,7 +12,7 @@ import { useUserSettings } from "@/hooks/use-user-settings";
 import { BlurView } from "expo-blur";
 import { DateTime } from "luxon";
 import { fontSpaceGrotesk } from "@/constants/theme";
-import { isWeb } from "@/constants/platform";
+import { useMobile } from "@/hooks/use-mobile";
 
 export const ChatMessage = ({
   role,
@@ -33,6 +33,7 @@ export const ChatMessage = ({
   const isAssistant = role === "Assistant";
 
   const { colorSettings } = useUserSettings();
+  const { isMobile } = useMobile();
 
   const content = parts
     ?.filter((p) => p.type === "text")
@@ -88,8 +89,8 @@ export const ChatMessage = ({
             </View>
             <View
               style={{
-                paddingVertical: isWeb ? 20 : 10,
-                paddingHorizontal: isWeb ? 25 : 20,
+                paddingVertical: isMobile ? 10 : 20,
+                paddingHorizontal: isMobile ? 20 : 25,
               }}
             >
               {content ? (

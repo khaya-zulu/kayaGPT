@@ -1,10 +1,12 @@
 import { Button } from "@/components/button";
 import { Text } from "@/components/text";
-import { isWeb } from "@/constants/platform";
+import { useMobile } from "@/hooks/use-mobile";
 import { MagnifyingGlass } from "phosphor-react-native";
 import { Pressable, View } from "react-native";
 
 export const MessageTags = () => {
+  const { isMobile } = useMobile();
+
   return (
     <View
       style={{
@@ -13,7 +15,7 @@ export const MessageTags = () => {
         alignItems: "center",
       }}
     >
-      {isWeb ? (
+      {!isMobile ? (
         <Pressable style={{ marginRight: 10 }}>
           <MagnifyingGlass size={16} weight="bold" />
         </Pressable>
@@ -26,7 +28,7 @@ export const MessageTags = () => {
       </Button>
       <Button>Pinned</Button>
 
-      {!isWeb ? (
+      {isMobile ? (
         <Pressable style={{ marginLeft: "auto" }}>
           <MagnifyingGlass size={16} weight="bold" />
         </Pressable>

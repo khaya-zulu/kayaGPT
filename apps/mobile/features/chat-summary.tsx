@@ -9,7 +9,7 @@ import { Link } from "expo-router";
 import { ChatHistoryQueryOutput } from "@/queries/chat";
 import { formatRelative } from "@/utils/date";
 import { useUserSettings } from "@/hooks/use-user-settings";
-import { isWeb } from "@/constants/platform";
+import { useMobile } from "@/hooks/use-mobile";
 
 export const ChatSummary = ({
   style,
@@ -23,8 +23,9 @@ export const ChatSummary = ({
   message: ChatHistoryQueryOutput["chats"][number]["lastMessage"];
 }) => {
   const { colorSettings } = useUserSettings();
+  const { isMobile } = useMobile();
 
-  const maxLength = isWeb ? 35 : 25;
+  const maxLength = !isMobile ? 35 : 25;
 
   const isTrailing = (title ?? "").length > maxLength;
 

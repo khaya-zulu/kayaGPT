@@ -14,9 +14,9 @@ import { styled } from "styled-components/native";
 import { BackgroundImageFeature } from "@/features/background-image";
 import { ChatBox } from "@/features/chat-box";
 
-import { isIOS, isWeb } from "@/constants/platform";
+import { isIOS } from "@/constants/platform";
 import { useUserSettings } from "@/hooks/use-user-settings";
-import { BlurView } from "expo-blur";
+import { useMobile } from "@/hooks/use-mobile";
 
 export const MainAppBox = ({
   children,
@@ -88,12 +88,14 @@ export const ChatFrame = ({
   const Component = isSafeAreaDisabled ? Fragment : SafeAreaView;
   const props = isSafeAreaDisabled ? {} : { style: { flex: 1 } };
 
+  const { isMobile } = useMobile();
+
   return (
     <MainAppBox backgroundStyle={{ opacity: 0.3, intensity: 20 }}>
       <View
         style={{
           flex: 1,
-          padding: isWeb ? 20 : 0,
+          padding: isMobile ? 0 : 20,
           flexDirection: "column",
           position: "relative",
         }}
