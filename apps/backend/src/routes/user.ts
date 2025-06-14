@@ -303,6 +303,10 @@ export const userRoute = createApp()
   .get("/random", async (c) => {
     const user = await getUserRandom(c.env);
 
+    if (!user) {
+      return c.json({ error: "No users found" }, 404);
+    }
+
     return c.json({
       username: user.username,
     });

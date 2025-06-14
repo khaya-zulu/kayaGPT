@@ -15,7 +15,6 @@ import { saveLastMessageService } from "@/services/save-last-message";
 import { getUserOnboardedAtById } from "@/queries/user";
 import { generalChatStreamText } from "@/services/general-chat-stream-text";
 import { onboardingChatStreamText } from "@/services/onboarding-chat-stream-text";
-import { isObjectExists } from "@/utils/r2";
 
 export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
@@ -71,19 +70,22 @@ export const chatRoute = createApp()
     }
 
     if (!isOnboardingComplete) {
-      const isAvatarUploaded = isObjectExists(c.env.R2_PROFILE, userId);
-      const isWorkspaceUploaded = isObjectExists(c.env.R2_WORKSPACE, userId);
+      const onboardingModel = await createOpenAIModel(c.env, ["o3"]);
 
       return onboardingChatStreamText(c.env, {
-        model: openai,
+        model: onboardingModel,
         messages: body.messages,
         userId,
         chatId,
       });
     }
 
+    const onboardingModel = await createOpenAIModel(c.env, [
+      "gpt-4.1-2025-04-14",
+    ]);
+
     return generalChatStreamText(c.env, {
-      model: openai,
+      model: onboardingModel,
       messages: body.messages,
       userId,
       chatId,

@@ -1,8 +1,7 @@
 import { type AppType } from "@kgpt/backend";
 import { hc } from "hono/client";
-import { processEnv } from "./env";
 
-export const client = hc<AppType>(processEnv.EXPO_PUBLIC_API_URL, {
+export const client = hc<AppType>(process.env.EXPO_PUBLIC_API_URL, {
   headers: async () => {
     // @ts-ignore
     if (!Clerk.session) return;

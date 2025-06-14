@@ -21,7 +21,6 @@ import * as ImagePicker from "expo-image-picker";
 import { client } from "@/utils/client";
 import { useAuth } from "@clerk/clerk-expo";
 
-import { processEnv } from "@/utils/env";
 import { base46FontSpaceGrotesk } from "@/utils/font-base64";
 import { RefObject, useImperativeHandle } from "react";
 import { useMobile } from "@/hooks/use-mobile";
@@ -54,7 +53,7 @@ export const ProfileDescription = ({
       formData.append("file", image.file);
 
       const response = await fetch(
-        `${processEnv.EXPO_PUBLIC_API_URL}${client.api.user.profile.description.upload.$url().pathname}`,
+        `${process.env.EXPO_PUBLIC_API_URL}${client.api.user.profile.description.upload.$url().pathname}`,
         {
           method: "POST",
           body: formData,
@@ -66,7 +65,9 @@ export const ProfileDescription = ({
 
       const data = await response.json();
 
-      editor.setImage(`${processEnv.EXPO_PUBLIC_API_URL}/api/user/${data.key}`);
+      editor.setImage(
+        `${process.env.EXPO_PUBLIC_API_URL}/api/user/${data.key}`
+      );
     }
   };
 

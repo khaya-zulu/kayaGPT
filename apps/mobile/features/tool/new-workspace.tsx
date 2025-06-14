@@ -10,7 +10,6 @@ import { Circle, CursorClick } from "phosphor-react-native";
 import { Text } from "@/components/text";
 import { zinc100, zinc200, zinc300 } from "@/constants/theme";
 import { ColorPalette } from "../color-palette";
-import { processEnv } from "@/utils/env";
 
 export const NewWorkspaceTool = ({
   workspaceKey,
@@ -30,7 +29,7 @@ export const NewWorkspaceTool = ({
     },
   });
 
-  const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/img/workspace/${workspaceKey}`;
+  const workspaceUrl = `${process.env.EXPO_PUBLIC_API_URL}/img/workspace/${workspaceKey}`;
 
   return (
     <Text style={{ marginTop: 10 }}>

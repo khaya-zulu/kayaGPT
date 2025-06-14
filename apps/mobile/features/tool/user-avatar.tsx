@@ -6,7 +6,7 @@ import { Image, View } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "@/components/button";
-import { processEnv } from "@/utils/env";
+
 import { client } from "@/utils/client";
 import { useAuth } from "@clerk/clerk-expo";
 
@@ -66,7 +66,7 @@ export const UserAvatarTool = ({}) => {
       formData.append("file", image.file);
 
       await fetch(
-        `${processEnv.EXPO_PUBLIC_API_URL}${client.api.user.profile.upload.$url().pathname}`,
+        `${process.env.EXPO_PUBLIC_API_URL}${client.api.user.profile.upload.$url().pathname}`,
         {
           method: "POST",
           body: formData,

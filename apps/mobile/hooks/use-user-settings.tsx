@@ -14,7 +14,6 @@ import {
   type UserSettingsQueryOutput,
   userSettingsQueryKey,
 } from "@/queries/users";
-import { processEnv } from "@/utils/env";
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, ReactNode, useContext, useState } from "react";
 
@@ -122,8 +121,8 @@ export const useUserSettings = () => {
 
   const ms = context.ms;
 
-  const workspaceUrl = `${processEnv.EXPO_PUBLIC_API_URL}/img/workspace/${username}${ms.workspace ? `?ms=${ms.workspace}` : ""}`;
-  const avatarUrl = `${processEnv.EXPO_PUBLIC_API_URL}/img/avatar/${username}${ms.avatar ? `?ms=${ms.avatar}` : ""}`;
+  const workspaceUrl = `${process.env.EXPO_PUBLIC_API_URL}/img/workspace/${username}${ms.workspace ? `?ms=${ms.workspace}` : ""}`;
+  const avatarUrl = `${process.env.EXPO_PUBLIC_API_URL}/img/avatar/${username}${ms.avatar ? `?ms=${ms.avatar}` : ""}`;
 
   return {
     ...context,

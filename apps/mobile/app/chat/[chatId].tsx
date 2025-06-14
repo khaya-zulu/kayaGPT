@@ -88,6 +88,7 @@ export default function ChatIdPage() {
   >();
 
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
+  const [isFirstMessageIgnored, setIsFirstMessageIgnored] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
 
@@ -246,6 +247,8 @@ export default function ChatIdPage() {
 
       router.setParams({ isOnboarding: undefined });
       setIsNewMessage(true);
+
+      setIsFirstMessageIgnored(true);
     }
   }, [params.message]);
 
@@ -345,7 +348,10 @@ export default function ChatIdPage() {
                     setScrollViewContentHeight(ev.nativeEvent.layout.height);
                   }}
                 >
-                  <MessagesLayout messages={messages} />
+                  <MessagesLayout
+                    messages={messages}
+                    isFirstMessageIgnored={isFirstMessageIgnored}
+                  />
                 </View>
               </KeyboardDismiss>
             </ScrollView>

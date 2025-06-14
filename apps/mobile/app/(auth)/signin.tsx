@@ -11,7 +11,6 @@ import { Link, useRouter } from "expo-router";
 import { Rounded } from "@/components/rounded";
 import { zinc300 } from "@/constants/theme";
 import { useUserRandomQuery } from "@/queries/users";
-import { processEnv } from "@/utils/env";
 import { useMobile } from "@/hooks/use-mobile";
 
 const SignInAction = () => {
@@ -109,7 +108,7 @@ export default function SignInPage() {
                       <Rounded size={13} style={{ overflow: "hidden" }}>
                         <Image
                           source={{
-                            uri: `${processEnv.EXPO_PUBLIC_API_URL}/img/workspace/${userRandom.username}`,
+                            uri: `${process.env.EXPO_PUBLIC_API_URL}/img/workspace/${userRandom.username}`,
                           }}
                           style={{
                             height: 125,

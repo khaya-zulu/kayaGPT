@@ -7,14 +7,7 @@ import { Env } from "@/utils/env";
 import { createChatMessage } from "@/queries/chat-message";
 
 const GENERAL_CHAT_SYSTEM_PROMPT =
-  "You are a helpful personal assitant, for my personal website. You are meant to help the user be more productive. Be friendly and concise. For tools where an image key is returned, the image will be displayed in the chat, please don't give the key in your message.";
-
-const ONBOARDING_CHAT_SYSTEM_PROMPT = `You are a helpful personal assistant, for my personal website. You are meant to help the user onboard to the website.
-
-There are two parts to the onboarding process:
-
-
-`;
+  "You’re a helpful, thoughtful assistant on KayaGPT—part friend, part productivity guide. Your job is to help each user feel more focused, more creative, and more at home. Be warm, friendly, and concise. If a tool returns an image, it will be shown in chat—no need to mention the key.";
 
 /**
  * Streams text responses for the general chat. (Post onboarding)
