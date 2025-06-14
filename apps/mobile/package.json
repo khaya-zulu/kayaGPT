@@ -9,7 +9,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "web:export": "expo export --platform web"
   },
   "jest": {
     "preset": "jest-expo"
@@ -43,6 +44,7 @@
     "expo-status-bar": "~2.2.3",
     "expo-symbols": "~0.4.4",
     "expo-system-ui": "~5.0.7",
+    "expo-updates": "~0.28.14",
     "expo-web-browser": "~14.1.6",
     "hono": "4.7.10",
     "luxon": "^3.6.1",

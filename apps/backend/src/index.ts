@@ -17,7 +17,8 @@ const routes = app
   .route("/api/user", userRoute)
   .route("/api/chat", chatRoute)
   .route("/api/workspace", workspaceRoute)
-  .route("/img", imgRoute);
+  .route("/img", imgRoute)
+  .get("/health", (c) => c.text("ok"));
 
 export default routes;
 

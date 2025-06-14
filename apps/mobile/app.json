@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.khaya.kaya-gpt"
+      "bundleIdentifier": "com.khaya.kaya-gpt",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +24,7 @@
         "android.permission.RECORD_AUDIO",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.khaya.kaya-gpt"
+      "package": "com.kayagpt.mobile"
     },
     "web": {
       "bundler": "metro",
@@ -42,7 +45,9 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/SpaceGrotesk-Medium.ttf"]
+          "fonts": [
+            "./assets/fonts/SpaceGrotesk-Medium.ttf"
+          ]
         }
       ],
       "expo-web-browser",
@@ -55,6 +60,18 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a18943da-812c-42df-b1ca-8dcd823451cd"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a18943da-812c-42df-b1ca-8dcd823451cd"
     }
   }
 }
