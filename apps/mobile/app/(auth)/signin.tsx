@@ -19,18 +19,22 @@ const SignInAction = () => {
 
   const router = useRouter();
 
+  //#region sign in with Google
+  const signInWithGoogle = async () => {
+    await startSSOFlow({
+      strategy: "oauth_google",
+    });
+
+    router.navigate("/");
+  };
+  //#endregion
+
   return (
     <View style={{ flexDirection: "row" }}>
       <Button
         padding={{ horizontal: 0 }}
         variant="filled"
-        onPress={async () => {
-          await startSSOFlow({
-            strategy: "oauth_google",
-          });
-
-          router.navigate("/");
-        }}
+        onPress={signInWithGoogle}
       >
         <View
           style={{
