@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "backend",
+  "name": "kgpt-backend",
   "main": "src/index.ts",
   "compatibility_date": "2025-05-06",
   "compatibility_flags": ["nodejs_compat"],
@@ -27,7 +27,7 @@
     {
       "binding": "DB",
       "database_name": "kgpt-database",
-      "database_id": "YOUR-DB-ID-HERE",
+      "database_id": "f71c1ef8-3e26-47b6-b3d1-5a13bdd9e35f",
       "migrations_dir": "../../packages/db/drizzle",
     },
   ],
