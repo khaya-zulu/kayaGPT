@@ -17,11 +17,9 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, ReactNode, useContext, useState } from "react";
 
-import { View } from "react-native";
+import { WorkspaceLoader } from "@/features/workspace-loader";
 
-import { Text } from "@/components/text";
 import { Redirect, usePathname, useLocalSearchParams } from "expo-router";
-
 import * as Crypto from "expo-crypto";
 import { useAuth } from "@clerk/clerk-expo";
 
@@ -37,6 +35,21 @@ type UserContextType = {
 
 const UserSettingsContext = createContext<UserContextType>(null as any);
 
+const useWorkspaceUrl = ({
+  contextUsername,
+  ms,
+}: {
+  contextUsername: string;
+  ms?: number;
+}) => {
+  const params = useLocalSearchParams<{ username: string }>();
+
+  const username = params.username || contextUsername;
+  const workspaceUrl = `${process.env.EXPO_PUBLIC_API_URL}/img/workspace/${username}${ms ? `?ms=${ms}` : ""}`;
+
+  return { workspaceUrl, username };
+};
+
 export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   const { isSignedIn, isLoaded } = useAuth();
 
@@ -45,6 +58,12 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const [ms, setMs] = useState<{ workspace?: number; avatar?: number }>({});
+  const [isWorkspaceImageLoading, setIsWorkspaceImageLoading] = useState(true);
+
+  const { workspaceUrl } = useWorkspaceUrl({
+    contextUsername: data?.username ?? "",
+    ms: undefined,
+  });
 
   const isOnboardingComplete = !!data?.onboardedAt;
 
@@ -57,8 +76,6 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   //#endregion
 
   //#region color settings
-  const colorSettings = data?.colorSettings;
-
   const getDefaultColors = () => {
     return {
       "50": zinc50,
@@ -73,13 +90,22 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
       "900": zinc900,
     };
   };
+
+  const colorSettings = {
+    ...getDefaultColors(),
+    ...(data?.colorSettings || {}),
+  };
   //#endregion
 
-  if (!isLoaded || (isSignedIn && isPending)) {
+  if (!isLoaded || (isSignedIn && isPending) || isWorkspaceImageLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Booting workspace...</Text>
-      </View>
+      <WorkspaceLoader
+        color={colorSettings["base"]}
+        isAuthLoading={!isLoaded}
+        isSignedIn={isSignedIn}
+        onWorkspaceUrlLoaded={() => setIsWorkspaceImageLoading(false)}
+        workspaceUrl={isPending ? undefined : workspaceUrl}
+      />
     );
   }
 
@@ -89,10 +115,7 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   return (
     <UserSettingsContext.Provider
       value={{
-        colorSettings: {
-          ...getDefaultColors(),
-          ...(colorSettings || {}),
-        },
+        colorSettings: colorSettings,
         isLoading,
         ms,
         userId: data?.id,
@@ -113,15 +136,15 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
 
 export const useUserSettings = () => {
   const context = useContext(UserSettingsContext);
-  const params = useLocalSearchParams<{ username: string }>();
 
   const query = useQueryClient();
-
-  const username = params.username || context.username;
-
   const ms = context.ms;
 
-  const workspaceUrl = `${process.env.EXPO_PUBLIC_API_URL}/img/workspace/${username}${ms.workspace ? `?ms=${ms.workspace}` : ""}`;
+  const { workspaceUrl, username } = useWorkspaceUrl({
+    contextUsername: context.username ?? "",
+    ms: context.ms.workspace,
+  });
+
   const avatarUrl = `${process.env.EXPO_PUBLIC_API_URL}/img/avatar/${username}${ms.avatar ? `?ms=${ms.avatar}` : ""}`;
 
   return {
