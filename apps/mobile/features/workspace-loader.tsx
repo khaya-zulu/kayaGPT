@@ -15,7 +15,7 @@ import {
   withTiming,
 } from "react-native-reanimated";
 
-const CubeLoader = ({ color }: { color: string }) => {
+export const CubeLoader = ({ color }: { color: string }) => {
   const [state, setState] = useState(0);
 
   const states = [

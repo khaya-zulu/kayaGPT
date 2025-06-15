@@ -22,6 +22,7 @@ import { useAuth } from "@clerk/clerk-expo";
 import { NavigationMenu } from "@/features/navigation-menu";
 import { DateNow } from "@/features/date-now";
 import { useMobile } from "@/hooks/use-mobile";
+import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 
 const Container = styled.Pressable<{ isMobile?: boolean }>`
   max-width: 512px;
@@ -75,43 +76,54 @@ export default function IndexPage() {
       toolbar={<DateNow />}
     >
       <Container onPress={() => Keyboard.dismiss()} isMobile={isMobile}>
-        <NavigationMenu />
-        <Rounded
-          size={isMobile ? 0 : "2xl"}
-          style={{
-            flex: 1,
-            width: "100%",
-            overflow: "hidden",
-            marginBottom: isMobile ? 0 : 15,
-          }}
+        <Animated.View entering={FadeIn.duration(250).delay(250)}>
+          <NavigationMenu />
+        </Animated.View>
+        <Animated.View
+          style={{ flex: 1 }}
+          entering={FadeInUp.duration(250).delay(150)}
         >
-          <BlurView
-            tint="regular"
-            style={{ flex: 1 }}
-            intensity={isMobile ? 0 : undefined}
+          <Rounded
+            size={isMobile ? 0 : 24}
+            style={{
+              flex: 1,
+              width: "100%",
+              overflow: "hidden",
+              marginBottom: isMobile ? 0 : 15,
+            }}
           >
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <View
-                style={{
-                  flexDirection: "column",
-                  gap: 5,
-                  padding: 15,
-                }}
-              >
-                {chatHistoryQuery.data?.chats.map((c) => {
-                  return (
-                    <ChatSummary
-                      key={c.id}
-                      chatId={c.id}
-                      title={c.title}
-                      message={c.lastMessage}
-                    />
-                  );
-                })}
-              </View>
-            </ScrollView>
-          </BlurView>
-        </Rounded>
+            <BlurView
+              tint="regular"
+              style={{ flex: 1 }}
+              intensity={isMobile ? 0 : undefined}
+            >
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View
+                  style={{
+                    flexDirection: "column",
+                    gap: 5,
+                    padding: 15,
+                  }}
+                >
+                  {chatHistoryQuery.data?.chats.map((c, idx) => {
+                    return (
+                      <Animated.View
+                        key={c.id}
+                        entering={FadeIn.duration(350).delay(idx * 150)}
+                      >
+                        <ChatSummary
+                          chatId={c.id}
+                          title={c.title}
+                          message={c.lastMessage}
+                        />
+                      </Animated.View>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            </BlurView>
+          </Rounded>
+        </Animated.View>
       </Container>
     </ChatFrame>
   );

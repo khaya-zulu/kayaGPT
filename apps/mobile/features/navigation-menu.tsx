@@ -1,7 +1,7 @@
 import { View, Pressable, SafeAreaView } from "react-native";
 import { Link, LinkProps, useRouter } from "expo-router";
 
-import { Text } from "@/components/text";
+import { AnimatedText, Text } from "@/components/text";
 
 import { rose600, zinc200, zinc300 } from "@/constants/theme";
 import { Rounded } from "@/components/rounded";
@@ -14,6 +14,7 @@ import { Button } from "@/components/button";
 import { useUserWeatherQuery } from "@/queries/users";
 import { useAuth } from "@clerk/clerk-expo";
 import { useMobile } from "@/hooks/use-mobile";
+import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 
 const NavigationMenuItem = ({
   icon,
@@ -49,6 +50,36 @@ const NavigationMenuItem = ({
   );
 };
 
+const WeatherComment = ({ text }: { text: string }) => {
+  const words = text.split(" ");
+
+  return (
+    <Rounded
+      style={{
+        backgroundColor: "#ffffff",
+        paddingHorizontal: 15,
+        paddingVertical: 15,
+        flexDirection: "column",
+        gap: 5,
+        flex: 1,
+        height: 79,
+      }}
+    >
+      <Text numberOfLines={2} fontSize="sm">
+        {words.map((word, idx) => (
+          <AnimatedText
+            fontSize="sm"
+            key={"word" + word}
+            entering={FadeInDown.duration(350).delay(idx * 50)}
+          >
+            {word + " "}
+          </AnimatedText>
+        ))}
+      </Text>
+    </Rounded>
+  );
+};
+
 const WebNavigationMenuItem = () => {
   const userSettings = useUserSettings();
   const userWeatherQuery = useUserWeatherQuery(undefined, {
@@ -69,6 +100,7 @@ const WebNavigationMenuItem = () => {
   return (
     <View>
       <Rounded
+        size={25}
         style={{
           flex: 1,
           overflow: "hidden",
@@ -130,18 +162,7 @@ const WebNavigationMenuItem = () => {
               </Rounded>
             </Pressable>
           </Rounded>
-          <Rounded
-            style={{
-              backgroundColor: "#ffffff",
-              paddingHorizontal: 15,
-              paddingVertical: 15,
-              flexDirection: "column",
-              gap: 5,
-              flex: 1,
-            }}
-          >
-            <Text fontSize="sm">{userWeather?.comment}</Text>
-          </Rounded>
+          <WeatherComment text={userWeather?.comment ?? ""} />
         </BlurView>
       </Rounded>
     </View>

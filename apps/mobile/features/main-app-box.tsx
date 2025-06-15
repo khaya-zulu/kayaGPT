@@ -17,6 +17,11 @@ import { ChatBox } from "@/features/chat-box";
 import { isIOS } from "@/constants/platform";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useMobile } from "@/hooks/use-mobile";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeInUp,
+} from "react-native-reanimated";
 
 export const MainAppBox = ({
   children,
@@ -101,14 +106,16 @@ export const ChatFrame = ({
         }}
       >
         <Component {...props}>{children}</Component>
-        <ChatBox
-          value={value}
-          onChange={onChange}
-          onSubmit={onSubmit}
-          toolbar={toolbar}
-          bottomToolbar={bottomToolbar}
-          scrollProgress={scrollProgress}
-        />
+        <Animated.View entering={FadeInUp.duration(250)}>
+          <ChatBox
+            value={value}
+            onChange={onChange}
+            onSubmit={onSubmit}
+            toolbar={toolbar}
+            bottomToolbar={bottomToolbar}
+            scrollProgress={scrollProgress}
+          />
+        </Animated.View>
       </View>
       {rightLayout}
     </MainAppBox>
