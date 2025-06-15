@@ -23,14 +23,34 @@ import { Redirect, usePathname, useLocalSearchParams } from "expo-router";
 import * as Crypto from "expo-crypto";
 import { useAuth } from "@clerk/clerk-expo";
 
+type AnimatedDoneState = {
+  index: boolean;
+};
+
 type UserContextType = {
   colorSettings: NonNullable<UserSettingsQueryOutput["colorSettings"]>;
   isLoading: boolean;
   userId?: string;
+  /**
+   * method to invalidate the cached workspace or avatar image
+   */
   invalidateImage: (type: "workspace" | "avatar") => void;
   isOnboardingComplete: boolean;
   username?: string;
+  /**
+   * the client caches the workspace and avatar images
+   * so we need to invalidate them when they change
+   */
   ms: { workspace?: number; avatar?: number };
+  /**
+   * we want to track if animation has already run for a page
+   * so that we can skip it on subsequent visits
+   * */
+  isAnimatedDoneState: AnimatedDoneState;
+  /**
+   * marks an animation as complete.
+   */
+  completeAnimation: (type: keyof AnimatedDoneState) => void;
 };
 
 const UserSettingsContext = createContext<UserContextType>(null as any);
@@ -59,6 +79,21 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const [ms, setMs] = useState<{ workspace?: number; avatar?: number }>({});
   const [isWorkspaceImageLoading, setIsWorkspaceImageLoading] = useState(true);
+
+  //#region animated done state
+  const [isAnimatedDoneState, setIsAnimatedDoneState] = useState<
+    UserContextType["isAnimatedDoneState"]
+  >({
+    index: false,
+  });
+
+  const completeAnimation = (type: keyof AnimatedDoneState) => {
+    setIsAnimatedDoneState((prev) => ({
+      ...prev,
+      [type]: true,
+    }));
+  };
+  //#endregion
 
   const { workspaceUrl } = useWorkspaceUrl({
     contextUsername: data?.username ?? "",
@@ -122,6 +157,8 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
         username: data?.username,
         invalidateImage: handleInvalidateImage,
         isOnboardingComplete,
+        completeAnimation,
+        isAnimatedDoneState,
       }}
     >
       {children}

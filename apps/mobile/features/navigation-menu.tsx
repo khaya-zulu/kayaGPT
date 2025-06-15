@@ -69,7 +69,7 @@ const WeatherComment = ({ text }: { text: string }) => {
         {words.map((word, idx) => (
           <AnimatedText
             fontSize="sm"
-            key={"word" + word}
+            key={"word" + word + idx}
             entering={FadeInDown.duration(350).delay(idx * 50)}
           >
             {word + " "}

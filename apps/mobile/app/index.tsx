@@ -22,7 +22,10 @@ import { useAuth } from "@clerk/clerk-expo";
 import { NavigationMenu } from "@/features/navigation-menu";
 import { DateNow } from "@/features/date-now";
 import { useMobile } from "@/hooks/use-mobile";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
+import { FadeIn, FadeInUp } from "react-native-reanimated";
+import { useUserSettings } from "@/hooks/use-user-settings";
+import { AnimatedView } from "@/components/animated-view";
+import { useEffect } from "react";
 
 const Container = styled.Pressable<{ isMobile?: boolean }>`
   max-width: 512px;
@@ -37,14 +40,19 @@ export default function IndexPage() {
   const router = useRouter();
 
   const { isSignedIn } = useAuth();
+  const { isAnimatedDoneState, completeAnimation } = useUserSettings();
   const { handleInputChange, input, setInput } = useChat({});
 
   const { isMobile } = useMobile();
 
   const chatHistoryQuery = useChatHistoryQuery();
 
+  const chatHistory = chatHistoryQuery.data;
+
   //#region chat form
   const handleChatFormSubmit = () => {
+    completeAnimation("index");
+
     if (input.trim() === "") return;
     router.push(`/chat/${Crypto.randomUUID()}?message=${input}`);
     setInput("");
@@ -63,6 +71,23 @@ export default function IndexPage() {
   };
   //#endregion
 
+  useEffect(() => {
+    const chats = chatHistory?.chats || [];
+    // context: the browser reruns the animations
+    // when the page is navigated back to
+    // so we want to skip the animation if it's already done
+    if (chats.length && !isAnimatedDoneState.index) {
+      const timerId = setTimeout(
+        () => {
+          completeAnimation("index");
+        },
+        chats.length * 150 + 500
+      );
+
+      return () => clearTimeout(timerId);
+    }
+  }, [isAnimatedDoneState.index, chatHistory?.chats.length]);
+
   if (!isSignedIn) {
     return <Redirect href="/signin" />;
   }
@@ -74,13 +99,18 @@ export default function IndexPage() {
       onSubmit={handleChatFormSubmit}
       bottomToolbar={<ChatBoxToolbar />}
       toolbar={<DateNow />}
+      isChatAnimationDisabled={isAnimatedDoneState.index}
     >
       <Container onPress={() => Keyboard.dismiss()} isMobile={isMobile}>
-        <Animated.View entering={FadeIn.duration(250).delay(250)}>
+        <AnimatedView
+          isAnimationDisabled={isAnimatedDoneState.index}
+          entering={FadeIn.duration(250).delay(250)}
+        >
           <NavigationMenu />
-        </Animated.View>
-        <Animated.View
+        </AnimatedView>
+        <AnimatedView
           style={{ flex: 1 }}
+          isAnimationDisabled={isAnimatedDoneState.index}
           entering={FadeInUp.duration(250).delay(150)}
         >
           <Rounded
@@ -105,10 +135,11 @@ export default function IndexPage() {
                     padding: 15,
                   }}
                 >
-                  {chatHistoryQuery.data?.chats.map((c, idx) => {
+                  {chatHistory?.chats.map((c, idx) => {
                     return (
-                      <Animated.View
+                      <AnimatedView
                         key={c.id}
+                        isAnimationDisabled={isAnimatedDoneState.index}
                         entering={FadeIn.duration(350).delay(idx * 150)}
                       >
                         <ChatSummary
@@ -116,14 +147,14 @@ export default function IndexPage() {
                           title={c.title}
                           message={c.lastMessage}
                         />
-                      </Animated.View>
+                      </AnimatedView>
                     );
                   })}
                 </View>
               </ScrollView>
             </BlurView>
           </Rounded>
-        </Animated.View>
+        </AnimatedView>
       </Container>
     </ChatFrame>
   );

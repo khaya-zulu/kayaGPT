@@ -22,6 +22,7 @@ import Animated, {
   FadeInDown,
   FadeInUp,
 } from "react-native-reanimated";
+import { AnimatedView } from "@/components/animated-view";
 
 export const MainAppBox = ({
   children,
@@ -79,6 +80,7 @@ export const ChatFrame = ({
   bottomToolbar,
   rightLayout,
   scrollProgress,
+  isChatAnimationDisabled = false,
 }: {
   children: ReactNode;
   isSafeAreaDisabled?: boolean;
@@ -89,6 +91,7 @@ export const ChatFrame = ({
   bottomToolbar?: ReactNode;
   rightLayout?: ReactNode;
   scrollProgress?: number;
+  isChatAnimationDisabled?: boolean;
 }) => {
   const Component = isSafeAreaDisabled ? Fragment : SafeAreaView;
   const props = isSafeAreaDisabled ? {} : { style: { flex: 1 } };
@@ -106,7 +109,10 @@ export const ChatFrame = ({
         }}
       >
         <Component {...props}>{children}</Component>
-        <Animated.View entering={FadeInUp.duration(250)}>
+        <AnimatedView
+          isAnimationDisabled={isChatAnimationDisabled}
+          entering={FadeInUp.duration(250)}
+        >
           <ChatBox
             value={value}
             onChange={onChange}
@@ -115,7 +121,7 @@ export const ChatFrame = ({
             bottomToolbar={bottomToolbar}
             scrollProgress={scrollProgress}
           />
-        </Animated.View>
+        </AnimatedView>
       </View>
       {rightLayout}
     </MainAppBox>
