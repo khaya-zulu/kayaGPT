@@ -13,6 +13,7 @@ import { BlurView } from "expo-blur";
 import { DateTime } from "luxon";
 import { fontSpaceGrotesk } from "@/constants/theme";
 import { useMobile } from "@/hooks/use-mobile";
+import { CubeLoader } from "./workspace-loader";
 
 export const ChatMessage = ({
   role,
@@ -20,8 +21,10 @@ export const ChatMessage = ({
   parts,
   actions,
   createdAt,
+  title,
 }: {
   role: "Assistant" | "User";
+  title?: ReactNode;
   children?: ReactNode;
   parts?: Message["parts"];
   content?: string;
@@ -35,10 +38,7 @@ export const ChatMessage = ({
   const { colorSettings } = useUserSettings();
   const { isMobile } = useMobile();
 
-  const content = parts
-    ?.filter((p) => p.type === "text")
-    .map((p) => p.text)
-    .join("");
+  const textOnlyParts = parts?.filter((p) => p.type === "text");
 
   return (
     <View style={{ flexDirection: "column", gap: 15 }}>
@@ -70,18 +70,20 @@ export const ChatMessage = ({
               <View
                 style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
               >
-                {isAssistant ? (
-                  <Cube
-                    size={18}
-                    color={colorSettings["base"]}
-                    weight="duotone"
-                    // flip x, todo: use for loading
-                    // style={{
-                    //   transform: [{ rotateY: "180deg" }],
-                    // }}
-                  />
+                {isAssistant && textOnlyParts?.length ? (
+                  <>
+                    {textOnlyParts.length > 0 ? (
+                      <Cube
+                        size={18}
+                        color={colorSettings["base"]}
+                        weight="duotone"
+                      />
+                    ) : (
+                      <CubeLoader color={colorSettings["base"]} />
+                    )}
+                  </>
                 ) : null}
-                <Text>{role === "Assistant" ? "AI" : "User"}</Text>
+                <Text>{title ?? (role === "Assistant" ? "AI" : "User")}</Text>
               </View>
               {role === "Assistant" || !createdAt ? null : (
                 <Text>{DateTime.now().toFormat("t a")}</Text>
@@ -93,13 +95,13 @@ export const ChatMessage = ({
                 paddingHorizontal: isMobile ? 20 : 25,
               }}
             >
-              {content ? (
+              {textOnlyParts && textOnlyParts?.length > 0 ? (
                 <Markdown
                   style={{
                     body: { fontFamily: fontSpaceGrotesk, fontSize: 16 },
                   }}
                 >
-                  {content}
+                  {textOnlyParts.map((p) => p.text).join("")}
                 </Markdown>
               ) : null}
               {children}

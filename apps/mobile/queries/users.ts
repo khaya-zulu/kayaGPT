@@ -116,6 +116,11 @@ export const useUserRandomQuery = () => {
     queryKey: userRandomQueryKey,
     queryFn: async () => {
       const response = await client.api.user.random.$get();
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch random user");
+      }
+
       return response.json();
     },
   });

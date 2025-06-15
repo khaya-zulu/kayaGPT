@@ -132,7 +132,11 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   };
   //#endregion
 
-  if (!isLoaded || (isSignedIn && isPending) || isWorkspaceImageLoading) {
+  if (
+    !isLoaded ||
+    (isSignedIn && isPending) ||
+    (isSignedIn && isWorkspaceImageLoading)
+  ) {
     return (
       <WorkspaceLoader
         color={colorSettings["base"]}

@@ -8,5 +8,5 @@ export const AnimatedView = ({
 }: AnimatedProps<ViewProps> & { isAnimationDisabled?: boolean }) => {
   const Component = isAnimationDisabled ? View : Animated.View;
 
-  return <Component {...props} />;
+  return <Component {...(props as any)} />;
 };

@@ -9,7 +9,7 @@ import { Text } from "@/components/text";
 import { useSSO } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { Rounded } from "@/components/rounded";
-import { zinc300 } from "@/constants/theme";
+import { zinc300, zinc500 } from "@/constants/theme";
 import { useUserRandomQuery } from "@/queries/users";
 import { useMobile } from "@/hooks/use-mobile";
 
@@ -64,65 +64,79 @@ export default function SignInPage() {
       <SafeAreaView style={{ flex: 1 }}>
         <View
           style={{
-            maxWidth: 500,
-            margin: "auto",
-            padding: 20,
-            flexDirection: "row",
-            alignItems: "center",
             flex: 1,
+            maxWidth: 1200,
             width: "100%",
+            margin: "auto",
           }}
         >
-          <View style={{ flex: 1 }}>
-            <ChatMessage
-              role="Assistant"
-              messageId="Login"
-              parts={[
-                {
-                  text: "Hello Human 👋, booting up...\n\nI'm Khaya, as I explore LLMs and building universal apps with Expo. Here is a workspace:",
-                  type: "text",
-                },
-              ]}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "flex-end",
-                  justifyContent: "space-between",
-                }}
+          <View
+            style={{
+              maxWidth: 500,
+              padding: 20,
+              flexDirection: "row",
+              alignItems: "center",
+              flex: 1,
+              width: "100%",
+            }}
+          >
+            <View style={{ flex: 1 }}>
+              <ChatMessage
+                messageId="sign-in-message"
+                role="Assistant"
+                title={
+                  <Text>
+                    <Text style={{ color: zinc500 }}>kaya</Text>GPT
+                  </Text>
+                }
+                parts={[
+                  {
+                    text: `Hello Human 👋, booting up...\n\nI'm Khaya, as I explore LLMs and building universal apps with Expo. ${userRandom ? `Here is a [workspace](/${userRandom?.username}):` : ""}`,
+                    type: "text",
+                  },
+                ]}
               >
-                <View style={{ transform: [{ translateY: -10 }] }}>
-                  <SignInAction />
-                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "flex-end",
+                    justifyContent: "space-between",
+                    height: 150,
+                  }}
+                >
+                  <View style={{ transform: [{ translateY: -10 }] }}>
+                    <SignInAction />
+                  </View>
 
-                {userRandom && !isMobile ? (
-                  <Link href={`/${userRandom.username}`}>
-                    <Rounded
-                      size="2xl"
-                      style={{
-                        padding: 5,
-                        backgroundColor: "#ffffff",
-                        transform: [{ rotate: "5deg" }],
-                      }}
-                    >
-                      <Rounded size={13} style={{ overflow: "hidden" }}>
-                        <Image
-                          source={{
-                            uri: `${process.env.EXPO_PUBLIC_API_URL}/img/workspace/${userRandom.username}`,
-                          }}
-                          style={{
-                            height: 125,
-                            width: 125,
-                            borderWidth: 1,
-                            borderColor: zinc300,
-                          }}
-                        />
+                  {userRandom && !isMobile ? (
+                    <Link href={`/${userRandom.username}`}>
+                      <Rounded
+                        size="2xl"
+                        style={{
+                          padding: 5,
+                          backgroundColor: "#ffffff",
+                          transform: [{ rotate: "5deg" }],
+                        }}
+                      >
+                        <Rounded size={13} style={{ overflow: "hidden" }}>
+                          <Image
+                            source={{
+                              uri: `${process.env.EXPO_PUBLIC_API_URL}/img/workspace/${userRandom.username}`,
+                            }}
+                            style={{
+                              height: 125,
+                              width: 125,
+                              borderWidth: 1,
+                              borderColor: zinc300,
+                            }}
+                          />
+                        </Rounded>
                       </Rounded>
-                    </Rounded>
-                  </Link>
-                ) : null}
-              </View>
-            </ChatMessage>
+                    </Link>
+                  ) : null}
+                </View>
+              </ChatMessage>
+            </View>
           </View>
         </View>
       </SafeAreaView>

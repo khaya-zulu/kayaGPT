@@ -131,7 +131,7 @@ const BottomBar = ({ userOverview }: { userOverview: any }) => {
   );
 };
 
-export default function SpaceIdPage() {
+export default function UsernamePage() {
   const { username } = useLocalSearchParams<{ username: string }>();
 
   const userOverviewQuery = useUserOverviewQuery(username);
