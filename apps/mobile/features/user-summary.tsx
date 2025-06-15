@@ -5,7 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { BlurView } from "expo-blur";
 
-import { Text } from "@/components/text";
+import { AnimatedText, Text } from "@/components/text";
 import { Button } from "@/components/button";
 import {
   Cloud,
@@ -26,10 +26,16 @@ import {
   useUserWeatherPublicQuery,
   useUserWeatherQuery,
 } from "@/queries/users";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { useAuth } from "@clerk/clerk-expo";
 import { useLocalSearchParams } from "expo-router";
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from "react-native-reanimated";
 
 const WeatherIcon = ({ code, color }: { code: string; color: string }) => {
   const Component = {
@@ -47,6 +53,34 @@ const WeatherIcon = ({ code, color }: { code: string; color: string }) => {
   return Component ? (
     <Component size={40} weight="duotone" duotoneColor={color} />
   ) : null;
+};
+
+const SlideInText = ({
+  text,
+  fontSize,
+  delay = 0,
+}: {
+  text: string;
+  fontSize?: "2xl";
+  delay?: number;
+}) => {
+  const x = useSharedValue(-250);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: x.value }],
+    };
+  });
+
+  useEffect(() => {
+    x.value = withDelay(delay, withTiming(0, { duration: 500 }));
+  }, []);
+
+  return (
+    <AnimatedText style={animatedStyle} fontSize={fontSize}>
+      {text}
+    </AnimatedText>
+  );
 };
 
 export const UserSummary = ({
@@ -80,6 +114,10 @@ export const UserSummary = ({
 
   const [date] = useState(() => DateTime.now());
 
+  const isWeatherPending = isSignedIn
+    ? userWeatherQuery.isPending
+    : userWeatherPublicQuery.isPending;
+
   return (
     <View style={{ gap: 10, flexDirection: "row", height: 450 }}>
       <Pressable style={{ flex: 1.5 }} onPress={onDescriptionPress}>
@@ -95,11 +133,19 @@ export const UserSummary = ({
             justifyContent: "space-between",
           }}
         >
-          <View>
-            <Text>{userWeather?.regionName ?? "Somewhere"}</Text>
-            <Text fontSize="2xl" style={{ marginTop: 10 }}>
-              {userWeather?.temperature ?? userWeatherPublic?.temperature}°C
-            </Text>
+          <View
+            style={{ overflow: "hidden", flexDirection: "column", gap: 10 }}
+          >
+            {!isWeatherPending ? (
+              <>
+                <SlideInText text={userWeather?.regionName ?? "Somewhere"} />
+                <SlideInText
+                  fontSize="2xl"
+                  delay={150}
+                  text={`${userWeather?.temperature ?? userWeatherPublic?.temperature}°C`}
+                />
+              </>
+            ) : null}
           </View>
 
           <WeatherIcon
@@ -164,7 +210,7 @@ export const UserSummary = ({
                   <XLogo
                     size={18}
                     color="#fff"
-                    style={{ transform: [{ translateY: 2 }] }}
+                    style={{ transform: [{ translateY: 5 }] }}
                   />
                 </Button>
               ) : null}
@@ -178,7 +224,7 @@ export const UserSummary = ({
                   <GithubLogo
                     size={18}
                     color="#fff"
-                    style={{ transform: [{ translateY: 2 }] }}
+                    style={{ transform: [{ translateY: 5 }] }}
                   />
                 </Button>
               ) : null}
@@ -192,7 +238,7 @@ export const UserSummary = ({
                   <LinkedinLogo
                     size={18}
                     color="#fff"
-                    style={{ transform: [{ translateY: 2 }] }}
+                    style={{ transform: [{ translateY: 5 }] }}
                   />
                 </Button>
               ) : null}
@@ -206,7 +252,7 @@ export const UserSummary = ({
                   <Globe
                     size={18}
                     color="#fff"
-                    style={{ transform: [{ translateY: 2 }] }}
+                    style={{ transform: [{ translateY: 5 }] }}
                   />
                 </Button>
               ) : null}
@@ -219,7 +265,7 @@ export const UserSummary = ({
               <LinkSimple
                 size={18}
                 color="#fff"
-                style={{ transform: [{ translateY: 2 }] }}
+                style={{ transform: [{ translateY: 5 }] }}
               />
             </Button>
           </BlurView>

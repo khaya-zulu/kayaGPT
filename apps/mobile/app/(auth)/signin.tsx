@@ -12,6 +12,15 @@ import { Rounded } from "@/components/rounded";
 import { zinc300, zinc500 } from "@/constants/theme";
 import { useUserRandomQuery } from "@/queries/users";
 import { useMobile } from "@/hooks/use-mobile";
+import { AnimatedView } from "@/components/animated-view";
+import {
+  Keyframe,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSpring,
+} from "react-native-reanimated";
+import { useEffect } from "react";
 
 const SignInAction = () => {
   const { startSSOFlow } = useSSO();
@@ -49,6 +58,46 @@ const SignInAction = () => {
         </View>
       </Button>
     </View>
+  );
+};
+
+const keyframe = new Keyframe({
+  "0": {
+    transform: [{ rotate: "10deg" }, { scale: 0.2 }, { translateX: 10 }],
+  },
+  100: {
+    transform: [{ rotate: "0deg" }, { scale: 1 }, { translateX: 0 }],
+  },
+});
+
+const AnimatedWorkspaceImage = ({ username }: { username?: string }) => {
+  return (
+    <Link href={`/${username}`}>
+      <AnimatedView entering={keyframe.duration(300).delay(350)}>
+        <Rounded
+          size="2xl"
+          style={{
+            padding: 5,
+            backgroundColor: "#ffffff",
+            transform: [{ rotate: "5deg" }],
+          }}
+        >
+          <Rounded size={13} style={{ overflow: "hidden" }}>
+            <Image
+              source={{
+                uri: `${process.env.EXPO_PUBLIC_API_URL}/img/workspace/${username}`,
+              }}
+              style={{
+                height: 125,
+                width: 125,
+                borderWidth: 1,
+                borderColor: zinc300,
+              }}
+            />
+          </Rounded>
+        </Rounded>
+      </AnimatedView>
+    </Link>
   );
 };
 
@@ -109,30 +158,7 @@ export default function SignInPage() {
                   </View>
 
                   {userRandom && !isMobile ? (
-                    <Link href={`/${userRandom.username}`}>
-                      <Rounded
-                        size="2xl"
-                        style={{
-                          padding: 5,
-                          backgroundColor: "#ffffff",
-                          transform: [{ rotate: "5deg" }],
-                        }}
-                      >
-                        <Rounded size={13} style={{ overflow: "hidden" }}>
-                          <Image
-                            source={{
-                              uri: `${process.env.EXPO_PUBLIC_API_URL}/img/workspace/${userRandom.username}`,
-                            }}
-                            style={{
-                              height: 125,
-                              width: 125,
-                              borderWidth: 1,
-                              borderColor: zinc300,
-                            }}
-                          />
-                        </Rounded>
-                      </Rounded>
-                    </Link>
+                    <AnimatedWorkspaceImage username={userRandom.username} />
                   ) : null}
                 </View>
               </ChatMessage>

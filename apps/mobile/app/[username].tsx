@@ -12,14 +12,36 @@ import { Link, useLocalSearchParams } from "expo-router";
 import { useUserOverviewQuery } from "@/queries/users";
 import { UserSummary } from "@/features/user-summary";
 import { useUserSettings } from "@/hooks/use-user-settings";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DescriptionPreview } from "@/features/description-preview";
+import { AnimatedView } from "@/components/animated-view";
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSpring,
+} from "react-native-reanimated";
 
 const BottomBar = ({ userOverview }: { userOverview: any }) => {
   const userSettings = useUserSettings();
 
+  const y = useSharedValue(100);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: y.value }],
+      position: "absolute",
+      bottom: 20,
+      width: "100%",
+    };
+  });
+
+  useEffect(() => {
+    y.value = withDelay(500, withSpring(0));
+  }, []);
+
   return (
-    <View style={{ position: "absolute", bottom: 20, width: "100%" }}>
+    <AnimatedView style={animatedStyle}>
       <Rounded
         size={35}
         style={{
@@ -127,7 +149,7 @@ const BottomBar = ({ userOverview }: { userOverview: any }) => {
           </View>
         </LinearGradient>
       </Rounded>
-    </View>
+    </AnimatedView>
   );
 };
 

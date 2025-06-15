@@ -111,7 +111,7 @@ export const ChatFrame = ({
         <Component {...props}>{children}</Component>
         <AnimatedView
           isAnimationDisabled={isChatAnimationDisabled}
-          entering={FadeInUp.duration(250)}
+          entering={FadeInDown.duration(250)}
         >
           <ChatBox
             value={value}

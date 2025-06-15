@@ -70,7 +70,8 @@ export const getChatHistory = async (env: Env) => {
         chatMessagesSubquery,
         eq(chatMessagesSubquery.chatId, schema.chat.id)
       )
-      .where(isNull(schema.chat.deletedAt));
+      .where(isNull(schema.chat.deletedAt))
+      .orderBy(desc(schema.chat.createdAt));
 
     return chats;
   } catch (error) {
