@@ -4,6 +4,7 @@ import { Rounded } from "@/components/rounded";
 import { LinearGradient } from "expo-linear-gradient";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { BlurView } from "expo-blur";
+import * as Clipboard from "expo-clipboard";
 
 import { AnimatedText, Text } from "@/components/text";
 import { Button } from "@/components/button";
@@ -29,13 +30,14 @@ import {
 import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { useAuth } from "@clerk/clerk-expo";
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withTiming,
 } from "react-native-reanimated";
+import { isWeb } from "@/constants/platform";
 
 const WeatherIcon = ({ code, color }: { code: string; color: string }) => {
   const Component = {
@@ -202,65 +204,94 @@ export const UserSummary = ({
           >
             <View style={{ flexDirection: "row", gap: 5 }}>
               {summary?.social?.x ? (
-                <Button
-                  variant="filled"
-                  borderColor={"#5b5b5b" + "cc"}
-                  padding={{ horizontal: 12, vertical: 8 }}
+                <Link
+                  href={summary.social.x}
+                  target="_blank"
+                  rel="noreferrer noopener"
                 >
-                  <XLogo
-                    size={18}
-                    color="#fff"
-                    style={{ transform: [{ translateY: 5 }] }}
-                  />
-                </Button>
+                  <Button
+                    variant="filled"
+                    borderColor={"#5b5b5b" + "cc"}
+                    padding={{ horizontal: 12, vertical: 8 }}
+                  >
+                    <XLogo
+                      size={18}
+                      color="#fff"
+                      style={{ transform: [{ translateY: 5 }] }}
+                    />
+                  </Button>
+                </Link>
               ) : null}
 
               {summary?.social?.github ? (
-                <Button
-                  variant="filled"
-                  borderColor={"#5b5b5b" + "cc"}
-                  padding={{ horizontal: 12, vertical: 8 }}
+                <Link
+                  href={summary.social.github}
+                  target="_blank"
+                  rel="noreferrer noopener"
                 >
-                  <GithubLogo
-                    size={18}
-                    color="#fff"
-                    style={{ transform: [{ translateY: 5 }] }}
-                  />
-                </Button>
+                  <Button
+                    variant="filled"
+                    borderColor={"#5b5b5b" + "cc"}
+                    padding={{ horizontal: 12, vertical: 8 }}
+                  >
+                    <GithubLogo
+                      size={18}
+                      color="#fff"
+                      style={{ transform: [{ translateY: 5 }] }}
+                    />
+                  </Button>
+                </Link>
               ) : null}
 
               {summary?.social?.linkedin ? (
-                <Button
-                  variant="filled"
-                  borderColor={"#5b5b5b" + "cc"}
-                  padding={{ horizontal: 12, vertical: 8 }}
+                <Link
+                  href={summary.social.linkedin}
+                  target="_blank"
+                  rel="noreferrer noopener"
                 >
-                  <LinkedinLogo
-                    size={18}
-                    color="#fff"
-                    style={{ transform: [{ translateY: 5 }] }}
-                  />
-                </Button>
+                  <Button
+                    variant="filled"
+                    borderColor={"#5b5b5b" + "cc"}
+                    padding={{ horizontal: 12, vertical: 8 }}
+                  >
+                    <LinkedinLogo
+                      size={18}
+                      color="#fff"
+                      style={{ transform: [{ translateY: 5 }] }}
+                    />
+                  </Button>
+                </Link>
               ) : null}
 
               {summary?.social?.website ? (
-                <Button
-                  variant="filled"
-                  borderColor={"#5b5b5b" + "cc"}
-                  padding={{ horizontal: 12, vertical: 8 }}
+                <Link
+                  href={summary.social.website}
+                  target="_blank"
+                  rel="noreferrer noopener"
                 >
-                  <Globe
-                    size={18}
-                    color="#fff"
-                    style={{ transform: [{ translateY: 5 }] }}
-                  />
-                </Button>
+                  <Button
+                    variant="filled"
+                    borderColor={"#5b5b5b" + "cc"}
+                    padding={{ horizontal: 12, vertical: 8 }}
+                  >
+                    <Globe
+                      size={18}
+                      color="#fff"
+                      style={{ transform: [{ translateY: 5 }] }}
+                    />
+                  </Button>
+                </Link>
               ) : null}
             </View>
             <Button
               variant="filled"
               borderColor={"#5b5b5b" + "cc"}
               padding={{ horizontal: 12, vertical: 8 }}
+              onPress={async () => {
+                if (isWeb) {
+                  await Clipboard.setStringAsync(window.location.href);
+                }
+              }}
             >
               <LinkSimple
                 size={18}
