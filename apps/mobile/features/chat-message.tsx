@@ -14,6 +14,8 @@ import { DateTime } from "luxon";
 import { fontSpaceGrotesk } from "@/constants/theme";
 import { useMobile } from "@/hooks/use-mobile";
 import { CubeLoader } from "./workspace-loader";
+import { AnimatedView } from "@/components/animated-view";
+import { FadeInDown } from "react-native-reanimated";
 
 export const ChatMessage = ({
   role,
@@ -41,7 +43,10 @@ export const ChatMessage = ({
   const textOnlyParts = parts?.filter((p) => p.type === "text");
 
   return (
-    <View style={{ flexDirection: "column", gap: 15 }}>
+    <AnimatedView
+      entering={FadeInDown.duration(250)}
+      style={{ flexDirection: "column", gap: 15 }}
+    >
       <Rounded
         style={{
           overflow: "hidden",
@@ -110,6 +115,6 @@ export const ChatMessage = ({
         </BlurView>
       </Rounded>
       {actions}
-    </View>
+    </AnimatedView>
   );
 };

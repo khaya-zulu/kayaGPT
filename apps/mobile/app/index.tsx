@@ -26,6 +26,7 @@ import { FadeIn, FadeInUp } from "react-native-reanimated";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { AnimatedView } from "@/components/animated-view";
 import { useEffect } from "react";
+import { FadeInView } from "@/components/fadein-view";
 
 const Container = styled.Pressable<{ isMobile?: boolean }>`
   max-width: 512px;
@@ -102,16 +103,13 @@ export default function IndexPage() {
       isChatAnimationDisabled={isAnimatedDoneState.index}
     >
       <Container onPress={() => Keyboard.dismiss()} isMobile={isMobile}>
-        <AnimatedView
-          isAnimationDisabled={isAnimatedDoneState.index}
-          entering={FadeIn.duration(250).delay(250)}
-        >
+        <FadeInView isAnimationDisabled={isAnimatedDoneState.index} delay={250}>
           <NavigationMenu />
-        </AnimatedView>
-        <AnimatedView
+        </FadeInView>
+        <FadeInView
           style={{ flex: 1 }}
           isAnimationDisabled={isAnimatedDoneState.index}
-          entering={FadeInUp.duration(250).delay(150)}
+          delay={150}
         >
           <Rounded
             size={isMobile ? 0 : 24}
@@ -137,24 +135,24 @@ export default function IndexPage() {
                 >
                   {chatHistory?.chats.map((c, idx) => {
                     return (
-                      <AnimatedView
+                      <FadeInView
                         key={c.id}
                         isAnimationDisabled={isAnimatedDoneState.index}
-                        entering={FadeIn.duration(350).delay(idx * 150)}
+                        delay={idx * 150}
                       >
                         <ChatSummary
                           chatId={c.id}
                           title={c.title}
                           message={c.lastMessage}
                         />
-                      </AnimatedView>
+                      </FadeInView>
                     );
                   })}
                 </View>
               </ScrollView>
             </BlurView>
           </Rounded>
-        </AnimatedView>
+        </FadeInView>
       </Container>
     </ChatFrame>
   );

@@ -134,7 +134,7 @@ export const WorkspaceLoader = ({
       <CubeLoader color={color} />
       <Text style={{ color: zinc500 }}>/</Text>
       <Text>
-        <Text style={{ color: zinc500 }}>kaya</Text>GPT
+        <Text style={{ color }}>kaya</Text>GPT
       </Text>
       <Text>/</Text>
       <View style={{ width: 200, overflow: "hidden" }}>
