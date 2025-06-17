@@ -1,5 +1,5 @@
 import { Env } from "@/utils/env";
-import { db, eq, schema, InferSelectModel, sql } from "@kgpt/db";
+import { db, eq, schema, InferSelectModel, sql, isNotNull } from "@kgpt/db";
 import { createId } from "@paralleldrive/cuid2";
 
 type UserSelect = InferSelectModel<typeof schema.user>;
@@ -469,6 +469,7 @@ export const getUserRandom = async (env: Env) => {
         username: schema.user.username,
       })
       .from(schema.user)
+      .where(isNotNull(schema.user.onboardedAt))
       .orderBy(sql`RANDOM()`)
       .limit(1);
 

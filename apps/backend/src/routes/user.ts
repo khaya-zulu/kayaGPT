@@ -25,6 +25,7 @@ import { zValidator } from "@hono/zod-validator";
 import { getColorPalette } from "@/utils/color";
 import { createId } from "@paralleldrive/cuid2";
 import { generateText } from "ai";
+
 import { getFirstChatByUserId } from "@/queries/chat";
 import { generateRegionObjectService } from "@/services/generate-region-object";
 import { getUserWeatherService } from "@/services/get-user-weather";
@@ -143,7 +144,6 @@ export const userRoute = createApp()
     const { weather, temp } = await getUserWeatherService(c.env, { userId });
 
     const response = await generateText({
-      // todo: use worker ai service
       model: await createOpenAIModel(c.env, ["gpt-4.1-mini-2025-04-14"]),
       prompt: `The temperature in ${weather.regionName} is ${temp}°C with a humidity of ${weather.humidity}%.`,
       system: `You are a helpful assistant that displays the current temperature and comments on the users current weather conditions in a friendly manner. Keep it very short and concise. Use emojis to make it more engaging. Use the user's first name.\n
