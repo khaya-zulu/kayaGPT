@@ -9,8 +9,7 @@ import { createChatMessage } from "@/queries/chat-message";
 import { saveDisplayNameTool } from "./onboarding-tools/save-display-name";
 import { saveRegionTool } from "./onboarding-tools/save-region";
 import { completeOnboardingTool } from "./onboarding-tools/complete";
-
-import { createOpenAIModel } from "@/utils/models";
+import { saveSocialLinksTool } from "./onboarding-tools/save-social-links";
 
 const ONBOARDING_CHAT_SYSTEM_PROMPT = `You’re a warm, thoughtful assistant—part friend, part therapist—gently guiding someone through setting up their KayaGPT. Be brief, supportive, and conversational. This isn’t a form—it’s a vibe check. Reflect the user’s energy. Light jokes welcome.
 
@@ -65,7 +64,14 @@ Invite a short, real bio — honest, weird, poetic… all good.
 
 ---
 
-### Step 6: **Complete**  
+### Step 6: **Social Links**  
+Ask if they’d like to share any socials — Twitter, LinkedIn, GitHub, etc. (Optional but fun.)  
+Mention they can drop as many or as few as they want.  
+→ \`saveSocialLinks\`
+
+---
+
+### Step 7: **Complete**  
 Wrap it up with encouragement.  
 → \`completeOnboarding\`  
 Let them know their KayaGPT is ready to go.`;
@@ -93,6 +99,7 @@ export const onboardingChatStreamText = async (
       newWorkspace: generateWorkspaceTool(env, { userId: props.userId }),
       userAvatar: userAvatarTool(),
       profileSettings: profileSettingsTool(),
+      saveSocialLinksTool: saveSocialLinksTool(env, { userId: props.userId }),
       completeOnboarding: completeOnboardingTool(env, { userId: props.userId }),
     },
     maxSteps: 3,

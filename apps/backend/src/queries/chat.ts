@@ -1,4 +1,4 @@
-import { schema, db, desc, eq, isNull, asc } from "@kgpt/db";
+import { schema, db, desc, eq, isNull, asc, and } from "@kgpt/db";
 
 import { Env } from "@/utils/env";
 
@@ -42,7 +42,10 @@ export const getFirstChatByUserId = async (
   }
 };
 
-export const getChatHistory = async (env: Env) => {
+export const getChatHistoryByUserId = async (
+  env: Env,
+  props: { userId: string }
+) => {
   try {
     const chatMessagesSubquery = db(env.DB)
       .select({
@@ -70,7 +73,9 @@ export const getChatHistory = async (env: Env) => {
         chatMessagesSubquery,
         eq(chatMessagesSubquery.chatId, schema.chat.id)
       )
-      .where(isNull(schema.chat.deletedAt))
+      .where(
+        and(isNull(schema.chat.deletedAt), eq(schema.chat.userId, props.userId))
+      )
       .orderBy(desc(schema.chat.createdAt));
 
     return chats;
@@ -100,14 +105,22 @@ export const getChatTitleById = async (env: Env, props: { chatId: string }) => {
   }
 };
 
-export const deleteChatById = async (env: Env, props: { chatId: string }) => {
+export const deleteChatById = async (
+  env: Env,
+  props: { chatId: string; userId: string }
+) => {
   try {
     await db(env.DB)
       .update(schema.chat)
       .set({
         deletedAt: new Date(),
       })
-      .where(eq(schema.chat.id, props.chatId));
+      .where(
+        and(
+          eq(schema.chat.id, props.chatId),
+          eq(schema.chat.userId, props.userId)
+        )
+      );
   } catch (error: any) {
     console.error("Error deleting chat by ID:", error.message);
     throw error;

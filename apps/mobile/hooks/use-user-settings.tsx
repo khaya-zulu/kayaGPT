@@ -133,9 +133,12 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   //#endregion
 
   if (
+    // auth is not loaded yet
     !isLoaded ||
+    // user is not signed in
     (isSignedIn && isPending) ||
-    (isSignedIn && isWorkspaceImageLoading)
+    // workspace image is loading
+    (!!data?.onboardedAt && isSignedIn && isWorkspaceImageLoading)
   ) {
     return (
       <WorkspaceLoader

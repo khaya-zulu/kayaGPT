@@ -10,6 +10,7 @@ import {
   ScrollView,
   NativeSyntheticEvent,
   TextInputChangeEventData,
+  FlatList,
 } from "react-native";
 
 import { zinc100 } from "@/constants/theme";
@@ -37,6 +38,8 @@ import {
 import { ProfileEditorBottomSheet } from "@/features/profile-editor/bottom-sheet";
 import { MessagesLayout } from "@/features/messages-layout";
 import { useMobile } from "@/hooks/use-mobile";
+import { ChatMessage } from "@/features/chat-message";
+import { Tool } from "@/features/tool";
 
 const MobileKeyboardDismiss = styled.Pressable`
   max-width: 650px;
@@ -77,7 +80,7 @@ export default function ChatIdPage() {
 
   const userSettings = useUserSettings();
 
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<FlatList>(null);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   const [isNewMessage, setIsNewMessage] = useState(false);
@@ -150,7 +153,8 @@ export default function ChatIdPage() {
   };
 
   const handleChatInputSubmit = () => {
-    scrollViewRef.current?.scrollToEnd({
+    scrollViewRef.current?.scrollToIndex({
+      index: messages.length - 1,
       animated: true,
     });
     handleSubmit();
@@ -326,35 +330,59 @@ export default function ChatIdPage() {
             </ToolbarBox>
           ) : null}
           <SafeAreaView style={{ flex: 1, position: "relative" }}>
-            <ScrollView
-              ref={scrollViewRef}
-              scrollEventThrottle={16}
-              onScroll={handleOnScroll}
-              onLayout={(ev) => {
-                setScrollViewHeight(ev.nativeEvent.layout.height);
-              }}
-              showsVerticalScrollIndicator={false}
-            >
-              <KeyboardDismiss onPress={() => Keyboard.dismiss()}>
-                <View
-                  style={{
-                    paddingHorizontal: isMobile ? 15 : 20,
-                    paddingTop: 20,
-                    flexDirection: "column",
-                    gap: isMobile ? 10 : 18,
-                    paddingBottom: 200,
-                  }}
+            <KeyboardDismiss onPress={() => Keyboard.dismiss()}>
+              <View
+                style={{
+                  flex: 1,
+                }}
+                onLayout={(ev) => {
+                  setScrollViewHeight(ev.nativeEvent.layout.height);
+                }}
+              >
+                <FlatList
+                  ref={scrollViewRef as any}
+                  data={messages}
                   onLayout={(ev) => {
                     setScrollViewContentHeight(ev.nativeEvent.layout.height);
                   }}
-                >
-                  <MessagesLayout
-                    messages={messages}
-                    isFirstMessageIgnored={isFirstMessageIgnored}
-                  />
-                </View>
-              </KeyboardDismiss>
-            </ScrollView>
+                  showsVerticalScrollIndicator={false}
+                  onScroll={handleOnScroll}
+                  scrollEventThrottle={16}
+                  contentContainerStyle={{
+                    gap: isMobile ? 10 : 18,
+                    paddingHorizontal: isMobile ? 15 : 20,
+                    paddingTop: 20,
+                    paddingBottom: 200,
+                  }}
+                  renderItem={({ item, index }) => {
+                    if (isFirstMessageIgnored && index === 0) {
+                      return null;
+                    }
+
+                    const tools = item.parts?.filter(
+                      (p) => p.type === "tool-invocation"
+                    );
+
+                    return (
+                      <ChatMessage
+                        key={item.id}
+                        role={item.role === "assistant" ? "Assistant" : "User"}
+                        messageId={item.id}
+                        parts={item.parts}
+                        createdAt={item.createdAt}
+                      >
+                        {tools?.map((t, idx) => (
+                          <Tool
+                            key={"tool" + idx}
+                            invocation={t.toolInvocation}
+                          />
+                        ))}
+                      </ChatMessage>
+                    );
+                  }}
+                />
+              </View>
+            </KeyboardDismiss>
             {isScrollToBottomVisible ? (
               <View
                 style={{
@@ -366,7 +394,13 @@ export default function ChatIdPage() {
                   justifyContent: "center",
                 }}
               >
-                <Pressable onPress={() => scrollViewRef.current?.scrollToEnd()}>
+                <Pressable
+                  onPress={() =>
+                    scrollViewRef.current?.scrollToIndex({
+                      index: messages.length - 1,
+                    })
+                  }
+                >
                   <Rounded
                     size="full"
                     style={{

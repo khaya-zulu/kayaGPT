@@ -1,5 +1,5 @@
 import { Env } from "@/utils/env";
-import { schema, db, InferSelectModel, eq } from "@kgpt/db";
+import { schema, db, InferSelectModel, eq, and } from "@kgpt/db";
 import { createId } from "@paralleldrive/cuid2";
 
 type ChatMessageSelect = InferSelectModel<typeof schema.chatMessage>;
@@ -31,9 +31,18 @@ export const createChatMessage = async (
 
 export const getChatMessagesByChatId = async (
   env: Env,
-  props: { chatId: string }
+  props: { chatId: string; userId: string }
 ) => {
   try {
+    const [chat] = await db(env.DB)
+      .select({ userId: schema.chat.userId })
+      .from(schema.chat)
+      .where(eq(schema.chat.id, props.chatId));
+
+    if (chat.userId !== props.userId) {
+      throw new Error("Unauthorized access to chat messages");
+    }
+
     const chatMessages = await db(env.DB)
       .select({
         id: schema.chatMessage.id,

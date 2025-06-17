@@ -15,18 +15,14 @@ export const saveSocialLinksTool = (env: Env, props: { userId: string }) => {
       website: socialLinkSchema.describe("The user's personal website URL."),
     }),
     execute: async ({ github, twitter, linkedin, website }) => {
-      console.log(
-        "Saving social links for user:",
-        props.userId,
-        github,
-        twitter,
-        linkedin,
-        website
-      );
       await updateSocialLinksById(env, {
         userId: props.userId,
         social: { github, x: twitter, linkedin, website },
       });
+
+      return {
+        success: true,
+      };
     },
   });
 };

@@ -2,7 +2,7 @@ import { Message } from "ai";
 
 import {
   deleteChatById,
-  getChatHistory,
+  getChatHistoryByUserId,
   getChatTitleById,
 } from "@/queries/chat";
 import { getChatMessagesByChatId } from "@/queries/chat-message";
@@ -18,12 +18,17 @@ import { onboardingChatStreamText } from "@/services/onboarding-chat-stream-text
 
 export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
-    const chats = await getChatHistory(c.env);
+    const userId = c.get("userId");
+
+    const chats = await getChatHistoryByUserId(c.env, { userId });
     return c.json({ chats });
   })
   .post("/:chatId/delete", privateAuth, async (c) => {
+    const userId = c.get("userId");
+
     await deleteChatById(c.env, {
       chatId: c.req.param("chatId"),
+      userId,
     });
 
     return c.json({ success: true });
@@ -36,7 +41,9 @@ export const chatRoute = createApp()
   })
   .get("/:chatId/messages", privateAuth, async (c) => {
     const chatId = c.req.param("chatId");
-    const messages = await getChatMessagesByChatId(c.env, { chatId });
+    const userId = c.get("userId");
+
+    const messages = await getChatMessagesByChatId(c.env, { chatId, userId });
 
     return c.json({ messages });
   })
@@ -69,23 +76,19 @@ export const chatRoute = createApp()
       await saveLastMessageService(c.env, { chatId, messages: body.messages });
     }
 
-    if (!isOnboardingComplete) {
-      const onboardingModel = await createOpenAIModel(c.env, ["o3"]);
+    const model = await createOpenAIModel(c.env, ["gpt-4.1-2025-04-14"]);
 
+    if (!isOnboardingComplete) {
       return onboardingChatStreamText(c.env, {
-        model: onboardingModel,
+        model,
         messages: body.messages,
         userId,
         chatId,
       });
     }
 
-    const onboardingModel = await createOpenAIModel(c.env, [
-      "gpt-4.1-2025-04-14",
-    ]);
-
     return generalChatStreamText(c.env, {
-      model: onboardingModel,
+      model,
       messages: body.messages,
       userId,
       chatId,
