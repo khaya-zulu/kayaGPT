@@ -6,21 +6,15 @@ import { ChatMessage } from "@/features/chat-message";
 
 import { Button } from "@/components/button";
 import { Text } from "@/components/text";
-import { useSSO } from "@clerk/clerk-expo";
-import { Link, useRouter } from "expo-router";
+import { useAuth, useSSO } from "@clerk/clerk-expo";
+import { Link, Redirect, useRouter } from "expo-router";
 import { Rounded } from "@/components/rounded";
 import { zinc300, zinc500 } from "@/constants/theme";
 import { useUserRandomQuery } from "@/queries/users";
 import { useMobile } from "@/hooks/use-mobile";
 import { AnimatedView } from "@/components/animated-view";
-import {
-  Keyframe,
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withSpring,
-} from "react-native-reanimated";
-import { useEffect } from "react";
+import { Keyframe } from "react-native-reanimated";
+import { isWeb } from "@/constants/platform";
 
 const SignInAction = () => {
   const { startSSOFlow } = useSSO();
@@ -33,7 +27,13 @@ const SignInAction = () => {
       strategy: "oauth_google",
     });
 
-    router.navigate("/");
+    if (isWeb) {
+      // context: the session state is not updated immediately in web,
+      // so we need to reload the page
+      window.location.reload();
+    } else {
+      router.navigate("/");
+    }
   };
   //#endregion
 
@@ -102,11 +102,17 @@ const AnimatedWorkspaceImage = ({ username }: { username?: string }) => {
 };
 
 export default function SignInPage() {
+  const { isSignedIn } = useAuth();
+
   const userRandomQuery = useUserRandomQuery();
 
   const userRandom = userRandomQuery.data;
 
   const { isMobile } = useMobile();
+
+  if (isSignedIn) {
+    return <Redirect href="/" />;
+  }
 
   return (
     <MainAppBox>

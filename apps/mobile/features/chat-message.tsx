@@ -75,7 +75,7 @@ export const ChatMessage = ({
               <View
                 style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
               >
-                {isAssistant && textOnlyParts?.length ? (
+                {isAssistant && textOnlyParts?.length !== undefined ? (
                   <>
                     {textOnlyParts.length > 0 ? (
                       <Cube
