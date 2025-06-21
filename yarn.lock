@@ -82,7 +82,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ai-sdk/provider-utils@npm:2.2.8":
+"@ai-sdk/provider-utils@npm:2.2.8, @ai-sdk/provider-utils@npm:^2.2.8":
   version: 2.2.8
   resolution: "@ai-sdk/provider-utils@npm:2.2.8"
   dependencies:
@@ -95,7 +95,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ai-sdk/provider@npm:1.1.3":
+"@ai-sdk/provider@npm:1.1.3, @ai-sdk/provider@npm:^1.1.3":
   version: 1.1.3
   resolution: "@ai-sdk/provider@npm:1.1.3"
   dependencies:
@@ -3384,6 +3384,7 @@ __metadata:
     dotenv: ^16.5.0
     hono: 4.7.10
     openai: 5.3.0
+    workers-ai-provider: ^0.6.1
     wrangler: 4.14.4
     zod: 3.24.4
   languageName: unknown
@@ -13400,6 +13401,16 @@ __metadata:
   bin:
     workerd: bin/workerd
   checksum: 4e1bf1ccc4f0e60e1713611a2b7248043c8423ff1faebcefe5386b1c8a3ddc8742c96bd305631221b05fb10c454189fed435f753a361703be7c03cf656df0734
+  languageName: node
+  linkType: hard
+
+"workers-ai-provider@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "workers-ai-provider@npm:0.6.1"
+  dependencies:
+    "@ai-sdk/provider": ^1.1.3
+    "@ai-sdk/provider-utils": ^2.2.8
+  checksum: aa307f82746553dd7bb5adc12f065c8541480d63916bc26a97546c12f8c8418eda5709c3a7d4f7edb7da875ccc400d07b6f5d632a2ed65fae7342fd78bf0a1a4
   languageName: node
   linkType: hard
 

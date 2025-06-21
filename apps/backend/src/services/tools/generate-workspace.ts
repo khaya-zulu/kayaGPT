@@ -22,8 +22,6 @@ export const generateWorkspaceTool = (env: Env, props: { userId: string }) => {
 
         const referenceImage = await getReferenceImage();
 
-        console.log("Generating workspace...");
-
         const response = await client.images.edit({
           model: "gpt-image-1",
           image: [referenceImage],
