@@ -1,7 +1,7 @@
 import { Env } from "@/utils/env";
 import { tool } from "ai";
 import { z } from "zod";
-import { generateRegionObjectService } from "../generate-region-object";
+import { generateRegionObject } from "../../utils/generate-region-object";
 import { updateRegionById } from "@/queries/user";
 
 export const saveRegionTool = (env: Env, props: { userId: string }) => {
@@ -15,8 +15,7 @@ export const saveRegionTool = (env: Env, props: { userId: string }) => {
         ),
     }),
     execute: async ({ regionName }) => {
-      console.log("Saving region for user:", props.userId, regionName);
-      const region = await generateRegionObjectService(env, { regionName });
+      const region = await generateRegionObject(env, { regionName });
       await updateRegionById(env, { region, userId: props.userId });
 
       return region;

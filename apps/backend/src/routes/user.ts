@@ -27,8 +27,8 @@ import { createId } from "@paralleldrive/cuid2";
 import { generateText } from "ai";
 
 import { getFirstChatByUserId } from "@/queries/chat";
-import { generateRegionObjectService } from "@/services/generate-region-object";
-import { getUserWeatherService } from "@/services/get-user-weather";
+import { generateRegionObject } from "@/services/utils/generate-region-object";
+import { getUserWeather } from "@/services/utils/get-user-weather";
 
 export const userRoute = createApp()
   .get("/overview/:username", async (c) => {
@@ -124,7 +124,7 @@ export const userRoute = createApp()
       return c.json({ error: "User not found" }, 404);
     }
 
-    const { weather, temp } = await getUserWeatherService(c.env, {
+    const { weather, temp } = await getUserWeather(c.env, {
       userId: user.id,
     });
 
@@ -141,7 +141,7 @@ export const userRoute = createApp()
 
     const user = await getUserDisplayNameById(c.env, { userId });
 
-    const { weather, temp } = await getUserWeatherService(c.env, { userId });
+    const { weather, temp } = await getUserWeather(c.env, { userId });
 
     const response = await generateText({
       model: await createWorkersAIModel(c.env, "@cf/meta/llama-3-8b-instruct"),
@@ -246,7 +246,7 @@ export const userRoute = createApp()
       const { regionName, ...rest } = data;
 
       if (region?.name !== data.regionName) {
-        region = await generateRegionObjectService(c.env, { regionName });
+        region = await generateRegionObject(c.env, { regionName });
       }
 
       await updateUserProfileById(c.env, {

@@ -1,6 +1,5 @@
 import { Button } from "@/components/button";
 import { Text } from "@/components/text";
-import { rose600 } from "@/constants/theme";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useChatDeleteMutation } from "@/mutations/chat";
 import { chatHistoryQueryKey } from "@/queries/chat";
@@ -10,7 +9,11 @@ import { useLocalSearchParams } from "expo-router/build/hooks";
 import { Trash } from "phosphor-react-native";
 import { View } from "react-native";
 
-export const CompleteOnboardingTool = ({ username }: { username: string }) => {
+import type { CompleteOnboardingToolOutput } from "@kgpt/ai/tools";
+
+export const CompleteOnboardingTool = ({
+  username,
+}: CompleteOnboardingToolOutput) => {
   const utils = useQueryClient();
 
   const userSettings = useUserSettings();

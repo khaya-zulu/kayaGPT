@@ -10,11 +10,11 @@ import { getChatMessagesByChatId } from "@/queries/chat-message";
 import { createOpenAIModel } from "@/utils/models";
 import { createApp } from "@/utils/server";
 import { privateAuth } from "@/utils/auth";
-import { generateChatTitleService } from "@/services/generate-chat-title";
-import { saveLastMessageService } from "@/services/save-last-message";
+import { generateChatTitle } from "@/services/utils/generate-chat-title";
+import { saveLastMessage } from "@/services/chat/save-last-message";
 import { getUserOnboardedAtById } from "@/queries/user";
-import { generalChatStreamText } from "@/services/general-chat-stream-text";
-import { onboardingChatStreamText } from "@/services/onboarding-chat-stream-text";
+import { generalChatStreamText } from "@/services/chat/general-chat-stream-text";
+import { onboardingChatStreamText } from "@/services/chat/onboarding-chat-stream-text";
 
 export const chatRoute = createApp()
   .get("/", privateAuth, async (c) => {
@@ -58,7 +58,7 @@ export const chatRoute = createApp()
     const isNewMessage = body.messages.length === 1;
 
     if (isNewMessage) {
-      await generateChatTitleService(c.env, {
+      await generateChatTitle(c.env, {
         prompt: body.messages[0].content,
         chatId,
         userId,
@@ -73,7 +73,7 @@ export const chatRoute = createApp()
 
     // do not save the first message for onboarding chats
     if (isOnboardingComplete || !isTheFirstMessage) {
-      await saveLastMessageService(c.env, { chatId, messages: body.messages });
+      await saveLastMessage(c.env, { chatId, messages: body.messages });
     }
 
     const model = await createOpenAIModel(c.env, ["gpt-4.1-2025-04-14"]);

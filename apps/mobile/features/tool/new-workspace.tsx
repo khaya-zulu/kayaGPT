@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Image, View } from "react-native";
 
+import type { NewWorkspaceToolOutput } from "@kgpt/ai/tools";
+
 import { Rounded } from "@/components/rounded";
 import { Button } from "@/components/button";
 
@@ -11,13 +13,7 @@ import { Text } from "@/components/text";
 import { zinc100, zinc200, zinc300 } from "@/constants/theme";
 import { ColorPalette } from "../color-palette";
 
-export const NewWorkspaceTool = ({
-  workspaceKey,
-  prompt,
-}: {
-  workspaceKey: string;
-  prompt: string;
-}) => {
+export const NewWorkspaceTool = ({ workspaceKey }: NewWorkspaceToolOutput) => {
   const [color, setColor] = useState<string | undefined>();
   const [isLoaded, setIsLoaded] = useState(false);
 

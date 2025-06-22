@@ -1,0 +1,20 @@
+{
+  "name": "@kgpt/ai",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "scripts": {
+    "generate": "drizzle-kit generate"
+  },
+  "devDependencies": {
+    "ai": "4.3.16",
+    "zod": "3.24.4"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./tools": "./src/tools/index.ts"
+  }
+}

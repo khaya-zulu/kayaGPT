@@ -3,6 +3,7 @@ import { Text } from "@/components/text";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useState, useTransition } from "react";
 import { Image, View } from "react-native";
+import type { UserAvatarToolOutput } from "@kgpt/ai/tools";
 
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "@/components/button";
@@ -37,7 +38,7 @@ const AvatarBox = ({ url, size = 125 }: { url: string; size?: number }) => {
   );
 };
 
-export const UserAvatarTool = ({}) => {
+export const UserAvatarTool = ({}: UserAvatarToolOutput) => {
   const { avatarUrl, invalidateImage } = useUserSettings();
 
   const [image, setImage] = useState<ImagePicker.ImagePickerAsset | null>(null);

@@ -1,6 +1,5 @@
 import { createChat } from "@/queries/chat";
 import { Env } from "@/utils/env";
-import { createOpenAIModel } from "@/utils/models";
 import { generateObject, LanguageModelV1 } from "ai";
 import { z } from "zod";
 
@@ -8,7 +7,7 @@ import { z } from "zod";
  * generates a chat title based on a starting prompt
  * and creates a new chat.
  */
-export const generateChatTitleService = async (
+export const generateChatTitle = async (
   env: Env,
   props: {
     prompt: string;

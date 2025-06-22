@@ -7,7 +7,7 @@ import { Message } from "ai";
  * This function is intended to be used after a chat session ends,
  * to store the last message in the database.
  */
-export const saveLastMessageService = async (
+export const saveLastMessage = async (
   env: Env,
   props: { chatId: string; messages: Message[] }
 ) => {

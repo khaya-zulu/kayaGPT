@@ -1,4 +1,3 @@
-import { Env } from "@/utils/env";
 import { toFile } from "openai";
 
 export const getReferenceImage = async () => {

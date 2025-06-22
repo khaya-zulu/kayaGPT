@@ -3,7 +3,7 @@ import { createOpenAIModel } from "@/utils/models";
 import { generateObject } from "ai";
 import { z } from "zod";
 
-export const generateRegionObjectService = async (
+export const generateRegionObject = async (
   env: Env,
   props: { regionName: string }
 ) => {

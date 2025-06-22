@@ -70,6 +70,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
+    "@kgpt/ai": "*",
     "@kgpt/backend": "workspace:*",
     "@types/jest": "^29.5.12",
     "@types/luxon": "^3.6.2",

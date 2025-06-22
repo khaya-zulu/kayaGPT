@@ -3369,6 +3369,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kgpt/ai@*, @kgpt/ai@workspace:packages/ai":
+  version: 0.0.0-use.local
+  resolution: "@kgpt/ai@workspace:packages/ai"
+  dependencies:
+    ai: 4.3.16
+    zod: 3.24.4
+  languageName: unknown
+  linkType: soft
+
 "@kgpt/backend@workspace:*, @kgpt/backend@workspace:apps/backend":
   version: 0.0.0-use.local
   resolution: "@kgpt/backend@workspace:apps/backend"
@@ -3377,6 +3386,7 @@ __metadata:
     "@clerk/backend": ^1.32.1
     "@hono/clerk-auth": ^2.0.0
     "@hono/zod-validator": 0.5.0
+    "@kgpt/ai": "*"
     "@kgpt/db": "*"
     "@paralleldrive/cuid2": ^2.2.2
     "@types/fs-extra": ^11.0.4
@@ -9875,6 +9885,7 @@ __metadata:
     "@clerk/clerk-expo": 2.12.0
     "@expo/vector-icons": ^14.0.2
     "@gorhom/bottom-sheet": ^5
+    "@kgpt/ai": "*"
     "@kgpt/backend": "workspace:*"
     "@react-native-masked-view/masked-view": 0.3.2
     "@react-navigation/bottom-tabs": ^7.2.0
