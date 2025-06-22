@@ -11,11 +11,13 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
   FlatList,
+  TouchableWithoutFeedback,
+  TouchableWithoutFeedbackProps,
 } from "react-native";
 
 import { zinc100 } from "@/constants/theme";
 import { AppWindow, ArrowDown, ChatCircleDots } from "phosphor-react-native";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, FragmentProps, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useChat } from "@/hooks/use-chat";
 import { chatHistoryQueryKey, useChatMessagesQuery } from "@/queries/chat";
@@ -36,19 +38,13 @@ import {
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import { ProfileEditorBottomSheet } from "@/features/profile-editor/bottom-sheet";
-import { MessagesLayout } from "@/features/messages-layout";
 import { useMobile } from "@/hooks/use-mobile";
 import { ChatMessage } from "@/features/chat-message";
 import { Tool } from "@/features/tool";
 
-const MobileKeyboardDismiss = styled.Pressable`
-  max-width: 650px;
-  margin: 0 auto;
-  width: 100%;
-  flex-direction: column;
-  gap: 20px;
-  flex: 1;
-`;
+const MobileKeyboardDismiss = (props: FragmentProps) => {
+  return <Fragment {...props} />;
+};
 
 const WebKeyboardDismiss = styled.View`
   max-width: 650px;
@@ -188,8 +184,8 @@ export default function ChatIdPage() {
   };
   //#endregion
 
-  useWatch(messagesQuery.isSuccess, (prev, curr) => {
-    if (curr) {
+  useEffect(() => {
+    if (messagesQuery.isSuccess) {
       const chatMessages = messagesQuery.data?.messages;
       if (chatMessages) {
         setMessages(
@@ -232,7 +228,7 @@ export default function ChatIdPage() {
         }, 50);
       }
     }
-  });
+  }, [messagesQuery.isSuccess]);
 
   useEffect(() => {
     if (!!params.message && params.message !== "undefined") {
@@ -330,14 +326,12 @@ export default function ChatIdPage() {
             </ToolbarBox>
           ) : null}
           <SafeAreaView style={{ flex: 1, position: "relative" }}>
-            <KeyboardDismiss onPress={() => Keyboard.dismiss()}>
+            <KeyboardDismiss>
               <View
-                style={{
-                  flex: 1,
-                }}
                 onLayout={(ev) => {
                   setScrollViewHeight(ev.nativeEvent.layout.height);
                 }}
+                style={{ flex: 1 }}
               >
                 <FlatList
                   ref={scrollViewRef as any}
@@ -353,7 +347,9 @@ export default function ChatIdPage() {
                     paddingHorizontal: isMobile ? 15 : 20,
                     paddingTop: 20,
                     paddingBottom: 200,
+                    flexGrow: 1,
                   }}
+                  style={{ flex: 1 }}
                   renderItem={({ item, index }) => {
                     if (isFirstMessageIgnored && index === 0) {
                       return null;

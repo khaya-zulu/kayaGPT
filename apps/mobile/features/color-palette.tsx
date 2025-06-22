@@ -15,8 +15,7 @@ const ColorButton = styled.TouchableOpacity<{ borderColor: string }>`
   border-radius: 100px;
   border-color: ${(props) => props.borderColor};
   border-width: 2px;
-  width: 22px;
-  height: 22px;
+  padding: 1px;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -128,7 +127,7 @@ export const ColorPalette = ({
         }
         onPress={() => handleColorChange(dominant)}
       >
-        <Circle color={dominant} weight="fill" size={17} />
+        <Circle color={dominant} weight="fill" size={16} />
       </ColorButton>
 
       <ColorButton
@@ -139,7 +138,7 @@ export const ColorPalette = ({
         }
         onPress={() => handleColorChange(darkMuted)}
       >
-        <Circle color={darkMuted} weight="fill" size={17} />
+        <Circle color={darkMuted} weight="fill" size={16} />
       </ColorButton>
 
       <ColorButton
@@ -150,7 +149,7 @@ export const ColorPalette = ({
         }
         onPress={() => handleColorChange(darkVibrant)}
       >
-        <Circle color={darkVibrant} weight="fill" size={17} />
+        <Circle color={darkVibrant} weight="fill" size={16} />
       </ColorButton>
 
       <ColorButton
@@ -159,7 +158,7 @@ export const ColorPalette = ({
         }
         onPress={() => handleColorChange(vibrant)}
       >
-        <Circle color={vibrant} weight="fill" size={17} />
+        <Circle color={vibrant} weight="fill" size={16} />
       </ColorButton>
     </View>
   );

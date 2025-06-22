@@ -146,7 +146,7 @@ export default function SignInPage() {
                 }
                 parts={[
                   {
-                    text: `Hello Human 👋, booting up...\n\nI'm Khaya, as I explore LLMs and building universal apps with Expo. ${userRandom ? `Here is a [workspace](/${userRandom?.username}):` : ""}`,
+                    text: `Hello Human 🤖 [booting up...]\n\nThis is a project exploring universal AI applications with Expo — built by [upshot.dev](https://upshot.dev/). Read the [blog post](https://upshot.dev/notes/kayagpt). ${userRandom ? `Check out this random [workspace](/${userRandom?.username}):` : ""}`,
                     type: "text",
                   },
                 ]}

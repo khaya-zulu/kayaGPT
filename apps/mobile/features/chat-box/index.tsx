@@ -15,6 +15,7 @@ import {
   LinkSimple,
   Microphone,
   PlusCircle,
+  SignOut,
 } from "phosphor-react-native";
 
 import {
@@ -23,12 +24,15 @@ import {
   roundedLg,
   roundedFull,
   zinc800,
+  rose600,
 } from "@/constants/theme";
 import { ScrollProgress } from "@/features/chat-box/scroll-progress";
 import { Text } from "@/components/text";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { AutoResizingInput } from "@/features/auto-resizing-input";
 import { useMobile } from "@/hooks/use-mobile";
+import { useRouter } from "expo-router";
+import { useAuth } from "@clerk/clerk-expo";
 
 const InputContainer = styled.View<{ isMobile: boolean }>`
   max-width: 750px;
@@ -127,6 +131,9 @@ export const ChatBox = ({
 
   const userSettings = useUserSettings();
 
+  const { navigate } = useRouter();
+  const { signOut } = useAuth();
+
   const { isMobile } = useMobile();
 
   return (
@@ -161,7 +168,24 @@ export const ChatBox = ({
                   marginTop: 20,
                 }}
               >
-                {isMobile ? <View /> : bottomToolbar}
+                {isMobile ? (
+                  <>
+                    {userSettings.isOnboardingComplete ? (
+                      <View />
+                    ) : (
+                      <Pressable
+                        onPress={async () => {
+                          await signOut();
+                          navigate("/signin");
+                        }}
+                      >
+                        <SignOut color={rose600} size={18} weight="bold" />
+                      </Pressable>
+                    )}
+                  </>
+                ) : (
+                  bottomToolbar
+                )}
                 <View
                   style={{
                     flexDirection: "row",

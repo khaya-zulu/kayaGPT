@@ -24,6 +24,7 @@ export const rose800 = "#991b1b";
 export const violet200 = "#ddd6fe";
 export const green200 = "#bbf7d0";
 export const amber200 = "#fde68a";
+export const sky600 = "#0284c7";
 
 export const rounded2xl = "16px";
 export const roundedLg = "8px";

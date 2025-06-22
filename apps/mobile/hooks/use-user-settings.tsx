@@ -1,4 +1,6 @@
 import {
+  fontSpaceGrotesk,
+  sky600,
   zinc100,
   zinc200,
   zinc300,
@@ -17,11 +19,13 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, ReactNode, useContext, useState } from "react";
 
-import { WorkspaceLoader } from "@/features/workspace-loader";
+import { CubeLoader, WorkspaceLoader } from "@/features/workspace-loader";
 
-import { Redirect, usePathname, useLocalSearchParams } from "expo-router";
+import { Redirect, usePathname, useLocalSearchParams, Link } from "expo-router";
 import * as Crypto from "expo-crypto";
 import { useAuth } from "@clerk/clerk-expo";
+import { View } from "react-native";
+import { Text } from "@/components/text";
 
 type AnimatedDoneState = {
   index: boolean;
@@ -73,7 +77,7 @@ const useWorkspaceUrl = ({
 export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   const { isSignedIn, isLoaded } = useAuth();
 
-  const { data, isLoading, isPending } = useUserSettingsQuery({
+  const { data, isLoading, isPending, isSuccess } = useUserSettingsQuery({
     enabled: isSignedIn,
   });
 
@@ -131,6 +135,45 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
     ...(data?.colorSettings || {}),
   };
   //#endregion
+
+  if (isSuccess && !data.isAllowed) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          flexDirection: "column",
+          gap: 10,
+          maxWidth: 450,
+          margin: "auto",
+          padding: 10,
+        }}
+      >
+        <CubeLoader color={zinc500} />
+        <Text style={{ marginTop: 10 }}>
+          Thank's for showing an interest ⛅️
+        </Text>
+        <Text>
+          Right now, I’m building this for myself and a few friends, but I’ll be
+          opening it up soon. In the meantime, I’ll be sharing updates on{" "}
+          <Link
+            href="https://x.com/khaya_was_taken"
+            target="_blank"
+            rel="noreferrer noopener"
+            style={{
+              fontFamily: fontSpaceGrotesk,
+              fontSize: 16,
+              textDecorationLine: "underline",
+              color: sky600,
+            }}
+          >
+            Twitter
+          </Link>
+          .
+        </Text>
+      </View>
+    );
+  }
 
   if (
     // auth is not loaded yet
