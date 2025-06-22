@@ -5,9 +5,10 @@ export type Env = {
   R2_WORKSPACE: R2Bucket;
   R2_PROFILE: R2Bucket;
   AI: Ai;
+  ALLOWED_LIST: string;
 };
 
 export type Context = {
   Bindings: Env;
-  Variables: { userEmail?: string; userId: string };
+  Variables: { userEmail?: string; userId: string; isAllowed: boolean };
 };

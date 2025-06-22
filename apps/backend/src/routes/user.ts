@@ -18,7 +18,7 @@ import {
 
 import { createApp } from "@/utils/server";
 import { privateAuth } from "@/utils/auth";
-import { createOpenAIModel, createWorkersAIModel } from "@/utils/models";
+import { createWorkersAIModel } from "@/utils/models";
 
 import { zValidator } from "@hono/zod-validator";
 
@@ -43,6 +43,7 @@ export const userRoute = createApp()
   })
   .get("/settings", privateAuth, async (c) => {
     const userId = c.get("userId");
+    const isAllowed = c.get("isAllowed");
     const user = await getUserSettingsById(c.env, { userId });
 
     let firstChatId: string | undefined;
@@ -53,7 +54,7 @@ export const userRoute = createApp()
       firstChatId = firstChat?.id;
     }
 
-    return c.json({ ...user, firstChatId, userId: user.id });
+    return c.json({ ...user, firstChatId, userId: user.id, isAllowed });
   })
   .get("/bio", privateAuth, async (c) => {
     const userId = c.get("userId");

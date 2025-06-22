@@ -6,10 +6,10 @@ import { userAvatarTool } from "@/services/tools/user-avatar";
 import { Env } from "@/utils/env";
 import { createChatMessage } from "@/queries/chat-message";
 
-import { saveDisplayNameTool } from "./onboarding-tools/save-display-name";
-import { saveRegionTool } from "./onboarding-tools/save-region";
-import { completeOnboardingTool } from "./onboarding-tools/complete";
-import { saveSocialLinksTool } from "./onboarding-tools/save-social-links";
+import { saveDisplayNameTool } from "@/services/tools/onboarding/save-display-name";
+import { saveRegionTool } from "@/services/tools/onboarding/save-region";
+import { completeOnboardingTool } from "@/services/tools/onboarding/complete";
+import { saveSocialLinksTool } from "@/services/tools/onboarding/save-social-links";
 
 const ONBOARDING_CHAT_SYSTEM_PROMPT = `You’re a warm, thoughtful assistant—part friend, part therapist—gently guiding someone through setting up their KayaGPT. Be brief, supportive, and conversational. This isn’t a form—it’s a vibe check. Reflect the user’s energy. Light jokes welcome.
 
