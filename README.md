@@ -2,8 +2,8 @@
 
 My exploration into UX, Developer Tooling and Best Practices in building Generative AI applications.
 
-Blog post: https://upshot.dev/notes/kayagpt
-Site: https://kayagpt.com/
+- Blog post: https://upshot.dev/notes/kayagpt
+- Site: https://kayagpt.com/
 
 Tech Stack:
 
