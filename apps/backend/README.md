@@ -29,3 +29,9 @@ To fix this issue, run the following command:
 ```bash
 yarn dev --ip 0.0.0.0 // the networks IP address
 ```
+
+# Running remote resources locally
+
+```bash
+yarn dev --x-remote-bindings
+```

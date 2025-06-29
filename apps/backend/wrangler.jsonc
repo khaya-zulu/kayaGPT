@@ -17,10 +17,12 @@
     {
       "binding": "R2_WORKSPACE",
       "bucket_name": "kgpt-workspace",
+      "experimental_remote": true,
     },
     {
       "binding": "R2_PROFILE",
       "bucket_name": "kgpt-profile",
+      "experimental_remote": true,
     },
   ],
   "d1_databases": [
@@ -29,6 +31,7 @@
       "database_name": "kgpt-database",
       "database_id": "f71c1ef8-3e26-47b6-b3d1-5a13bdd9e35f",
       "migrations_dir": "../../packages/db/drizzle",
+      "experimental_remote": true,
     },
   ],
   "observability": {

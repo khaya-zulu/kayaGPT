@@ -1,4 +1,4 @@
-import { GoogleLogo } from "phosphor-react-native";
+import { GithubLogo, GoogleLogo, ReadCvLogo } from "phosphor-react-native";
 import { Image, SafeAreaView, View } from "react-native";
 
 import { MainAppBox } from "@/features/main-app-box";
@@ -119,6 +119,54 @@ export default function SignInPage() {
       <SafeAreaView style={{ flex: 1 }}>
         <View
           style={{
+            position: "absolute",
+            top: 20,
+            right: 20,
+            flexDirection: "row",
+            gap: 10,
+          }}
+        >
+          <Link
+            href="https://upshot.dev/notes/kayagpt"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <Button variant="white">
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 10,
+                  padding: 5,
+                  alignItems: "center",
+                }}
+              >
+                <ReadCvLogo size={18} />
+                <Text>Blog Post</Text>
+              </View>
+            </Button>
+          </Link>
+          <Link
+            href="https://github.com/khaya-zulu/kayaGPT"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <Button variant="white">
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 10,
+                  padding: 5,
+                  alignItems: "center",
+                }}
+              >
+                <GithubLogo size={18} />
+                <Text>Github</Text>
+              </View>
+            </Button>
+          </Link>
+        </View>
+        <View
+          style={{
             flex: 1,
             maxWidth: 1200,
             width: "100%",
@@ -146,7 +194,7 @@ export default function SignInPage() {
                 }
                 parts={[
                   {
-                    text: `Hello Human 🤖 [booting up...]\n\nThis is a project exploring universal AI applications with Expo — built by [upshot.dev](https://upshot.dev/). Read the [blog post](https://upshot.dev/notes/kayagpt). ${userRandom ? `Check out this random [workspace](/${userRandom?.username}):` : ""}`,
+                    text: `Hello Human 🤖\n\nThis is a project exploring universal AI applications with Expo — built by [upshot.dev](https://upshot.dev/). ${userRandom ? `Check out this random [workspace](/${userRandom?.username}):` : ""}`,
                     type: "text",
                   },
                 ]}

@@ -21,9 +21,12 @@ import {
   withDelay,
   withSpring,
 } from "react-native-reanimated";
+import { useMobile } from "@/hooks/use-mobile";
 
 const BottomBar = ({ userOverview }: { userOverview: any }) => {
   const userSettings = useUserSettings();
+
+  const { isMobile } = useMobile();
 
   const y = useSharedValue(100);
 
@@ -31,7 +34,7 @@ const BottomBar = ({ userOverview }: { userOverview: any }) => {
     return {
       transform: [{ translateY: y.value }],
       position: "absolute",
-      bottom: 20,
+      bottom: isMobile ? 0 : 20,
       width: "100%",
     };
   });
@@ -51,6 +54,8 @@ const BottomBar = ({ userOverview }: { userOverview: any }) => {
           maxWidth: 600,
           width: "100%",
           marginHorizontal: "auto",
+          borderBottomLeftRadius: isMobile ? 0 : undefined,
+          borderBottomRightRadius: isMobile ? 0 : undefined,
         }}
       >
         <LinearGradient
@@ -156,6 +161,8 @@ const BottomBar = ({ userOverview }: { userOverview: any }) => {
 export default function UsernamePage() {
   const { username } = useLocalSearchParams<{ username: string }>();
 
+  const { isMobile } = useMobile();
+
   const userOverviewQuery = useUserOverviewQuery(username);
   const userOverview = userOverviewQuery.data;
 
@@ -172,7 +179,7 @@ export default function UsernamePage() {
         style={{
           width: "100%",
           maxWidth: 800,
-          paddingVertical: 60,
+          paddingVertical: isMobile ? undefined : 60,
           marginHorizontal: "auto",
           flex: 1,
         }}
@@ -182,6 +189,7 @@ export default function UsernamePage() {
             height="80%"
             description={userOverview?.description}
             onClose={() => setIsDescriptionExpanded(false)}
+            isExpanded
           />
         ) : null}
 

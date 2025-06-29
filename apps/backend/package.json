@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
-    "wrangler": "4.14.4"
+    "wrangler": "4.20.5"
   },
   "exports": {
     ".": "./src/index.ts"
