@@ -1,4 +1,7 @@
-A ChatGPT where I'm exploring the intersection of UX, Developer Tooling and Best Practices in building Generative AI applications (Blog post incoming...)
+My exploration into UX, Developer Tooling and Best Practices in building Generative AI applications.
+
+Blog post: https://upshot.dev/notes/kayagpt
+Site: https://kayagpt.com/
 
 Tech Stack:
 

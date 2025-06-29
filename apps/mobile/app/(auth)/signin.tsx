@@ -124,6 +124,7 @@ export default function SignInPage() {
             right: 20,
             flexDirection: "row",
             gap: 10,
+            zIndex: 1000,
           }}
         >
           <Link
