@@ -21,7 +21,13 @@ import { createContext, ReactNode, useContext, useState } from "react";
 
 import { CubeLoader, WorkspaceLoader } from "@/features/workspace-loader";
 
-import { Redirect, usePathname, useLocalSearchParams, Link } from "expo-router";
+import {
+  Redirect,
+  usePathname,
+  useLocalSearchParams,
+  Link,
+  useSegments,
+} from "expo-router";
 import * as Crypto from "expo-crypto";
 import { useAuth } from "@clerk/clerk-expo";
 import { View } from "react-native";
@@ -107,6 +113,8 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   const isOnboardingComplete = !!data?.onboardedAt;
 
   const pathname = usePathname();
+  const segments = useSegments();
+  const { username } = useLocalSearchParams<{ username: string }>();
 
   //#region image URLs
   const handleInvalidateImage = (type: "workspace" | "avatar") => {
@@ -136,7 +144,10 @@ export const UserSettingsProvider = ({ children }: { children: ReactNode }) => {
   };
   //#endregion
 
-  if (isSuccess && !data.isAllowed) {
+  const isUserPage =
+    pathname === `/${username}` || pathname.includes("?username");
+
+  if (isSuccess && !data.isAllowed && !isUserPage) {
     return (
       <View
         style={{
